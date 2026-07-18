@@ -14,6 +14,17 @@ describe('techstack catalog', () => {
     expect(techById('db', pickTech(2, () => 0)).name).toBe('Postgres');
   });
 
+  it('provides official documentation and optional GitHub links', () => {
+    expect(techById('fe', 'react')).toMatchObject({
+      docsUrl: 'https://react.dev/reference/react',
+      githubUrl: 'https://github.com/facebook/react',
+    });
+    expect(techById('db', 'dynamo')).toMatchObject({
+      docsUrl: 'https://docs.aws.amazon.com/dynamodb/',
+      githubUrl: null,
+    });
+  });
+
   it('describes a finished stack for the carousel', () => {
     expect(describeStack(['svelte', 'rust', 'mongo'])).toEqual([
       { layer: 'fe', layerLabel: 'Frontend', id: 'svelte', name: 'Svelte', short: 'SVLT' },
