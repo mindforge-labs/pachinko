@@ -1,0 +1,7 @@
+node_modules/
+coverage/
+.DS_Store
+
+# ignore all md files, except README.md
+*.md
+!README.md
