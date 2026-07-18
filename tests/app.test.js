@@ -99,7 +99,7 @@ describe('pachislot application', () => {
     expect(document.querySelectorAll('#stack-carousel-summary .stack-summary-chip')).toHaveLength(3);
     expect(document.querySelector('.stack-slide').getAttribute('aria-label')).toBe('Frontend: Vue');
     expect(document.querySelector('.stack-slide-name').textContent).toBe('Vue');
-    expect(document.querySelector('.stack-slide use').getAttribute('href')).toBe('#icon-vue');
+    expect(document.querySelector('.stack-slide img').getAttribute('src')).toContain('/vuejs/vuejs-original.svg');
     expect([...document.querySelectorAll('.stack-summary-label')].map((el) => el.textContent)).toEqual([
       'Vue',
       'Go',
@@ -107,7 +107,7 @@ describe('pachislot application', () => {
     ]);
 
     vi.advanceTimersByTime(50);
-    expect(document.querySelector('.stack-slide use').getAttribute('href')).toBe('#icon-go');
+    expect(document.querySelector('.stack-slide img').getAttribute('src')).toContain('/go/go-original.svg');
     expect(document.querySelector('.stack-slide-name').textContent).toBe('Go');
 
     vi.advanceTimersByTime(30);

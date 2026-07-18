@@ -58,7 +58,6 @@ export function describeStack(symbols = []) {
       id,
       name: tech?.name ?? id,
       short: tech?.short ?? String(id).toUpperCase(),
-      devicon: tech?.devicon ?? id,
     };
   });
 }
