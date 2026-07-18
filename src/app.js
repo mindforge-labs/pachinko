@@ -10,6 +10,9 @@ import {
 
 const BACKDROP_KEY = 'nocturne-pachislot-backdrop';
 const CAROUSEL_INTERVAL_MS = 1600;
+const DEVICON_BASE = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons';
+
+const deviconUrl = (slug) => `${DEVICON_BASE}/${slug}/${slug}-original.svg`;
 
 export function createApp(root = document, options = {}) {
   const body = root.body || root.querySelector('body');
@@ -90,7 +93,7 @@ export function createApp(root = document, options = {}) {
     carouselTrack.innerHTML = `
       <article class="stack-slide" data-layer="${item.layer}" data-tech="${item.id}" aria-label="${item.layerLabel}: ${item.name}">
         <span class="stack-slide-layer">${item.layerLabel}</span>
-        <svg class="stack-slide-icon" viewBox="0 0 64 64" aria-hidden="true"><use href="#icon-${item.id}"></use></svg>
+        <img class="stack-slide-icon" src="${deviconUrl(item.devicon)}" alt="" aria-hidden="true">
         <strong class="stack-slide-name">${item.name}</strong>
       </article>
     `;
@@ -114,7 +117,7 @@ export function createApp(root = document, options = {}) {
     if (carouselSummary) {
       carouselSummary.innerHTML = lastStack.map((item, index) => `
         <span class="stack-summary-chip${index === 0 ? ' is-active' : ''}" data-layer="${item.layer}" data-tech="${item.id}">
-          <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#icon-${item.id}"></use></svg>
+          <img src="${deviconUrl(item.devicon)}" alt="" aria-hidden="true">
           <span class="stack-summary-label">${item.name}</span>
         </span>
       `).join('');
@@ -143,9 +146,9 @@ export function createApp(root = document, options = {}) {
     const layer = layerForReel(index);
     const tech = techById(layer, symbol);
     const result = reel?.querySelector('.reel-result');
-    const use = result?.querySelector('use');
+    const image = result?.querySelector('img');
 
-    if (use) use.setAttribute('href', `#icon-${symbol}`);
+    if (image && tech) image.setAttribute('src', deviconUrl(tech.devicon));
     if (result) {
       result.setAttribute('aria-label', tech?.name ?? symbol);
       result.dataset.layer = layer;

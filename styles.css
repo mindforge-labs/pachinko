@@ -333,7 +333,7 @@ body.carousel-open .utility-bar {
   opacity: .5;
   transition: opacity .25s ease, transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
-.stack-summary-chip svg { width: 1.55rem; height: 1.55rem; }
+.stack-summary-chip img { width: 1.55rem; height: 1.55rem; object-fit: contain; }
 .stack-summary-label {
   max-width: 100%;
   overflow: hidden;
@@ -370,6 +370,7 @@ body.carousel-open .utility-bar {
   width: clamp(4.4rem, 18vw, 6.4rem);
   height: clamp(4.4rem, 18vw, 6.4rem);
   filter: drop-shadow(0 .35rem .55rem rgba(0,0,0,.45));
+  object-fit: contain;
 }
 .stack-slide-layer {
   font: 700 .68rem Orbitron, sans-serif;
