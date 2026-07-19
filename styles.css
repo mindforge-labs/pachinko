@@ -435,7 +435,11 @@ body.carousel-open .utility-bar {
   width: 1rem;
   height: 1rem;
   display: block;
+  grid-area: 1 / 1;
 }
+.stack-carousel-icon-expand { display: none; }
+.stack-carousel.is-minimized .stack-carousel-icon-minimize { display: none; }
+.stack-carousel.is-minimized .stack-carousel-icon-expand { display: block; }
 .stack-carousel-action:hover {
   color: #fff4c2;
   border-color: rgba(240, 199, 82, .7);
