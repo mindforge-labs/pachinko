@@ -100,16 +100,28 @@ export function createApp(root: Document = document, options: any = {}) {
     const active = carouselIndex % lastStack.length;
     const item = lastStack[active];
     carouselTrack.innerHTML = `
-      <article class="stack-slide" data-layer="${item.layer}" data-tech="${item.id}" aria-label="${item.layerLabel}: ${item.name}">
+      <a
+        class="stack-slide"
+        data-layer="${item.layer}"
+        data-tech="${item.id}"
+        href="${item.docsUrl}"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Open ${item.name} documentation (${item.layerLabel})"
+      >
         <span class="stack-slide-layer">${item.layerLabel}</span>
         <img class="stack-slide-icon" src="${deviconUrl(deviconFor(item))}" alt="" aria-hidden="true">
         <strong class="stack-slide-name">${item.name}</strong>
-      </article>
+        <span class="stack-slide-cta">Open docs ↗</span>
+      </a>
     `;
     carouselTrack.dataset.active = String(active);
     if (carouselDots) {
       [...carouselDots.children].forEach((dot, index) => {
         dot.classList.toggle('is-active', index === active);
+        if (dot instanceof HTMLButtonElement) {
+          dot.setAttribute('aria-current', index === active ? 'true' : 'false');
+        }
       });
     }
     if (carouselSummary) {
@@ -119,22 +131,66 @@ export function createApp(root: Document = document, options: any = {}) {
     }
   };
 
+  const startCarouselLoop = () => {
+    stopCarousel();
+    if (body.classList.contains('reduced-motion') || lastStack.length <= 1) return;
+    carouselTimer = globalThis.setInterval(() => {
+      carouselIndex = (carouselIndex + 1) % lastStack.length;
+      renderCarouselSlide();
+    }, options.carouselInterval ?? CAROUSEL_INTERVAL_MS);
+  };
+
+  const goToCarouselSlide = (index: number) => {
+    if (!lastStack.length || index < 0 || index >= lastStack.length) return;
+    carouselIndex = index;
+    renderCarouselSlide();
+    startCarouselLoop();
+  };
+
+  const openTechDocs = (url: string | null | undefined) => {
+    if (!url) return false;
+    const opened = globalThis.open(url, '_blank', 'noopener,noreferrer');
+    if (opened) opened.opener = null;
+    return true;
+  };
+
   const showStackCarousel = (symbols) => {
     lastStack = describeStack(symbols);
     if (!carousel || !carouselTrack || !lastStack.length) return;
 
     if (carouselSummary) {
       carouselSummary.innerHTML = lastStack.map((item, index) => `
-        <span class="stack-summary-chip${index === 0 ? ' is-active' : ''}" data-layer="${item.layer}" data-tech="${item.id}">
+        <a
+          class="stack-summary-chip${index === 0 ? ' is-active' : ''}"
+          data-layer="${item.layer}"
+          data-tech="${item.id}"
+          data-slide="${index}"
+          href="${item.docsUrl}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Open ${item.name} documentation (${item.layerLabel})"
+          title="${item.name} docs"
+        >
           <img src="${deviconUrl(deviconFor(item))}" alt="" aria-hidden="true">
           <span class="stack-summary-label">${item.name}</span>
-        </span>
+        </a>
       `).join('');
     }
 
-    carouselDots.innerHTML = lastStack
-      .map((item, index) => `<span class="stack-dot${index === 0 ? ' is-active' : ''}" data-layer="${item.layer}"></span>`)
-      .join('');
+    if (carouselDots) {
+      carouselDots.innerHTML = lastStack
+        .map((item, index) => `
+          <button
+            class="stack-dot${index === 0 ? ' is-active' : ''}"
+            type="button"
+            data-layer="${item.layer}"
+            data-slide="${index}"
+            aria-label="Show ${item.layerLabel}: ${item.name}"
+            aria-current="${index === 0 ? 'true' : 'false'}"
+          ></button>
+        `)
+        .join('');
+    }
 
     carousel.hidden = false;
     carousel.classList.remove('is-minimized');
@@ -143,14 +199,7 @@ export function createApp(root: Document = document, options: any = {}) {
     body.classList.add('carousel-open');
     carouselIndex = 0;
     renderCarouselSlide();
-    stopCarousel();
-
-    if (!body.classList.contains('reduced-motion') && lastStack.length > 1) {
-      carouselTimer = globalThis.setInterval(() => {
-        carouselIndex = (carouselIndex + 1) % lastStack.length;
-        renderCarouselSlide();
-      }, options.carouselInterval ?? CAROUSEL_INTERVAL_MS);
-    }
+    startCarouselLoop();
   };
 
   const setReelSymbol = (index, symbol) => {
@@ -281,7 +330,10 @@ export function createApp(root: Document = document, options: any = {}) {
     carouselMinimize?.setAttribute('aria-expanded', String(!minimized));
     carouselMinimize?.setAttribute('aria-label', minimized ? 'Restore stack popup' : 'Minimize stack popup');
     if (minimized) stopCarousel();
-    else renderCarouselSlide();
+    else {
+      renderCarouselSlide();
+      startCarouselLoop();
+    }
   };
 
   const resetPachinko = () => {
@@ -305,6 +357,52 @@ export function createApp(root: Document = document, options: any = {}) {
   stopButtons.forEach((button, index) => on(button, 'click', () => stop(index)));
   if (carouselMinimize) on(carouselMinimize, 'click', toggleCarouselMinimized);
   if (carouselReset) on(carouselReset, 'click', resetPachinko);
+  if (carouselDots) {
+    on(carouselDots, 'click', ((event: MouseEvent) => {
+      const target = (event.target as Element | null)?.closest?.('.stack-dot');
+      if (!(target instanceof HTMLButtonElement) || !carouselDots.contains(target)) return;
+      const index = Number(target.dataset.slide);
+      if (Number.isInteger(index)) goToCarouselSlide(index);
+    }) as EventListener);
+  }
+
+  if (carouselTrack) {
+    on(carouselTrack, 'click', ((event: MouseEvent) => {
+      const slide = (event.target as Element | null)?.closest?.('a.stack-slide');
+      if (!(slide instanceof HTMLAnchorElement) || !carouselTrack.contains(slide)) return;
+      event.preventDefault();
+      openTechDocs(slide.href);
+    }) as EventListener);
+    on(carouselTrack, 'mouseenter', () => stopCarousel());
+    on(carouselTrack, 'mouseleave', () => {
+      if (!carousel?.classList.contains('is-minimized')) startCarouselLoop();
+    });
+    on(carouselTrack, 'focusin', () => stopCarousel());
+    on(carouselTrack, 'focusout', ((event: FocusEvent) => {
+      if (!carouselTrack.contains(event.relatedTarget as Node | null)
+        && !carousel?.classList.contains('is-minimized')) {
+        startCarouselLoop();
+      }
+    }) as EventListener);
+  }
+
+  if (carouselSummary) {
+    on(carouselSummary, 'click', ((event: MouseEvent) => {
+      const chip = (event.target as Element | null)?.closest?.('a.stack-summary-chip');
+      if (!(chip instanceof HTMLAnchorElement) || !carouselSummary.contains(chip)) return;
+      event.preventDefault();
+      const index = Number(chip.dataset.slide);
+      if (Number.isInteger(index)) {
+        carouselIndex = index;
+        renderCarouselSlide();
+      }
+      openTechDocs(chip.href);
+    }) as EventListener);
+    on(carouselSummary, 'mouseenter', () => stopCarousel());
+    on(carouselSummary, 'mouseleave', () => {
+      if (!carousel?.classList.contains('is-minimized')) startCarouselLoop();
+    });
+  }
 
   on(root, 'keydown', ((event: KeyboardEvent) => {
     if (event.repeat || event.altKey || event.ctrlKey || event.metaKey) return;

@@ -93,16 +93,25 @@ export function pickTech(index: number, random = Math.random) {
   return pool[Math.floor(random() * pool.length)].id;
 }
 
+export function docsUrlFor(tech: Pick<Tech, 'name' | 'docsUrl' | 'githubUrl'> | null | undefined, fallbackName = 'technology') {
+  if (tech?.docsUrl) return tech.docsUrl;
+  if (tech?.githubUrl) return tech.githubUrl;
+  const query = encodeURIComponent(`${tech?.name ?? fallbackName} documentation`);
+  return `https://www.google.com/search?q=${query}`;
+}
+
 export function describeStack(symbols: string[] = []) {
   return symbols.map((id, index) => {
     const layer = layerForReel(index);
     const tech = techById(layer, id);
+    const name = tech?.name ?? id;
     return {
       layer,
       layerLabel: LAYER_LABELS[layer],
       id,
-      name: tech?.name ?? id,
+      name,
       short: tech?.short ?? String(id).toUpperCase(),
+      docsUrl: docsUrlFor(tech, name),
     };
   });
 }
