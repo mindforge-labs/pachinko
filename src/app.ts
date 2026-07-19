@@ -6,15 +6,14 @@ import {
   layerForReel,
   pickTech,
   techById,
+  technologyById,
 } from './techstack';
 
 const BACKDROP_KEY = 'nocturne-pachislot-backdrop';
 const CAROUSEL_INTERVAL_MS = 1600;
-const DEVICON_BASE = '/devicons';
-const INITIAL_SYMBOLS = ['react', 'nodejs', 'postgresql'];
+const INITIAL_SYMBOLS = ['react', 'express', 'postgresql'];
 
-const deviconUrl = (slug) => `${DEVICON_BASE}/${slug}.svg`;
-const deviconFor = (item) => techById(item.layer, item.id)?.devicon ?? item.id;
+const iconUrlFor = (item) => techById(item.layer, item.id)?.iconUrl ?? item.iconUrl ?? `/devicons/${item.id}.svg`;
 
 export function createApp(root: Document = document, options: any = {}) {
   const body = root.body || root.querySelector('body');
@@ -32,12 +31,24 @@ export function createApp(root: Document = document, options: any = {}) {
   const carouselSummary = root.querySelector('#stack-carousel-summary');
   const carouselMinimize = root.querySelector('#stack-carousel-minimize');
   const carouselReset = root.querySelector('#stack-carousel-reset');
+  const authCheckbox = root.querySelector<HTMLInputElement>('#include-auth');
+  const generatePromptButton = root.querySelector<HTMLButtonElement>('#generate-prompt');
+  const askGeminiButton = root.querySelector<HTMLButtonElement>('#ask-gemini');
+  const promptStatus = root.querySelector<HTMLElement>('#prompt-builder-status');
+  const promptOutput = root.querySelector<HTMLElement>('#prompt-output');
+  const promptTextarea = root.querySelector<HTMLTextAreaElement>('#gemini-system-prompt');
+  const copyPromptButton = root.querySelector<HTMLButtonElement>('#copy-prompt');
+  const guideOutput = root.querySelector<HTMLElement>('#gemini-guide-output');
+  const guideTextarea = root.querySelector<HTMLTextAreaElement>('#gemini-guide');
+  const copyGuideButton = root.querySelector<HTMLButtonElement>('#copy-guide');
   const storage = options.storage ?? globalThis.localStorage;
   const audio = options.audio ?? new AudioEngine({ windowRef: globalThis.window, storage });
   const listeners = [];
   let carouselTimer = null;
   let carouselIndex = 0;
   let lastStack = [];
+  let lastBackendRuntime: string | null = null;
+  let promptRequestVersion = 0;
 
   if (!machine || !startButton || stopButtons.length !== 3 || reels.length !== 3) {
     throw new Error('Pachislot markup is incomplete');
@@ -81,8 +92,30 @@ export function createApp(root: Document = document, options: any = {}) {
     }
   };
 
+  const resetPromptBuilder = ({ resetAuth = false } = {}) => {
+    promptRequestVersion += 1;
+    carousel?.classList.remove('has-prompt');
+    if (promptOutput) promptOutput.hidden = true;
+    if (promptTextarea) promptTextarea.value = '';
+    if (guideOutput) guideOutput.hidden = true;
+    if (guideTextarea) guideTextarea.value = '';
+    if (promptStatus) promptStatus.textContent = '';
+    if (generatePromptButton) {
+      generatePromptButton.disabled = false;
+      generatePromptButton.textContent = 'GENERATE PROMPT';
+    }
+    if (askGeminiButton) {
+      askGeminiButton.disabled = false;
+      askGeminiButton.textContent = 'ASK GEMINI';
+    }
+    if (copyPromptButton) copyPromptButton.textContent = 'COPY PROMPT';
+    if (copyGuideButton) copyGuideButton.textContent = 'COPY GUIDE';
+    if (resetAuth && authCheckbox) authCheckbox.checked = false;
+  };
+
   const hideCarousel = () => {
     stopCarousel();
+    resetPromptBuilder({ resetAuth: true });
     body.classList.remove('carousel-open');
     if (carousel) {
       carousel.hidden = true;
@@ -99,6 +132,10 @@ export function createApp(root: Document = document, options: any = {}) {
     if (!carouselTrack || !lastStack.length) return;
     const active = carouselIndex % lastStack.length;
     const item = lastStack[active];
+    const pairName = item.runtime ? `${item.name} + ${item.runtime.name}` : item.name;
+    const pairIcons = item.runtime
+      ? `<span class="stack-slide-pair-icons"><img class="stack-slide-icon" src="${iconUrlFor(item)}" alt=""><span aria-hidden="true">+</span><img class="stack-slide-icon" src="${item.runtime.iconUrl}" alt=""></span>`
+      : `<img class="stack-slide-icon" src="${iconUrlFor(item)}" alt="" aria-hidden="true">`;
     carouselTrack.innerHTML = `
       <a
         class="stack-slide"
@@ -107,11 +144,12 @@ export function createApp(root: Document = document, options: any = {}) {
         href="${item.docsUrl}"
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Open ${item.name} documentation (${item.layerLabel})"
+        aria-label="Open ${item.name} documentation (${item.layerLabel}: ${pairName})"
       >
         <span class="stack-slide-layer">${item.layerLabel}</span>
-        <img class="stack-slide-icon" src="${deviconUrl(deviconFor(item))}" alt="" aria-hidden="true">
-        <strong class="stack-slide-name">${item.name}</strong>
+        ${pairIcons}
+        <strong class="stack-slide-name">${pairName}</strong>
+        ${item.runtime ? `<span class="stack-slide-runtime">Framework + compatible runtime</span>` : ''}
         <span class="stack-slide-cta">Open docs ↗</span>
       </a>
     `;
@@ -154,9 +192,11 @@ export function createApp(root: Document = document, options: any = {}) {
     return true;
   };
 
-  const showStackCarousel = (symbols) => {
-    lastStack = describeStack(symbols);
+  const showStackCarousel = (symbols, backendRuntime) => {
+    lastBackendRuntime = backendRuntime;
+    lastStack = describeStack(symbols, backendRuntime);
     if (!carousel || !carouselTrack || !lastStack.length) return;
+    resetPromptBuilder({ resetAuth: true });
 
     if (carouselSummary) {
       carouselSummary.innerHTML = lastStack.map((item, index) => `
@@ -168,11 +208,11 @@ export function createApp(root: Document = document, options: any = {}) {
           href="${item.docsUrl}"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Open ${item.name} documentation (${item.layerLabel})"
+          aria-label="Open ${item.name} documentation (${item.layerLabel}${item.runtime ? ` with ${item.runtime.name}` : ''})"
           title="${item.name} docs"
         >
-          <img src="${deviconUrl(deviconFor(item))}" alt="" aria-hidden="true">
-          <span class="stack-summary-label">${item.name}</span>
+          <img src="${iconUrlFor(item)}" alt="" aria-hidden="true">
+          <span class="stack-summary-label">${item.name}${item.runtime ? ` + ${item.runtime.name}` : ''}</span>
         </a>
       `).join('');
     }
@@ -185,7 +225,7 @@ export function createApp(root: Document = document, options: any = {}) {
             type="button"
             data-layer="${item.layer}"
             data-slide="${index}"
-            aria-label="Show ${item.layerLabel}: ${item.name}"
+            aria-label="Show ${item.layerLabel}: ${item.name}${item.runtime ? ` with ${item.runtime.name}` : ''}"
             aria-current="${index === 0 ? 'true' : 'false'}"
           ></button>
         `)
@@ -209,7 +249,7 @@ export function createApp(root: Document = document, options: any = {}) {
     const result = reel?.querySelector<HTMLElement>('.reel-result');
     const image = result?.querySelector('img');
 
-    if (image && tech) image.setAttribute('src', deviconUrl(tech.devicon));
+    if (image && tech) image.setAttribute('src', tech.iconUrl);
     if (result) {
       result.setAttribute('aria-label', tech?.name ?? symbol);
       result.dataset.layer = layer;
@@ -258,7 +298,8 @@ export function createApp(root: Document = document, options: any = {}) {
         flash(reel, 'is-stopping');
         flash(stopButtons[event.index], 'is-hit');
         setDisplay(`${layer.toUpperCase()} · ${tech?.short ?? event.symbol}`);
-        announce(`${LAYER_LABELS[layer]} locked on ${tech?.name ?? event.symbol}.`);
+        const runtime = event.index === 1 && event.backendRuntime ? technologyById(event.backendRuntime) : null;
+        announce(`${LAYER_LABELS[layer]} locked on ${tech?.name ?? event.symbol}${runtime ? ` with ${runtime.name}` : ''}.`);
         audio.play('stop');
         break;
       }
@@ -266,11 +307,11 @@ export function createApp(root: Document = document, options: any = {}) {
         stopTicks();
         machine.dataset.state = 'settling';
         machine.classList.add('is-celebrating');
-        const stack = describeStack(event.symbols);
-        const summary = stack.map((item) => item.name).join(' · ');
+        const stack = describeStack(event.symbols, event.backendRuntime);
+        const summary = stack.map((item) => item.runtime ? `${item.name} + ${item.runtime.name}` : item.name).join(' · ');
         setDisplay(summary);
         announce(`Stack complete: ${summary}.`);
-        showStackCarousel(event.symbols);
+        showStackCarousel(event.symbols, event.backendRuntime);
         audio.play('complete');
         break;
       }
@@ -279,7 +320,7 @@ export function createApp(root: Document = document, options: any = {}) {
         machine.dataset.state = 'idle';
         machine.classList.remove('is-celebrating');
         if (lastStack.length) {
-          setDisplay(lastStack.map((item) => item.short).join(' · '));
+          setDisplay(lastStack.map((item) => item.runtime ? `${item.short}+${item.runtime.short}` : item.short).join(' · '));
           announce('Stack ready. Press start to spin another tech stack.');
         } else {
           setDisplay('PRESS START');
@@ -307,6 +348,7 @@ export function createApp(root: Document = document, options: any = {}) {
     schedule: options.schedule,
     cancel: options.cancel,
     selectSymbol: options.selectSymbol ?? ((index) => pickTech(index)),
+    selectBackendPair: options.selectBackendPair,
     onEvent: handleControllerEvent as any,
   });
 
@@ -341,6 +383,7 @@ export function createApp(root: Document = document, options: any = {}) {
     stopTicks();
     hideCarousel();
     lastStack = [];
+    lastBackendRuntime = null;
     carouselIndex = 0;
     machine.dataset.state = 'idle';
     machine.classList.remove('is-celebrating');
@@ -353,10 +396,151 @@ export function createApp(root: Document = document, options: any = {}) {
     setControls(controller.snapshot());
   };
 
+  const generateGeminiPrompt = async () => {
+    if (!lastStack.length || !generatePromptButton) return;
+
+    const requestVersion = ++promptRequestVersion;
+    generatePromptButton.disabled = true;
+    generatePromptButton.textContent = 'GENERATING…';
+    if (promptStatus) promptStatus.textContent = 'Building a prompt for the rolled stack…';
+
+    try {
+      const response = await globalThis.fetch('/api/gemini-prompt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          symbols: lastStack.map(({ id }) => id),
+          backendRuntime: lastBackendRuntime,
+          authentication: Boolean(authCheckbox?.checked),
+        }),
+      });
+      const payload = await response.json();
+
+      if (!response.ok) throw new Error(payload?.error || 'Could not generate the prompt.');
+      if (requestVersion !== promptRequestVersion) return;
+      if (typeof payload?.prompt !== 'string') throw new Error('The server returned an invalid prompt.');
+
+      if (promptTextarea) promptTextarea.value = payload.prompt;
+      if (promptOutput) promptOutput.hidden = false;
+      if (guideOutput) guideOutput.hidden = true;
+      if (guideTextarea) guideTextarea.value = '';
+      carousel?.classList.add('has-prompt');
+      generatePromptButton.textContent = 'REGENERATE PROMPT';
+      if (promptStatus) promptStatus.textContent = 'Prompt ready. Copy it into Gemini as a system prompt.';
+      promptTextarea?.focus();
+      promptTextarea?.setSelectionRange(0, 0);
+    } catch (error) {
+      if (requestVersion !== promptRequestVersion) return;
+      if (promptStatus) {
+        promptStatus.textContent = error instanceof Error ? error.message : 'Could not generate the prompt.';
+      }
+      generatePromptButton.textContent = 'TRY AGAIN';
+    } finally {
+      if (requestVersion === promptRequestVersion) generatePromptButton.disabled = false;
+    }
+  };
+
+  const askGemini = async () => {
+    if (!lastStack.length || !askGeminiButton) return;
+
+    const requestVersion = ++promptRequestVersion;
+    askGeminiButton.disabled = true;
+    askGeminiButton.textContent = 'GEMINI IS WRITING…';
+    if (generatePromptButton) generatePromptButton.disabled = true;
+    if (promptStatus) promptStatus.textContent = 'Gemini is generating the implementation guide. This can take a few minutes…';
+
+    try {
+      const response = await globalThis.fetch('/api/gemini-guide', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          symbols: lastStack.map(({ id }) => id),
+          backendRuntime: lastBackendRuntime,
+          authentication: Boolean(authCheckbox?.checked),
+        }),
+      });
+      const payload = await response.json();
+
+      if (!response.ok) throw new Error(payload?.error || 'Gemini could not generate the guide.');
+      if (requestVersion !== promptRequestVersion) return;
+      if (typeof payload?.prompt !== 'string' || typeof payload?.guide !== 'string') {
+        throw new Error('Gemini returned an invalid guide.');
+      }
+
+      if (promptTextarea) promptTextarea.value = payload.prompt;
+      if (promptOutput) promptOutput.hidden = false;
+      if (guideTextarea) guideTextarea.value = payload.guide;
+      if (guideOutput) guideOutput.hidden = false;
+      carousel?.classList.add('has-prompt');
+      if (generatePromptButton) generatePromptButton.textContent = 'REGENERATE PROMPT';
+      askGeminiButton.textContent = 'ASK GEMINI AGAIN';
+      if (promptStatus) promptStatus.textContent = `Guide ready from ${payload.model || 'Gemini'}. You can copy the prompt or the result.`;
+      guideTextarea?.focus();
+      guideTextarea?.setSelectionRange(0, 0);
+    } catch (error) {
+      if (requestVersion !== promptRequestVersion) return;
+      askGeminiButton.textContent = 'TRY GEMINI AGAIN';
+      if (promptStatus) {
+        promptStatus.textContent = error instanceof Error ? error.message : 'Gemini could not generate the guide.';
+      }
+    } finally {
+      if (requestVersion === promptRequestVersion) {
+        askGeminiButton.disabled = false;
+        if (generatePromptButton) generatePromptButton.disabled = false;
+      }
+    }
+  };
+
+  const copyText = async (
+    textarea: HTMLTextAreaElement | null,
+    button: HTMLButtonElement | null,
+    successMessage: string,
+  ) => {
+    const value = textarea?.value;
+    if (!value || !button) return;
+
+    try {
+      if (globalThis.navigator?.clipboard?.writeText) {
+        await globalThis.navigator.clipboard.writeText(value);
+      } else if (textarea) {
+        textarea.focus();
+        textarea.select();
+        if (!root.execCommand?.('copy')) throw new Error('Clipboard API is unavailable.');
+      }
+      button.textContent = 'COPIED ✓';
+      if (promptStatus) promptStatus.textContent = successMessage;
+    } catch {
+      textarea?.focus();
+      textarea?.select();
+      button.textContent = 'PRESS CTRL/CMD + C';
+      if (promptStatus) promptStatus.textContent = 'Automatic copy is blocked; the text has been selected for you.';
+    }
+  };
+
   on(startButton, 'click', () => start());
   stopButtons.forEach((button, index) => on(button, 'click', () => stop(index)));
   if (carouselMinimize) on(carouselMinimize, 'click', toggleCarouselMinimized);
   if (carouselReset) on(carouselReset, 'click', resetPachinko);
+  if (generatePromptButton) on(generatePromptButton, 'click', (() => { void generateGeminiPrompt(); }) as EventListener);
+  if (askGeminiButton) on(askGeminiButton, 'click', (() => { void askGemini(); }) as EventListener);
+  if (copyPromptButton) {
+    on(copyPromptButton, 'click', (() => {
+      void copyText(promptTextarea, copyPromptButton, 'Copied. Paste it into Gemini as the system prompt.');
+    }) as EventListener);
+  }
+  if (copyGuideButton) {
+    on(copyGuideButton, 'click', (() => {
+      void copyText(guideTextarea, copyGuideButton, 'Implementation guide copied.');
+    }) as EventListener);
+  }
+  if (authCheckbox) {
+    on(authCheckbox, 'change', () => {
+      resetPromptBuilder();
+      if (promptStatus) promptStatus.textContent = authCheckbox.checked
+        ? 'Authentication will be included.'
+        : 'Authentication will remain an extension point.';
+    });
+  }
   if (carouselDots) {
     on(carouselDots, 'click', ((event: MouseEvent) => {
       const target = (event.target as Element | null)?.closest?.('.stack-dot');

@@ -1,6 +1,6 @@
-import { pickTech } from './techstack';
+import { pickBackendPair, pickTech, type BackendPair } from './techstack';
 
-const DEFAULT_SYMBOLS = ['react', 'nodejs', 'postgresql', 'vuejs', 'go', 'mongodb'];
+const DEFAULT_SYMBOLS = ['react', 'express', 'postgresql', 'vuejs', 'spring', 'mongodb'];
 
 type Phase = 'idle' | 'spinning' | 'settling';
 type Reel = { index: number; state: 'stopped' | 'spinning'; symbol: string | null };
@@ -12,10 +12,13 @@ export class SpinController {
   schedule: (callback: () => void, delay: number) => ReturnType<typeof setTimeout>;
   cancelTimer: (timer: ReturnType<typeof setTimeout>) => void;
   selectSymbol: (index: number, reason?: string, snapshot?: unknown) => string;
+  selectBackendPair: (previousFrameworkId: string | null, reason?: string, snapshot?: unknown) => BackendPair;
   onEvent: (event: any) => void;
   phase: Phase;
   reels: Reel[];
   timers: Map<number | 'settle', ReturnType<typeof setTimeout>>;
+  backendRuntime: string | null;
+  lastBackendFramework: string | null;
 
   constructor({
     reelCount = 3,
@@ -24,6 +27,7 @@ export class SpinController {
     schedule = globalThis.setTimeout?.bind(globalThis),
     cancel = globalThis.clearTimeout?.bind(globalThis),
     selectSymbol = (index) => pickTech(index),
+    selectBackendPair = (previousFrameworkId) => pickBackendPair(previousFrameworkId),
     onEvent = () => {},
   } = {}) {
     if (!Number.isInteger(reelCount) || reelCount < 1) throw new TypeError('reelCount must be a positive integer');
@@ -35,10 +39,13 @@ export class SpinController {
     this.schedule = schedule;
     this.cancelTimer = cancel;
     this.selectSymbol = selectSymbol;
+    this.selectBackendPair = selectBackendPair;
     this.onEvent = onEvent;
     this.phase = 'idle';
     this.reels = this.#freshReels();
     this.timers = new Map();
+    this.backendRuntime = null;
+    this.lastBackendFramework = null;
   }
 
   #freshReels(): Reel[] {
@@ -52,6 +59,7 @@ export class SpinController {
   snapshot() {
     return {
       phase: this.phase,
+      backendRuntime: this.backendRuntime,
       reels: this.reels.map((reel) => ({ ...reel })),
     };
   }
@@ -61,6 +69,7 @@ export class SpinController {
 
     this.#clearTimers();
     this.phase = 'spinning';
+    this.backendRuntime = null;
     this.reels = Array.from({ length: this.reelCount }, (_, index): Reel => ({ index, state: 'spinning', symbol: null }));
     this.#emit('start');
 
@@ -79,16 +88,23 @@ export class SpinController {
 
     this.#clearTimer(index);
     reel.state = 'stopped';
-    reel.symbol = this.selectSymbol(index, reason, this.snapshot());
-    this.#emit('reelStop', { index, reason, symbol: reel.symbol });
+    if (index === 1) {
+      const pair = this.selectBackendPair(this.lastBackendFramework, reason, this.snapshot());
+      reel.symbol = pair.frameworkId;
+      this.backendRuntime = pair.runtimeId;
+      this.lastBackendFramework = pair.frameworkId;
+    } else {
+      reel.symbol = this.selectSymbol(index, reason, this.snapshot());
+    }
+    this.#emit('reelStop', { index, reason, symbol: reel.symbol, backendRuntime: this.backendRuntime });
 
     if (this.reels.every(({ state }) => state === 'stopped')) {
       this.phase = 'settling';
-      this.#emit('allStopped', { symbols: this.reels.map(({ symbol }) => symbol) });
+      this.#emit('allStopped', { symbols: this.reels.map(({ symbol }) => symbol), backendRuntime: this.backendRuntime });
       const timer = this.schedule(() => {
         this.timers.delete('settle');
         this.phase = 'idle';
-        this.#emit('complete', { symbols: this.reels.map(({ symbol }) => symbol) });
+        this.#emit('complete', { symbols: this.reels.map(({ symbol }) => symbol), backendRuntime: this.backendRuntime });
       }, this.settleDelay);
       this.timers.set('settle', timer);
     }
@@ -99,6 +115,7 @@ export class SpinController {
     if (this.phase === 'idle') return false;
     this.#clearTimers();
     this.phase = 'idle';
+    this.backendRuntime = null;
     this.reels = this.#freshReels();
     this.#emit('cancel', { reason });
     return true;

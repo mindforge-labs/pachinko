@@ -2,7 +2,7 @@
 
 export type TechDomain = 'application' | 'data' | 'tooling' | 'platform' | 'language' | 'design' | 'other';
 export type TechKind = 'framework' | 'library' | 'runtime' | 'datastore' | 'build-tool' | 'developer-tool' | 'cloud' | 'language' | 'design-tool' | 'other';
-export type DeviconReel = 'frontend' | 'backend' | 'database' | null;
+export const DEVICON_VERSION = "2.17.0";
 
 export type DeviconTech = {
   id: string;
@@ -11,7 +11,6 @@ export type DeviconTech = {
   tags: string[];
   domain: TechDomain;
   kind: TechKind;
-  reel: DeviconReel;
   color: string | null;
   iconVariant: string;
   iconUrl: string;
@@ -32,7 +31,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#16358C",
     "iconVariant": "original",
     "iconUrl": "/devicons/aarch64.svg"
@@ -49,7 +47,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "backend",
     "color": "#5A45FF",
     "iconVariant": "original",
     "iconUrl": "/devicons/adonisjs.svg"
@@ -65,7 +62,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#c21417",
     "iconVariant": "original",
     "iconUrl": "/devicons/aerospike.svg"
@@ -83,9 +79,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "js",
       "web"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#ee295f",
     "iconVariant": "original",
     "iconUrl": "/devicons/aframe.svg"
@@ -103,7 +98,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#1F0740",
     "iconVariant": "original",
     "iconUrl": "/devicons/aftereffects.svg"
@@ -120,9 +114,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "scala",
       "open-source"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#15a9ce",
     "iconVariant": "original",
     "iconUrl": "/devicons/akka.svg"
@@ -139,7 +132,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#003dff",
     "iconVariant": "original",
     "iconUrl": "/devicons/algolia.svg"
@@ -157,7 +149,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#ffffff",
     "iconVariant": "original",
     "iconUrl": "/devicons/almalinux.svg"
@@ -174,7 +165,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "frontend",
     "color": "#2d3441",
     "iconVariant": "original",
     "iconUrl": "/devicons/alpinejs.svg"
@@ -192,7 +182,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#f90",
     "iconVariant": "original-wordmark",
     "iconUrl": "/devicons/amazonwebservices.svg"
@@ -207,7 +196,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#3eb049",
     "iconVariant": "original",
     "iconUrl": "/devicons/anaconda.svg"
@@ -222,7 +210,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#A4C439",
     "iconVariant": "original",
     "iconUrl": "/devicons/android.svg"
@@ -241,7 +228,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#4285F4",
     "iconVariant": "original",
     "iconUrl": "/devicons/androidstudio.svg"
@@ -256,7 +242,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "frontend",
     "color": "#FFFFFF",
     "iconVariant": "original",
     "iconUrl": "/devicons/angular.svg"
@@ -271,7 +256,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "frontend",
     "color": "#c4473a",
     "iconVariant": "original",
     "iconUrl": "/devicons/angularjs.svg"
@@ -284,9 +268,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "javascript"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#ffa726",
     "iconVariant": "original",
     "iconUrl": "/devicons/angularmaterial.svg"
@@ -303,7 +286,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#1A1918",
     "iconVariant": "original",
     "iconUrl": "/devicons/ansible.svg"
@@ -317,7 +299,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/ansys.svg"
@@ -333,7 +314,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#0073bb",
     "iconVariant": "original",
     "iconUrl": "/devicons/antdesign.svg"
@@ -349,7 +329,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#cb2533",
     "iconVariant": "original",
     "iconUrl": "/devicons/apache.svg"
@@ -368,7 +347,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#017cee",
     "iconVariant": "original",
     "iconUrl": "/devicons/apacheairflow.svg"
@@ -383,7 +361,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#231f20",
     "iconVariant": "original",
     "iconUrl": "/devicons/apachekafka.svg"
@@ -399,7 +376,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#e15919",
     "iconVariant": "original",
     "iconUrl": "/devicons/apachespark.svg"
@@ -413,7 +389,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#0d9dda",
     "iconVariant": "original",
     "iconUrl": "/devicons/apex.svg"
@@ -432,7 +407,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#24a148",
     "iconVariant": "original",
     "iconUrl": "/devicons/apl.svg"
@@ -450,7 +424,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#112B49",
     "iconVariant": "original",
     "iconUrl": "/devicons/apollographql.svg"
@@ -465,7 +438,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#ac162c",
     "iconVariant": "original",
     "iconUrl": "/devicons/appcelerator.svg"
@@ -480,7 +452,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/apple.svg"
@@ -496,7 +467,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#fd366e",
     "iconVariant": "original",
     "iconUrl": "/devicons/appwrite.svg"
@@ -512,7 +482,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#1791cf",
     "iconVariant": "original",
     "iconUrl": "/devicons/archlinux.svg"
@@ -527,7 +496,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#00979d",
     "iconVariant": "original",
     "iconUrl": "/devicons/arduino.svg"
@@ -542,7 +510,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#ef7b4d",
     "iconVariant": "original",
     "iconUrl": "/devicons/argocd.svg"
@@ -561,7 +528,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#10a0cc",
     "iconVariant": "original",
     "iconUrl": "/devicons/artixlinux.svg"
@@ -577,7 +543,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "frontend",
     "color": "#ff5d01",
     "iconVariant": "original",
     "iconUrl": "/devicons/astro.svg"
@@ -591,7 +556,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#67595D",
     "iconVariant": "original",
     "iconUrl": "/devicons/atom.svg"
@@ -609,7 +573,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#0a094d",
     "iconVariant": "original",
     "iconUrl": "/devicons/awk.svg"
@@ -625,7 +588,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#5a29e4",
     "iconVariant": "plain",
     "iconUrl": "/devicons/axios.svg"
@@ -642,7 +604,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#0089D6",
     "iconVariant": "original",
     "iconUrl": "/devicons/azure.svg"
@@ -662,7 +623,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#0078d4",
     "iconVariant": "original",
     "iconUrl": "/devicons/azuredevops.svg"
@@ -681,7 +641,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#005ba1",
     "iconVariant": "original",
     "iconUrl": "/devicons/azuresqldatabase.svg"
@@ -698,7 +657,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "build-tool",
-    "reel": null,
     "color": "#f9dc3e",
     "iconVariant": "original",
     "iconUrl": "/devicons/babel.svg"
@@ -715,9 +673,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "library",
       "web"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#bb464b",
     "iconVariant": "original",
     "iconUrl": "/devicons/babylonjs.svg"
@@ -730,9 +687,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "javascript",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#002A41",
     "iconVariant": "original",
     "iconUrl": "/devicons/backbonejs.svg"
@@ -751,7 +707,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#46C0BC",
     "iconVariant": "original",
     "iconUrl": "/devicons/ballerina.svg"
@@ -769,7 +724,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#1068e2",
     "iconVariant": "original",
     "iconUrl": "/devicons/bamboo.svg"
@@ -787,7 +741,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#293138",
     "iconVariant": "original",
     "iconUrl": "/devicons/bash.svg"
@@ -805,7 +758,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#76D275",
     "iconVariant": "original",
     "iconUrl": "/devicons/bazel.svg"
@@ -820,7 +772,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#07c",
     "iconVariant": "original",
     "iconUrl": "/devicons/beats.svg"
@@ -835,7 +786,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#0071e0",
     "iconVariant": "original",
     "iconUrl": "/devicons/behance.svg"
@@ -855,7 +805,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#282828",
     "iconVariant": "original",
     "iconUrl": "/devicons/bevyengine.svg"
@@ -877,7 +826,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#60a5fa",
     "iconVariant": "original",
     "iconUrl": "/devicons/biome.svg"
@@ -893,7 +841,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#205081",
     "iconVariant": "original",
     "iconUrl": "/devicons/bitbucket.svg"
@@ -911,7 +858,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "frontend",
     "color": "#5c2d91",
     "iconVariant": "original",
     "iconUrl": "/devicons/blazor.svg"
@@ -928,7 +874,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#DC7B2E",
     "iconVariant": "original",
     "iconUrl": "/devicons/blender.svg"
@@ -944,9 +889,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "javascript",
       "library"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#712cf9",
     "iconVariant": "original",
     "iconUrl": "/devicons/bootstrap.svg"
@@ -961,7 +905,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#ef5734",
     "iconVariant": "original",
     "iconUrl": "/devicons/bower.svg"
@@ -978,7 +921,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#0070f0",
     "iconVariant": "original",
     "iconUrl": "/devicons/browserstack.svg"
@@ -993,9 +935,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "css",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#00d1b2",
     "iconVariant": "plain",
     "iconUrl": "/devicons/bulma.svg"
@@ -1009,9 +950,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "zig",
       "language"
     ],
-    "domain": "application",
-    "kind": "runtime",
-    "reel": "backend",
+    "domain": "language",
+    "kind": "language",
     "color": "#FBF0DF",
     "iconVariant": "original",
     "iconUrl": "/devicons/bun.svg"
@@ -1025,7 +965,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#a9bacd",
     "iconVariant": "original",
     "iconUrl": "/devicons/c.svg"
@@ -1042,9 +981,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "c",
       "open-source"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#f39914",
     "iconVariant": "original",
     "iconUrl": "/devicons/cairo.svg"
@@ -1056,9 +994,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#D43D44",
     "iconVariant": "original",
     "iconUrl": "/devicons/cakephp.svg"
@@ -1072,7 +1009,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "design",
     "kind": "design-tool",
-    "reel": null,
     "color": "#00C4CC",
     "iconVariant": "original",
     "iconUrl": "/devicons/canva.svg"
@@ -1090,9 +1026,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "universal"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#53B9FF",
     "iconVariant": "original",
     "iconUrl": "/devicons/capacitor.svg"
@@ -1109,7 +1044,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/carbon.svg"
@@ -1127,7 +1061,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#1185b0",
     "iconVariant": "original",
     "iconUrl": "/devicons/cassandra.svg"
@@ -1142,7 +1075,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#932178",
     "iconVariant": "original",
     "iconUrl": "/devicons/centos.svg"
@@ -1159,7 +1091,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#AB710A",
     "iconVariant": "original",
     "iconUrl": "/devicons/ceylon.svg"
@@ -1174,9 +1105,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "ui",
       "library"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#52c8c5",
     "iconVariant": "original",
     "iconUrl": "/devicons/chakraui.svg"
@@ -1192,9 +1122,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "chart",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#ff6384",
     "iconVariant": "original",
     "iconUrl": "/devicons/chartjs.svg"
@@ -1210,7 +1139,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#ce4e4e",
     "iconVariant": "original",
     "iconUrl": "/devicons/chrome.svg"
@@ -1225,7 +1153,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#343434",
     "iconVariant": "plain",
     "iconUrl": "/devicons/circleci.svg"
@@ -1243,7 +1170,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#13171a",
     "iconVariant": "original",
     "iconUrl": "/devicons/clarity.svg"
@@ -1260,7 +1186,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#f9ff69",
     "iconVariant": "original",
     "iconUrl": "/devicons/clickhouse.svg"
@@ -1279,7 +1204,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#21d789",
     "iconVariant": "original",
     "iconUrl": "/devicons/clion.svg"
@@ -1294,7 +1218,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#5881d8",
     "iconVariant": "original",
     "iconUrl": "/devicons/clojure.svg"
@@ -1308,7 +1231,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#96ca4b",
     "iconVariant": "original",
     "iconUrl": "/devicons/clojurescript.svg"
@@ -1326,7 +1248,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#F38020",
     "iconVariant": "original",
     "iconUrl": "/devicons/cloudflare.svg"
@@ -1346,7 +1267,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#ea9344",
     "iconVariant": "original",
     "iconUrl": "/devicons/cloudflareworkers.svg"
@@ -1365,7 +1285,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#4285f4",
     "iconVariant": "original",
     "iconUrl": "/devicons/cloudrun.svg"
@@ -1379,7 +1298,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#0e8a16",
     "iconVariant": "original",
     "iconUrl": "/devicons/cmake.svg"
@@ -1393,7 +1311,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/cobol.svg"
@@ -1410,7 +1327,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#005096",
     "iconVariant": "original",
     "iconUrl": "/devicons/codeac.svg"
@@ -1425,7 +1341,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#e0225c",
     "iconVariant": "plain",
     "iconUrl": "/devicons/codecov.svg"
@@ -1438,9 +1353,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "php",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#ee4323",
     "iconVariant": "plain",
     "iconUrl": "/devicons/codeigniter.svg"
@@ -1456,7 +1370,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/codepen.svg"
@@ -1472,7 +1385,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#28334c",
     "iconVariant": "original",
     "iconUrl": "/devicons/coffeescript.svg"
@@ -1488,7 +1400,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/composer.svg"
@@ -1506,7 +1417,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#136be6",
     "iconVariant": "original",
     "iconUrl": "/devicons/confluence.svg"
@@ -1525,7 +1435,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#e03875",
     "iconVariant": "original",
     "iconUrl": "/devicons/consul.svg"
@@ -1539,7 +1448,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#f47c00",
     "iconVariant": "original",
     "iconUrl": "/devicons/contao.svg"
@@ -1557,9 +1465,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "polyfill",
       "tool"
     ],
-    "domain": "tooling",
-    "kind": "developer-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/corejs.svg"
@@ -1578,7 +1485,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#59B3D8",
     "iconVariant": "original",
     "iconUrl": "/devicons/cosmosdb.svg"
@@ -1594,7 +1500,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#EA2328",
     "iconVariant": "original",
     "iconUrl": "/devicons/couchbase.svg"
@@ -1610,7 +1515,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#e42528",
     "iconVariant": "original",
     "iconUrl": "/devicons/couchdb.svg"
@@ -1627,7 +1531,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#ff6c2c",
     "iconVariant": "original",
     "iconUrl": "/devicons/cpanel.svg"
@@ -1644,7 +1547,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#004482",
     "iconVariant": "original",
     "iconUrl": "/devicons/cplusplus.svg"
@@ -1661,7 +1563,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/crystal.svg"
@@ -1677,7 +1578,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#68217a",
     "iconVariant": "original",
     "iconUrl": "/devicons/csharp.svg"
@@ -1694,7 +1594,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#3d8fc6",
     "iconVariant": "original",
     "iconUrl": "/devicons/css3.svg"
@@ -1708,9 +1607,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#00a818",
     "iconVariant": "plain",
     "iconUrl": "/devicons/cucumber.svg"
@@ -1725,9 +1623,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "testing",
       "framework"
     ],
-    "domain": "tooling",
-    "kind": "developer-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#1b1e2e",
     "iconVariant": "original",
     "iconUrl": "/devicons/cypressio.svg"
@@ -1739,7 +1636,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#f7974e",
     "iconVariant": "original",
     "iconUrl": "/devicons/d3js.svg"
@@ -1756,7 +1652,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#00A8E1",
     "iconVariant": "original",
     "iconUrl": "/devicons/dart.svg"
@@ -1772,7 +1667,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#632ca6",
     "iconVariant": "original",
     "iconUrl": "/devicons/datadog.svg"
@@ -1788,8 +1682,7 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "database"
     ],
     "domain": "data",
-    "kind": "developer-tool",
-    "reel": null,
+    "kind": "datastore",
     "color": "#21d789",
     "iconVariant": "original",
     "iconUrl": "/devicons/datagrip.svg"
@@ -1806,7 +1699,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#087cfa",
     "iconVariant": "original",
     "iconUrl": "/devicons/dataspell.svg"
@@ -1822,9 +1714,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "javascript",
       "library"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#ffffff",
     "iconVariant": "original",
     "iconUrl": "/devicons/datatables.svg"
@@ -1838,8 +1729,7 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "database"
     ],
     "domain": "data",
-    "kind": "developer-tool",
-    "reel": null,
+    "kind": "datastore",
     "color": "#382a24",
     "iconVariant": "original",
     "iconUrl": "/devicons/dbeaver.svg"
@@ -1854,7 +1744,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#A80030",
     "iconVariant": "original",
     "iconUrl": "/devicons/debian.svg"
@@ -1870,7 +1759,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#a81c21",
     "iconVariant": "original",
     "iconUrl": "/devicons/delphi.svg"
@@ -1886,7 +1774,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "runtime",
-    "reel": "backend",
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/denojs.svg"
@@ -1905,7 +1792,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#f73b95",
     "iconVariant": "original",
     "iconUrl": "/devicons/detaspace.svg"
@@ -1919,7 +1805,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#60BE86",
     "iconVariant": "original",
     "iconUrl": "/devicons/devicon.svg"
@@ -1935,8 +1820,7 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "storage"
     ],
     "domain": "data",
-    "kind": "developer-tool",
-    "reel": null,
+    "kind": "datastore",
     "color": "#0080FF",
     "iconVariant": "original",
     "iconUrl": "/devicons/digitalocean.svg"
@@ -1952,8 +1836,7 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "storage"
     ],
     "domain": "data",
-    "kind": "developer-tool",
-    "reel": null,
+    "kind": "datastore",
     "color": "#57f287",
     "iconVariant": "original",
     "iconUrl": "/devicons/discloud.svg"
@@ -1969,7 +1852,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#0c0c14",
     "iconVariant": "original",
     "iconUrl": "/devicons/discordjs.svg"
@@ -1979,9 +1861,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "name": "django",
     "aliases": [],
     "tags": [],
-    "domain": "application",
-    "kind": "framework",
-    "reel": "backend",
+    "domain": "other",
+    "kind": "other",
     "color": "#092e20",
     "iconVariant": "plain",
     "iconUrl": "/devicons/django.svg"
@@ -1999,9 +1880,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "python",
       "web"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#a30000",
     "iconVariant": "original",
     "iconUrl": "/devicons/djangorest.svg"
@@ -2016,7 +1896,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#019bc6",
     "iconVariant": "original",
     "iconUrl": "/devicons/docker.svg"
@@ -2028,7 +1907,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#f56d39",
     "iconVariant": "original",
     "iconUrl": "/devicons/doctrine.svg"
@@ -2043,9 +1921,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#1384c8",
     "iconVariant": "original",
     "iconUrl": "/devicons/dot-net.svg"
@@ -2060,8 +1937,7 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework"
     ],
     "domain": "application",
-    "kind": "runtime",
-    "reel": "backend",
+    "kind": "framework",
     "color": "#623697",
     "iconVariant": "original",
     "iconUrl": "/devicons/dotnetcore.svg"
@@ -2077,7 +1953,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#54bbab",
     "iconVariant": "original",
     "iconUrl": "/devicons/dovecot.svg"
@@ -2096,7 +1971,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#470137",
     "iconVariant": "original",
     "iconUrl": "/devicons/dreamweaver.svg"
@@ -2109,9 +1983,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "java",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#24265d",
     "iconVariant": "original",
     "iconUrl": "/devicons/dropwizard.svg"
@@ -2125,7 +1998,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#0073BA",
     "iconVariant": "original",
     "iconUrl": "/devicons/drupal.svg"
@@ -2140,7 +2012,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/duckdb.svg"
@@ -2154,7 +2025,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#ff6a13",
     "iconVariant": "original",
     "iconUrl": "/devicons/dyalog.svg"
@@ -2170,7 +2040,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#527fff",
     "iconVariant": "original",
     "iconUrl": "/devicons/dynamodb.svg"
@@ -2186,7 +2055,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/dynatrace.svg"
@@ -2203,7 +2071,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#2c2255",
     "iconVariant": "original",
     "iconUrl": "/devicons/eclipse.svg"
@@ -2220,7 +2087,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#77bf43",
     "iconVariant": "original",
     "iconUrl": "/devicons/ecto.svg"
@@ -2236,7 +2102,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#00bfb3",
     "iconVariant": "original",
     "iconUrl": "/devicons/elasticsearch.svg"
@@ -2250,9 +2115,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#47848f",
     "iconVariant": "original",
     "iconUrl": "/devicons/electron.svg"
@@ -2269,7 +2133,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#1f1f1f",
     "iconVariant": "original",
     "iconUrl": "/devicons/eleventy.svg"
@@ -2285,7 +2148,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#380A4D",
     "iconVariant": "original",
     "iconUrl": "/devicons/elixir.svg"
@@ -2299,9 +2161,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#34495E",
     "iconVariant": "original",
     "iconUrl": "/devicons/elm.svg"
@@ -2317,7 +2178,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#421f5f",
     "iconVariant": "original",
     "iconUrl": "/devicons/emacs.svg"
@@ -2332,7 +2192,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#444444",
     "iconVariant": "original",
     "iconUrl": "/devicons/embeddedc.svg"
@@ -2350,9 +2209,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "web-development",
       "build"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#E04E39",
     "iconVariant": "original",
     "iconUrl": "/devicons/ember.svg"
@@ -2371,8 +2229,7 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "database"
     ],
     "domain": "data",
-    "kind": "developer-tool",
-    "reel": null,
+    "kind": "datastore",
     "color": "#512bd4",
     "iconVariant": "original",
     "iconUrl": "/devicons/entityframeworkcore.svg"
@@ -2389,7 +2246,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#e13eaf",
     "iconVariant": "original",
     "iconUrl": "/devicons/envoy.svg"
@@ -2401,7 +2257,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#a90533",
     "iconVariant": "original",
     "iconUrl": "/devicons/erlang.svg"
@@ -2418,7 +2273,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#4b32c3",
     "iconVariant": "original",
     "iconUrl": "/devicons/eslint.svg"
@@ -2432,9 +2286,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "react",
       "react-native"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/expo.svg"
@@ -2450,7 +2303,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "backend",
     "color": "#444",
     "iconVariant": "original",
     "iconUrl": "/devicons/express.svg"
@@ -2464,7 +2316,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#3d5a98",
     "iconVariant": "original",
     "iconUrl": "/devicons/facebook.svg"
@@ -2479,7 +2330,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "backend",
     "color": "#009688",
     "iconVariant": "original",
     "iconUrl": "/devicons/fastapi.svg"
@@ -2495,9 +2345,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "javascript",
       "performance"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/fastify.svg"
@@ -2513,7 +2362,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#3A1AB6",
     "iconVariant": "original",
     "iconUrl": "/devicons/faunadb.svg"
@@ -2526,9 +2374,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "rest"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#333333",
     "iconVariant": "original",
     "iconUrl": "/devicons/feathersjs.svg"
@@ -2544,7 +2391,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#294172",
     "iconVariant": "original",
     "iconUrl": "/devicons/fedora.svg"
@@ -2560,9 +2406,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "go",
       "web"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#00acd7",
     "iconVariant": "original",
     "iconUrl": "/devicons/fiber.svg"
@@ -2576,7 +2421,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "design",
     "kind": "design-tool",
-    "reel": null,
     "color": "#f24e1e",
     "iconVariant": "original",
     "iconUrl": "/devicons/figma.svg"
@@ -2589,9 +2433,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "laravel"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/filamentphp.svg"
@@ -2605,7 +2448,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#bb0001",
     "iconVariant": "original",
     "iconUrl": "/devicons/filezilla.svg"
@@ -2620,9 +2462,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "storage",
       "cloud"
     ],
-    "domain": "data",
-    "kind": "datastore",
-    "reel": "database",
+    "domain": "platform",
+    "kind": "cloud",
     "color": "#ffa000",
     "iconVariant": "original",
     "iconUrl": "/devicons/firebase.svg"
@@ -2636,7 +2477,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#f4790e",
     "iconVariant": "original",
     "iconUrl": "/devicons/firebird.svg"
@@ -2652,7 +2492,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#DD732A",
     "iconVariant": "original",
     "iconUrl": "/devicons/firefox.svg"
@@ -2667,7 +2506,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "backend",
     "color": "#010101",
     "iconVariant": "original",
     "iconUrl": "/devicons/flask.svg"
@@ -2680,9 +2518,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "sdk"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#3FB6D3",
     "iconVariant": "original",
     "iconUrl": "/devicons/flutter.svg"
@@ -2698,7 +2535,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#FF5500",
     "iconVariant": "original",
     "iconUrl": "/devicons/forgejo.svg"
@@ -2713,7 +2549,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#734f96",
     "iconVariant": "original",
     "iconUrl": "/devicons/fortran.svg"
@@ -2726,9 +2561,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "css"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#008cba",
     "iconVariant": "original",
     "iconUrl": "/devicons/foundation.svg"
@@ -2746,9 +2580,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "react",
       "animation"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/framermotion.svg"
@@ -2766,9 +2599,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "ios",
       "open-source"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#ee350f",
     "iconVariant": "original",
     "iconUrl": "/devicons/framework7.svg"
@@ -2784,7 +2616,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#378BBA",
     "iconVariant": "original",
     "iconUrl": "/devicons/fsharp.svg"
@@ -2801,7 +2632,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "design",
     "kind": "design-tool",
-    "reel": null,
     "color": "#FF6A00",
     "iconVariant": "original",
     "iconUrl": "/devicons/fusion.svg"
@@ -2816,7 +2646,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#009f76",
     "iconVariant": "original",
     "iconUrl": "/devicons/gardener.svg"
@@ -2829,9 +2658,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "testing"
     ],
-    "domain": "tooling",
-    "kind": "developer-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#f78557",
     "iconVariant": "original",
     "iconUrl": "/devicons/gatling.svg"
@@ -2846,9 +2674,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "reactjs",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#64328B",
     "iconVariant": "original",
     "iconUrl": "/devicons/gatsby.svg"
@@ -2863,7 +2690,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#f58113",
     "iconVariant": "original",
     "iconUrl": "/devicons/gazebo.svg"
@@ -2880,7 +2706,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#ffcfab",
     "iconVariant": "original",
     "iconUrl": "/devicons/gcc.svg"
@@ -2896,7 +2721,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#9991d9",
     "iconVariant": "original",
     "iconUrl": "/devicons/gentoo.svg"
@@ -2910,7 +2734,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/ghost.svg"
@@ -2924,7 +2747,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#716955",
     "iconVariant": "original",
     "iconUrl": "/devicons/gimp.svg"
@@ -2938,7 +2760,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#f34f29",
     "iconVariant": "original",
     "iconUrl": "/devicons/git.svg"
@@ -2955,7 +2776,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#346ddb",
     "iconVariant": "original",
     "iconUrl": "/devicons/gitbook.svg"
@@ -2969,7 +2789,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#181616",
     "iconVariant": "original",
     "iconUrl": "/devicons/github.svg"
@@ -2986,7 +2805,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#2088FF",
     "iconVariant": "original",
     "iconUrl": "/devicons/githubactions.svg"
@@ -3006,7 +2824,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#24292e",
     "iconVariant": "original",
     "iconUrl": "/devicons/githubcodespaces.svg"
@@ -3021,7 +2838,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#179287",
     "iconVariant": "original",
     "iconUrl": "/devicons/gitkraken.svg"
@@ -3035,7 +2851,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#E24329",
     "iconVariant": "original",
     "iconUrl": "/devicons/gitlab.svg"
@@ -3054,7 +2869,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#FFA132",
     "iconVariant": "original",
     "iconUrl": "/devicons/gitpod.svg"
@@ -3069,7 +2883,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "plain",
     "iconUrl": "/devicons/gitter.svg"
@@ -3084,7 +2897,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#ffaff3",
     "iconVariant": "original",
     "iconUrl": "/devicons/gleam.svg"
@@ -3101,7 +2913,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/glitch.svg"
@@ -3117,7 +2928,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#00acd7",
     "iconVariant": "original",
     "iconUrl": "/devicons/go.svg"
@@ -3132,7 +2942,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#478cbf",
     "iconVariant": "original",
     "iconUrl": "/devicons/godot.svg"
@@ -3148,7 +2957,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#087cfa",
     "iconVariant": "original",
     "iconUrl": "/devicons/goland.svg"
@@ -3162,7 +2970,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#587dbd",
     "iconVariant": "original",
     "iconUrl": "/devicons/google.svg"
@@ -3177,7 +2984,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#557ebf",
     "iconVariant": "original",
     "iconUrl": "/devicons/googlecloud.svg"
@@ -3198,7 +3004,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#ffb300",
     "iconVariant": "original",
     "iconUrl": "/devicons/googlecolab.svg"
@@ -3216,7 +3021,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#02303a",
     "iconVariant": "original",
     "iconUrl": "/devicons/gradle.svg"
@@ -3235,7 +3039,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#f7a525",
     "iconVariant": "original",
     "iconUrl": "/devicons/grafana.svg"
@@ -3253,9 +3056,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "jvm",
       "build"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#feb571",
     "iconVariant": "original",
     "iconUrl": "/devicons/grails.svg"
@@ -3271,7 +3073,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#e434aa",
     "iconVariant": "plain",
     "iconUrl": "/devicons/graphql.svg"
@@ -3290,7 +3091,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#619cbc",
     "iconVariant": "original",
     "iconUrl": "/devicons/groovy.svg"
@@ -3312,7 +3112,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#00b0ad",
     "iconVariant": "original",
     "iconUrl": "/devicons/grpc.svg"
@@ -3329,7 +3128,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "build-tool",
-    "reel": null,
     "color": "#fcaa1a",
     "iconVariant": "original",
     "iconUrl": "/devicons/grunt.svg"
@@ -3346,7 +3144,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "build-tool",
-    "reel": null,
     "color": "#eb4a4b",
     "iconVariant": "plain",
     "iconUrl": "/devicons/gulp.svg"
@@ -3366,9 +3163,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "java"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#ffff00",
     "iconVariant": "original",
     "iconUrl": "/devicons/hadoop.svg"
@@ -3382,9 +3178,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/handlebars.svg"
@@ -3401,7 +3196,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#666666",
     "iconVariant": "original",
     "iconUrl": "/devicons/harbor.svg"
@@ -3419,7 +3213,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#fff100",
     "iconVariant": "original",
     "iconUrl": "/devicons/hardhat.svg"
@@ -3438,7 +3231,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#00A580",
     "iconVariant": "original",
     "iconUrl": "/devicons/harvester.svg"
@@ -3453,7 +3245,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#5E5185",
     "iconVariant": "original",
     "iconUrl": "/devicons/haskell.svg"
@@ -3467,7 +3258,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#EA8220",
     "iconVariant": "original",
     "iconUrl": "/devicons/haxe.svg"
@@ -3483,7 +3273,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#0F1689",
     "iconVariant": "original",
     "iconUrl": "/devicons/helm.svg"
@@ -3497,7 +3286,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#6762a6",
     "iconVariant": "original",
     "iconUrl": "/devicons/heroku.svg"
@@ -3512,8 +3300,7 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "java"
     ],
     "domain": "data",
-    "kind": "developer-tool",
-    "reel": null,
+    "kind": "datastore",
     "color": "#bcae79",
     "iconVariant": "original",
     "iconUrl": "/devicons/hibernate.svg"
@@ -3531,7 +3318,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#fbb040",
     "iconVariant": "original",
     "iconUrl": "/devicons/homebrew.svg"
@@ -3547,7 +3333,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#00d196",
     "iconVariant": "original",
     "iconUrl": "/devicons/hoppscotch.svg"
@@ -3564,7 +3349,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#e54d26",
     "iconVariant": "original",
     "iconUrl": "/devicons/html5.svg"
@@ -3583,7 +3367,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "frontend",
     "color": "#333333",
     "iconVariant": "original",
     "iconUrl": "/devicons/htmx.svg"
@@ -3602,9 +3385,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "html",
       "css"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#FF4088",
     "iconVariant": "original",
     "iconUrl": "/devicons/hugo.svg"
@@ -3621,7 +3403,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#00188f",
     "iconVariant": "original",
     "iconUrl": "/devicons/hyperv.svg"
@@ -3637,7 +3418,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#1EBBEE",
     "iconVariant": "original",
     "iconUrl": "/devicons/ie10.svg"
@@ -3655,7 +3435,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/ifttt.svg"
@@ -3672,7 +3451,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#330000",
     "iconVariant": "original",
     "iconUrl": "/devicons/illustrator.svg"
@@ -3688,9 +3466,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "js",
       "library"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#8163eb",
     "iconVariant": "original",
     "iconUrl": "/devicons/inertiajs.svg"
@@ -3707,7 +3484,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#020a47",
     "iconVariant": "original",
     "iconUrl": "/devicons/influxdb.svg"
@@ -3722,7 +3498,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/inkscape.svg"
@@ -3741,7 +3516,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#4000bf",
     "iconVariant": "original",
     "iconUrl": "/devicons/insomnia.svg"
@@ -3759,7 +3533,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#087cfa",
     "iconVariant": "original",
     "iconUrl": "/devicons/intellij.svg"
@@ -3771,9 +3544,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#4e8ef7",
     "iconVariant": "original",
     "iconUrl": "/devicons/ionic.svg"
@@ -3790,7 +3562,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#67cfe3",
     "iconVariant": "original",
     "iconUrl": "/devicons/jaegertracing.svg"
@@ -3805,7 +3576,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#F0047F",
     "iconVariant": "original",
     "iconUrl": "/devicons/jamstack.svg"
@@ -3821,7 +3591,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#8a4182",
     "iconVariant": "original",
     "iconUrl": "/devicons/jasmine.svg"
@@ -3837,7 +3606,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#EA2D2E",
     "iconVariant": "original",
     "iconUrl": "/devicons/java.svg"
@@ -3855,7 +3623,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#f0db4f",
     "iconVariant": "original",
     "iconUrl": "/devicons/javascript.svg"
@@ -3868,9 +3635,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "css"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#FF664A",
     "iconVariant": "original",
     "iconUrl": "/devicons/jeet.svg"
@@ -3887,7 +3653,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/jekyll.svg"
@@ -3905,7 +3670,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#F0D6B7",
     "iconVariant": "original",
     "iconUrl": "/devicons/jenkins.svg"
@@ -3922,7 +3686,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#99425b",
     "iconVariant": "plain",
     "iconUrl": "/devicons/jest.svg"
@@ -3938,7 +3701,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#FDCC21",
     "iconVariant": "original",
     "iconUrl": "/devicons/jetbrains.svg"
@@ -3955,7 +3717,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#4285f4",
     "iconVariant": "original",
     "iconUrl": "/devicons/jetpackcompose.svg"
@@ -3973,9 +3734,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "web-application",
       "web-development"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#4289c7",
     "iconVariant": "original",
     "iconUrl": "/devicons/jhipster.svg"
@@ -3992,7 +3752,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#2684ff",
     "iconVariant": "original",
     "iconUrl": "/devicons/jira.svg"
@@ -4010,7 +3769,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#2684FF",
     "iconVariant": "original",
     "iconUrl": "/devicons/jiraalign.svg"
@@ -4027,7 +3785,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "library",
-    "reel": "frontend",
     "color": "#0769ad",
     "iconVariant": "original",
     "iconUrl": "/devicons/jquery.svg"
@@ -4046,7 +3803,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#505050",
     "iconVariant": "original",
     "iconUrl": "/devicons/json.svg"
@@ -4063,7 +3819,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#5f7389",
     "iconVariant": "original",
     "iconUrl": "/devicons/jule.svg"
@@ -4080,7 +3835,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#28a745",
     "iconVariant": "original",
     "iconUrl": "/devicons/julia.svg"
@@ -4094,9 +3848,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "java"
     ],
-    "domain": "tooling",
-    "kind": "developer-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#dc514a",
     "iconVariant": "original",
     "iconUrl": "/devicons/junit.svg"
@@ -4113,7 +3866,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#F37726",
     "iconVariant": "original",
     "iconUrl": "/devicons/jupyter.svg"
@@ -4130,7 +3882,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#fd824e",
     "iconVariant": "original",
     "iconUrl": "/devicons/k3os.svg"
@@ -4146,7 +3897,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#ffc519",
     "iconVariant": "original",
     "iconUrl": "/devicons/k3s.svg"
@@ -4162,7 +3912,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#7D64FF",
     "iconVariant": "original",
     "iconUrl": "/devicons/k6.svg"
@@ -4178,7 +3927,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#20BEFF",
     "iconVariant": "original",
     "iconUrl": "/devicons/kaggle.svg"
@@ -4192,9 +3940,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "open-source",
       "library"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#8c6432",
     "iconVariant": "original",
     "iconUrl": "/devicons/kaldi.svg"
@@ -4212,7 +3959,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#2777ff",
     "iconVariant": "original",
     "iconUrl": "/devicons/kalilinux.svg"
@@ -4227,9 +3973,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "testing"
     ],
-    "domain": "tooling",
-    "kind": "developer-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/karatelabs.svg"
@@ -4247,7 +3992,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#56c5a8",
     "iconVariant": "original",
     "iconUrl": "/devicons/karma.svg"
@@ -4263,7 +4007,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#21769a",
     "iconVariant": "original",
     "iconUrl": "/devicons/kdeneon.svg"
@@ -4277,9 +4020,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "python",
       "library"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#d00000",
     "iconVariant": "original",
     "iconUrl": "/devicons/keras.svg"
@@ -4294,7 +4036,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#F04E98",
     "iconVariant": "original",
     "iconUrl": "/devicons/kibana.svg"
@@ -4311,8 +4052,7 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "library"
     ],
     "domain": "data",
-    "kind": "developer-tool",
-    "reel": null,
+    "kind": "datastore",
     "color": "#e16426",
     "iconVariant": "original",
     "iconUrl": "/devicons/knexjs.svg"
@@ -4327,9 +4067,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "javascript"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#e42e16",
     "iconVariant": "plain-wordmark",
     "iconUrl": "/devicons/knockout.svg"
@@ -4347,7 +4086,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#c711e1",
     "iconVariant": "original",
     "iconUrl": "/devicons/kotlin.svg"
@@ -4362,9 +4100,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "nodejs",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#0081C2",
     "iconVariant": "original",
     "iconUrl": "/devicons/krakenjs.svg"
@@ -4378,9 +4115,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "kotlin",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#fc801d",
     "iconVariant": "original",
     "iconUrl": "/devicons/ktor.svg"
@@ -4396,7 +4132,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#72a1e5",
     "iconVariant": "original",
     "iconUrl": "/devicons/kubeflow.svg"
@@ -4411,7 +4146,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#326ce5",
     "iconVariant": "original",
     "iconUrl": "/devicons/kubernetes.svg"
@@ -4425,7 +4159,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#fed500",
     "iconVariant": "original",
     "iconUrl": "/devicons/labview.svg"
@@ -4444,9 +4177,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "mvc",
       "middleware"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#013755",
     "iconVariant": "original",
     "iconUrl": "/devicons/laminas.svg"
@@ -4461,7 +4193,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "backend",
     "color": "#f0513f",
     "iconVariant": "original",
     "iconUrl": "/devicons/laravel.svg"
@@ -4481,7 +4212,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#6875f5",
     "iconVariant": "original",
     "iconUrl": "/devicons/laraveljetstream.svg"
@@ -4499,7 +4229,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/latex.svg"
@@ -4518,7 +4247,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#ffa116",
     "iconVariant": "original",
     "iconUrl": "/devicons/leetcode.svg"
@@ -4535,7 +4263,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#2a4d80",
     "iconVariant": "plain-wordmark",
     "iconUrl": "/devicons/less.svg"
@@ -4551,9 +4278,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "cross-platform",
       "open-source"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#e74a45",
     "iconVariant": "original",
     "iconUrl": "/devicons/libgdx.svg"
@@ -4568,7 +4294,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#0076b2",
     "iconVariant": "original",
     "iconUrl": "/devicons/linkedin.svg"
@@ -4582,7 +4307,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/linux.svg"
@@ -4597,7 +4321,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#69b53f",
     "iconVariant": "original",
     "iconUrl": "/devicons/linuxmint.svg"
@@ -4611,8 +4334,7 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "database"
     ],
     "domain": "data",
-    "kind": "developer-tool",
-    "reel": null,
+    "kind": "datastore",
     "color": "#FF3C00",
     "iconVariant": "original",
     "iconUrl": "/devicons/liquibase.svg"
@@ -4629,9 +4351,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "php",
       "open-source"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#FB70A9",
     "iconVariant": "original",
     "iconUrl": "/devicons/livewire.svg"
@@ -4650,7 +4371,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#5A90B6",
     "iconVariant": "original",
     "iconUrl": "/devicons/llvm.svg"
@@ -4663,9 +4383,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "javascript",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/lodash.svg"
@@ -4680,7 +4399,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#fec514",
     "iconVariant": "original",
     "iconUrl": "/devicons/logstash.svg"
@@ -4697,7 +4415,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#fff",
     "iconVariant": "original",
     "iconUrl": "/devicons/love2d.svg"
@@ -4719,7 +4436,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#000080",
     "iconVariant": "original",
     "iconUrl": "/devicons/lua.svg"
@@ -4739,9 +4455,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "micro-framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#e54537",
     "iconVariant": "original",
     "iconUrl": "/devicons/lumen.svg"
@@ -4754,9 +4469,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "php",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#f26322",
     "iconVariant": "original",
     "iconUrl": "/devicons/magento.svg"
@@ -4772,7 +4486,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/mapbox.svg"
@@ -4788,7 +4501,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#003545",
     "iconVariant": "original",
     "iconUrl": "/devicons/mariadb.svg"
@@ -4805,7 +4517,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/markdown.svg"
@@ -4824,9 +4535,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "design",
       "material-design"
     ],
-    "domain": "design",
-    "kind": "design-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#EB7077",
     "iconVariant": "original",
     "iconUrl": "/devicons/materializecss.svg"
@@ -4842,9 +4552,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "design",
       "ui"
     ],
-    "domain": "design",
-    "kind": "design-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#1FA6CA",
     "iconVariant": "original",
     "iconUrl": "/devicons/materialui.svg"
@@ -4859,7 +4568,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#6dd0c7",
     "iconVariant": "original",
     "iconUrl": "/devicons/matlab.svg"
@@ -4876,9 +4584,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "python",
       "api"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#11557C",
     "iconVariant": "original",
     "iconUrl": "/devicons/matplotlib.svg"
@@ -4896,7 +4603,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#19191c",
     "iconVariant": "original",
     "iconUrl": "/devicons/mattermost.svg"
@@ -4913,7 +4619,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#e97826",
     "iconVariant": "original",
     "iconUrl": "/devicons/maven.svg"
@@ -4936,7 +4641,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#149B9A",
     "iconVariant": "original",
     "iconUrl": "/devicons/maya.svg"
@@ -4952,7 +4656,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#2A9790",
     "iconVariant": "original",
     "iconUrl": "/devicons/memcached.svg"
@@ -4966,7 +4669,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#999",
     "iconVariant": "original",
     "iconUrl": "/devicons/mercurial.svg"
@@ -4981,9 +4683,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "javascript",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#df5052",
     "iconVariant": "original",
     "iconUrl": "/devicons/meteor.svg"
@@ -5003,7 +4704,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#ee352c",
     "iconVariant": "original",
     "iconUrl": "/devicons/microsoftsqlserver.svg"
@@ -5018,7 +4718,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#8dc63f",
     "iconVariant": "original",
     "iconUrl": "/devicons/minitab.svg"
@@ -5037,7 +4736,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "frontend",
     "color": "#010002",
     "iconVariant": "original",
     "iconUrl": "/devicons/mithril.svg"
@@ -5056,7 +4754,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#e05e11",
     "iconVariant": "original",
     "iconUrl": "/devicons/mobx.svg"
@@ -5070,7 +4767,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#8d6748",
     "iconVariant": "original",
     "iconUrl": "/devicons/mocha.svg"
@@ -5084,9 +4780,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "php",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#00decc",
     "iconVariant": "original",
     "iconUrl": "/devicons/modx.svg"
@@ -5106,9 +4801,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "micro-services",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#3cafce",
     "iconVariant": "original",
     "iconUrl": "/devicons/moleculer.svg"
@@ -5122,7 +4816,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#4FAA41",
     "iconVariant": "original",
     "iconUrl": "/devicons/mongodb.svg"
@@ -5139,7 +4832,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#860000",
     "iconVariant": "original",
     "iconUrl": "/devicons/mongoose.svg"
@@ -5157,7 +4849,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#e73c00",
     "iconVariant": "original",
     "iconUrl": "/devicons/monogame.svg"
@@ -5171,7 +4862,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#F7931E",
     "iconVariant": "original",
     "iconUrl": "/devicons/moodle.svg"
@@ -5187,7 +4877,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/msdos.svg"
@@ -5204,7 +4893,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#00618a",
     "iconVariant": "original",
     "iconUrl": "/devicons/mysql.svg"
@@ -5224,7 +4912,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#C8F",
     "iconVariant": "original",
     "iconUrl": "/devicons/nano.svg"
@@ -5245,7 +4932,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#27aae1",
     "iconVariant": "original",
     "iconUrl": "/devicons/nats.svg"
@@ -5259,7 +4945,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#018BFF",
     "iconVariant": "original",
     "iconUrl": "/devicons/neo4j.svg"
@@ -5277,7 +4962,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#5fb950",
     "iconVariant": "original",
     "iconUrl": "/devicons/neovim.svg"
@@ -5291,7 +4975,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "backend",
     "color": "#df234f",
     "iconVariant": "original",
     "iconUrl": "/devicons/nestjs.svg"
@@ -5307,7 +4990,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#1e6abf",
     "iconVariant": "original",
     "iconUrl": "/devicons/netbeans.svg"
@@ -5324,7 +5006,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#00857d",
     "iconVariant": "original",
     "iconUrl": "/devicons/netbox.svg"
@@ -5342,7 +5023,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#05BDBA",
     "iconVariant": "original",
     "iconUrl": "/devicons/netlify.svg"
@@ -5356,9 +5036,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "library",
       "python"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#2c7fb8",
     "iconVariant": "original",
     "iconUrl": "/devicons/networkx.svg"
@@ -5374,7 +5053,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#1d252c",
     "iconVariant": "original",
     "iconUrl": "/devicons/newrelic.svg"
@@ -5388,7 +5066,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "frontend",
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/nextjs.svg"
@@ -5402,7 +5079,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#090",
     "iconVariant": "original",
     "iconUrl": "/devicons/nginx.svg"
@@ -5417,7 +5093,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#02228e",
     "iconVariant": "original",
     "iconUrl": "/devicons/ngrok.svg"
@@ -5435,7 +5110,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#ba2bd2",
     "iconVariant": "original",
     "iconUrl": "/devicons/ngrx.svg"
@@ -5453,9 +5127,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "C#",
       "c-sharp"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#903a36",
     "iconVariant": "original",
     "iconUrl": "/devicons/nhibernate.svg"
@@ -5474,7 +5147,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#ffe953",
     "iconVariant": "original",
     "iconUrl": "/devicons/nim.svg"
@@ -5488,7 +5160,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#f7e941",
     "iconVariant": "original",
     "iconUrl": "/devicons/nimble.svg"
@@ -5502,7 +5173,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#5277C3",
     "iconVariant": "original",
     "iconUrl": "/devicons/nixos.svg"
@@ -5515,9 +5185,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "javascript",
       "language"
     ],
-    "domain": "application",
-    "kind": "runtime",
-    "reel": "backend",
+    "domain": "language",
+    "kind": "language",
     "color": "#5fa04e",
     "iconVariant": "original",
     "iconUrl": "/devicons/nodejs.svg"
@@ -5535,7 +5204,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#76d04b",
     "iconVariant": "original",
     "iconUrl": "/devicons/nodemon.svg"
@@ -5552,7 +5220,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#8f0000",
     "iconVariant": "original",
     "iconUrl": "/devicons/nodered.svg"
@@ -5566,7 +5233,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#3d3b47",
     "iconVariant": "original",
     "iconUrl": "/devicons/nodewebkit.svg"
@@ -5584,7 +5250,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#00ca8e",
     "iconVariant": "original",
     "iconUrl": "/devicons/nomad.svg"
@@ -5601,7 +5266,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#4878be",
     "iconVariant": "original",
     "iconUrl": "/devicons/norg.svg"
@@ -5615,7 +5279,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#fff",
     "iconVariant": "original",
     "iconUrl": "/devicons/notion.svg"
@@ -5633,7 +5296,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#cb3837",
     "iconVariant": "original",
     "iconUrl": "/devicons/npm.svg"
@@ -5645,7 +5307,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#0a37b2",
     "iconVariant": "original",
     "iconUrl": "/devicons/npss.svg"
@@ -5660,7 +5321,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#004880",
     "iconVariant": "original",
     "iconUrl": "/devicons/nuget.svg"
@@ -5673,9 +5333,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "library",
       "python"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#4dabcf",
     "iconVariant": "original",
     "iconUrl": "/devicons/numpy.svg"
@@ -5691,9 +5350,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "fullstack",
       "vuejs"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#00dc82",
     "iconVariant": "original",
     "iconUrl": "/devicons/nuxt.svg"
@@ -5711,7 +5369,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "frontend",
     "color": "#00c48d",
     "iconVariant": "original",
     "iconUrl": "/devicons/nuxtjs.svg"
@@ -5726,7 +5383,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/oauth.svg"
@@ -5741,7 +5397,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#0b5a9d",
     "iconVariant": "plain",
     "iconUrl": "/devicons/objectivec.svg"
@@ -5756,7 +5411,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#F18803",
     "iconVariant": "original",
     "iconUrl": "/devicons/ocaml.svg"
@@ -5778,7 +5432,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/ohmyzsh.svg"
@@ -5795,7 +5448,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#0f82c2",
     "iconVariant": "original",
     "iconUrl": "/devicons/okta.svg"
@@ -5810,9 +5462,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "game",
       "3d"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#7e000d",
     "iconVariant": "original",
     "iconUrl": "/devicons/openal.svg"
@@ -5828,7 +5479,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#91d400",
     "iconVariant": "original",
     "iconUrl": "/devicons/openapi.svg"
@@ -5848,7 +5498,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/opencl.svg"
@@ -5862,9 +5511,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "c/c++",
       "computer-vision"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#128dff",
     "iconVariant": "original",
     "iconUrl": "/devicons/opencv.svg"
@@ -5881,9 +5529,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "game",
       "3d"
     ],
-    "domain": "design",
-    "kind": "design-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#5586a4",
     "iconVariant": "original",
     "iconUrl": "/devicons/opengl.svg"
@@ -5898,7 +5545,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#ed1944",
     "iconVariant": "original",
     "iconUrl": "/devicons/openstack.svg"
@@ -5914,7 +5560,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#73ba25",
     "iconVariant": "original",
     "iconUrl": "/devicons/opensuse.svg"
@@ -5928,7 +5573,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#f5a800",
     "iconVariant": "original",
     "iconUrl": "/devicons/opentelemetry.svg"
@@ -5942,7 +5586,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#f7192d",
     "iconVariant": "original",
     "iconUrl": "/devicons/opera.svg"
@@ -5958,7 +5601,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#EA1B22",
     "iconVariant": "original",
     "iconUrl": "/devicons/oracle.svg"
@@ -5972,9 +5614,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "open-source",
       "security"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#5528ff",
     "iconVariant": "original",
     "iconUrl": "/devicons/ory.svg"
@@ -5990,9 +5631,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "js",
       "library"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#ED225D",
     "iconVariant": "original",
     "iconUrl": "/devicons/p5js.svg"
@@ -6008,7 +5648,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#1d94dd",
     "iconVariant": "original",
     "iconUrl": "/devicons/packer.svg"
@@ -6021,9 +5660,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "library",
       "python"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#130754",
     "iconVariant": "original",
     "iconUrl": "/devicons/pandas.svg"
@@ -6040,7 +5678,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#35df79",
     "iconVariant": "original",
     "iconUrl": "/devicons/passport.svg"
@@ -6055,7 +5692,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#212177",
     "iconVariant": "original",
     "iconUrl": "/devicons/perl.svg"
@@ -6075,7 +5711,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/pfsense.svg"
@@ -6088,9 +5723,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "php",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#76c39b",
     "iconVariant": "original",
     "iconUrl": "/devicons/phalcon.svg"
@@ -6111,7 +5745,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "backend",
     "color": "#FD4F00",
     "iconVariant": "original",
     "iconUrl": "/devicons/phoenix.svg"
@@ -6128,7 +5761,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#004480",
     "iconVariant": "original",
     "iconUrl": "/devicons/photonengine.svg"
@@ -6145,7 +5777,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#001e36",
     "iconVariant": "original",
     "iconUrl": "/devicons/photoshop.svg"
@@ -6163,7 +5794,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#777bb3",
     "iconVariant": "original",
     "iconUrl": "/devicons/php.svg"
@@ -6181,7 +5811,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#b74af7",
     "iconVariant": "original",
     "iconUrl": "/devicons/phpstorm.svg"
@@ -6200,8 +5829,7 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "ui"
     ],
     "domain": "application",
-    "kind": "framework",
-    "reel": "frontend",
+    "kind": "library",
     "color": "#e72264",
     "iconVariant": "original",
     "iconUrl": "/devicons/pixijs.svg"
@@ -6214,9 +5842,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "testing",
       "framework"
     ],
-    "domain": "tooling",
-    "kind": "developer-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#2EAD33",
     "iconVariant": "original",
     "iconUrl": "/devicons/playwright.svg"
@@ -6232,7 +5859,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#3d4c73",
     "iconVariant": "original",
     "iconUrl": "/devicons/plotly.svg"
@@ -6250,7 +5876,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/pm2.svg"
@@ -6267,7 +5892,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#f9ad00",
     "iconVariant": "original",
     "iconUrl": "/devicons/pnpm.svg"
@@ -6283,7 +5907,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#892ca0",
     "iconVariant": "original",
     "iconUrl": "/devicons/podman.svg"
@@ -6300,7 +5923,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#0080c5",
     "iconVariant": "original",
     "iconUrl": "/devicons/poetry.svg"
@@ -6316,7 +5938,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#7950DD",
     "iconVariant": "original",
     "iconUrl": "/devicons/polygon.svg"
@@ -6332,7 +5953,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#3BBCED",
     "iconVariant": "original",
     "iconUrl": "/devicons/portainer.svg"
@@ -6348,7 +5968,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "build-tool",
-    "reel": null,
     "color": "#DD3A0A",
     "iconVariant": "original",
     "iconUrl": "/devicons/postcss.svg"
@@ -6362,7 +5981,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#336791",
     "iconVariant": "original",
     "iconUrl": "/devicons/postgresql.svg"
@@ -6377,7 +5995,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#f37036",
     "iconVariant": "original",
     "iconUrl": "/devicons/postman.svg"
@@ -6398,7 +6015,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#1E2A3A",
     "iconVariant": "original",
     "iconUrl": "/devicons/powershell.svg"
@@ -6415,7 +6031,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#2A0634",
     "iconVariant": "original",
     "iconUrl": "/devicons/premierepro.svg"
@@ -6431,9 +6046,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "library",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/primeng.svg"
@@ -6449,7 +6063,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#2D3748",
     "iconVariant": "original",
     "iconUrl": "/devicons/prisma.svg"
@@ -6468,9 +6081,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "ide",
       "framework"
     ],
-    "domain": "tooling",
-    "kind": "developer-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#1f34ab",
     "iconVariant": "original",
     "iconUrl": "/devicons/processing.svg"
@@ -6484,9 +6096,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "php",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#1e87f0",
     "iconVariant": "original",
     "iconUrl": "/devicons/processwire.svg"
@@ -6505,7 +6116,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#F46C30",
     "iconVariant": "original",
     "iconUrl": "/devicons/prolog.svg"
@@ -6521,7 +6131,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#e75225",
     "iconVariant": "original",
     "iconUrl": "/devicons/prometheus.svg"
@@ -6537,9 +6146,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "javascript"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#d51c2f",
     "iconVariant": "original",
     "iconUrl": "/devicons/protractor.svg"
@@ -6555,7 +6163,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#e57000",
     "iconVariant": "original",
     "iconUrl": "/devicons/proxmox.svg"
@@ -6571,9 +6178,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "javascript",
       "nodejs"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#56332b",
     "iconVariant": "original",
     "iconUrl": "/devicons/pug.svg"
@@ -6591,7 +6197,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#2c3e50",
     "iconVariant": "original",
     "iconUrl": "/devicons/pulsar.svg"
@@ -6606,7 +6211,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#f6bf29",
     "iconVariant": "original",
     "iconUrl": "/devicons/pulumi.svg"
@@ -6623,7 +6227,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#00d8a2",
     "iconVariant": "original",
     "iconUrl": "/devicons/puppeteer.svg"
@@ -6639,7 +6242,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#14161a",
     "iconVariant": "original",
     "iconUrl": "/devicons/purescript.svg"
@@ -6654,7 +6256,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#0000fc",
     "iconVariant": "original",
     "iconUrl": "/devicons/putty.svg"
@@ -6669,7 +6270,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#21D789",
     "iconVariant": "original",
     "iconUrl": "/devicons/pycharm.svg"
@@ -6687,7 +6287,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#3775a9",
     "iconVariant": "original",
     "iconUrl": "/devicons/pypi.svg"
@@ -6704,7 +6303,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "frontend",
     "color": "#fda703",
     "iconVariant": "original-wordmark",
     "iconUrl": "/devicons/pyscript.svg"
@@ -6718,9 +6316,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "testing"
     ],
-    "domain": "tooling",
-    "kind": "developer-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#009fe3",
     "iconVariant": "original",
     "iconUrl": "/devicons/pytest.svg"
@@ -6735,7 +6332,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#ffd845",
     "iconVariant": "original",
     "iconUrl": "/devicons/python.svg"
@@ -6752,7 +6348,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#EE4C2C",
     "iconVariant": "original",
     "iconUrl": "/devicons/pytorch.svg"
@@ -6768,7 +6363,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#ff318c",
     "iconVariant": "original",
     "iconUrl": "/devicons/qodana.svg"
@@ -6780,9 +6374,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#41cd52",
     "iconVariant": "original",
     "iconUrl": "/devicons/qt.svg"
@@ -6796,7 +6389,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#1a62b3",
     "iconVariant": "original",
     "iconUrl": "/devicons/qtest.svg"
@@ -6809,9 +6401,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "java",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#4695EB",
     "iconVariant": "original",
     "iconUrl": "/devicons/quarkus.svg"
@@ -6824,9 +6415,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "javascript"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#00b4ff",
     "iconVariant": "original",
     "iconUrl": "/devicons/quasar.svg"
@@ -6839,9 +6429,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "open-source"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#18B6F6",
     "iconVariant": "original",
     "iconUrl": "/devicons/qwik.svg"
@@ -6858,7 +6447,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#1f65b7",
     "iconVariant": "original",
     "iconUrl": "/devicons/r.svg"
@@ -6873,7 +6461,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#ff6600",
     "iconVariant": "original",
     "iconUrl": "/devicons/rabbitmq.svg"
@@ -6888,7 +6475,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#9f1d20",
     "iconVariant": "original",
     "iconUrl": "/devicons/racket.svg"
@@ -6905,7 +6491,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#f42434",
     "iconVariant": "original",
     "iconUrl": "/devicons/radstudio.svg"
@@ -6921,7 +6506,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "backend",
     "color": "#CC0000",
     "iconVariant": "plain",
     "iconUrl": "/devicons/rails.svg"
@@ -6937,7 +6521,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#fff",
     "iconVariant": "original",
     "iconUrl": "/devicons/railway.svg"
@@ -6952,7 +6535,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#2453FF",
     "iconVariant": "original",
     "iconUrl": "/devicons/rancher.svg"
@@ -6969,7 +6551,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#c51850",
     "iconVariant": "original",
     "iconUrl": "/devicons/raspberrypi.svg"
@@ -6987,7 +6568,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#6AC6E7",
     "iconVariant": "original",
     "iconUrl": "/devicons/reach.svg"
@@ -7003,7 +6583,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "frontend",
     "color": "#61dafb",
     "iconVariant": "original",
     "iconUrl": "/devicons/react.svg"
@@ -7022,9 +6601,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "reactjs",
       "javascript"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#41e0fd",
     "iconVariant": "original",
     "iconUrl": "/devicons/reactbootstrap.svg"
@@ -7038,9 +6616,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#61dafb",
     "iconVariant": "original",
     "iconUrl": "/devicons/reactnative.svg"
@@ -7058,7 +6635,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#7b61c1",
     "iconVariant": "original",
     "iconUrl": "/devicons/reactnavigation.svg"
@@ -7071,9 +6647,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "react"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#f44250",
     "iconVariant": "original",
     "iconUrl": "/devicons/reactrouter.svg"
@@ -7091,7 +6666,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#32322A",
     "iconVariant": "original",
     "iconUrl": "/devicons/readthedocs.svg"
@@ -7107,7 +6681,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#6e60f9",
     "iconVariant": "original",
     "iconUrl": "/devicons/realm.svg"
@@ -7124,7 +6697,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#262626",
     "iconVariant": "original",
     "iconUrl": "/devicons/rect.svg"
@@ -7139,7 +6711,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#e93442",
     "iconVariant": "original",
     "iconUrl": "/devicons/redhat.svg"
@@ -7153,9 +6724,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [
       "server"
     ],
-    "domain": "data",
-    "kind": "datastore",
-    "reel": "database",
+    "domain": "other",
+    "kind": "other",
     "color": "#d82c20",
     "iconVariant": "original",
     "iconUrl": "/devicons/redis.svg"
@@ -7169,9 +6739,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#764abc",
     "iconVariant": "original",
     "iconUrl": "/devicons/redux.svg"
@@ -7185,9 +6754,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "python",
       "web"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#664ec6",
     "iconVariant": "original",
     "iconUrl": "/devicons/reflex.svg"
@@ -7203,9 +6771,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "fullstack",
       "web"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#121212",
     "iconVariant": "original",
     "iconUrl": "/devicons/remix.svg"
@@ -7224,7 +6791,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#ff7f7f",
     "iconVariant": "original",
     "iconUrl": "/devicons/renpy.svg"
@@ -7238,7 +6804,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#F26207",
     "iconVariant": "original",
     "iconUrl": "/devicons/replit.svg"
@@ -7252,7 +6817,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#d81511",
     "iconVariant": "original",
     "iconUrl": "/devicons/rexx.svg"
@@ -7269,7 +6833,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#dd1265",
     "iconVariant": "original",
     "iconUrl": "/devicons/rider.svg"
@@ -7283,7 +6846,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#ffbe00",
     "iconVariant": "original",
     "iconUrl": "/devicons/rocksdb.svg"
@@ -7301,7 +6863,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#10b982",
     "iconVariant": "original",
     "iconUrl": "/devicons/rockylinux.svg"
@@ -7320,7 +6881,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "build-tool",
-    "reel": null,
     "color": "#ff3333",
     "iconVariant": "original",
     "iconUrl": "/devicons/rollup.svg"
@@ -7336,7 +6896,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#21304c",
     "iconVariant": "original",
     "iconUrl": "/devicons/ros.svg"
@@ -7350,9 +6909,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "testing"
     ],
-    "domain": "tooling",
-    "kind": "developer-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#6de1fa",
     "iconVariant": "original",
     "iconUrl": "/devicons/rspec.svg"
@@ -7368,7 +6926,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#75aadb",
     "iconVariant": "original",
     "iconUrl": "/devicons/rstudio.svg"
@@ -7385,7 +6942,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#d91404",
     "iconVariant": "original",
     "iconUrl": "/devicons/ruby.svg"
@@ -7400,7 +6956,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#FC801D",
     "iconVariant": "original",
     "iconUrl": "/devicons/rubymine.svg"
@@ -7417,7 +6972,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/rust.svg"
@@ -7433,9 +6987,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "library",
       "observability"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#df1c85",
     "iconVariant": "original",
     "iconUrl": "/devicons/rxjs.svg"
@@ -7451,7 +7004,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#1B88CA",
     "iconVariant": "original",
     "iconUrl": "/devicons/safari.svg"
@@ -7466,7 +7018,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#00a1e0",
     "iconVariant": "original",
     "iconUrl": "/devicons/salesforce.svg"
@@ -7480,7 +7031,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#F03E2F",
     "iconVariant": "original",
     "iconUrl": "/devicons/sanity.svg"
@@ -7497,7 +7047,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#cc6699",
     "iconVariant": "original",
     "iconUrl": "/devicons/sass.svg"
@@ -7515,7 +7064,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#de3423",
     "iconVariant": "original",
     "iconUrl": "/devicons/scala.svg"
@@ -7531,7 +7079,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#173aee",
     "iconVariant": "original",
     "iconUrl": "/devicons/scalingo.svg"
@@ -7550,9 +7097,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "tool",
       "library"
     ],
-    "domain": "tooling",
-    "kind": "developer-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#f89939",
     "iconVariant": "original",
     "iconUrl": "/devicons/scikitlearn.svg"
@@ -7569,9 +7115,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "multimedia",
       "game"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#173354",
     "iconVariant": "original",
     "iconUrl": "/devicons/sdl.svg"
@@ -7586,7 +7131,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#CF0A2C",
     "iconVariant": "original",
     "iconUrl": "/devicons/selenium.svg"
@@ -7606,7 +7150,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/sema.svg"
@@ -7622,7 +7165,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#362d59",
     "iconVariant": "original",
     "iconUrl": "/devicons/sentry.svg"
@@ -7638,8 +7180,7 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "language"
     ],
     "domain": "data",
-    "kind": "developer-tool",
-    "reel": null,
+    "kind": "datastore",
     "color": "#3b4b72",
     "iconVariant": "original",
     "iconUrl": "/devicons/sequelize.svg"
@@ -7654,7 +7195,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#179eff",
     "iconVariant": "original",
     "iconUrl": "/devicons/shopware.svg"
@@ -7673,7 +7213,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/shotgrid.svg"
@@ -7687,7 +7226,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#fdad00",
     "iconVariant": "original",
     "iconUrl": "/devicons/sketch.svg"
@@ -7701,7 +7239,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#2D333A",
     "iconVariant": "original",
     "iconUrl": "/devicons/slack.svg"
@@ -7715,9 +7252,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "networking",
       "websockets"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#010101",
     "iconVariant": "original",
     "iconUrl": "/devicons/socketio.svg"
@@ -7735,7 +7271,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#383838",
     "iconVariant": "original",
     "iconUrl": "/devicons/solidity.svg"
@@ -7751,7 +7286,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "frontend",
     "color": "#2c4f7c",
     "iconVariant": "original",
     "iconUrl": "/devicons/solidjs.svg"
@@ -7768,7 +7302,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#549dd0",
     "iconVariant": "original",
     "iconUrl": "/devicons/sonarqube.svg"
@@ -7786,7 +7319,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#f79a10",
     "iconVariant": "original",
     "iconUrl": "/devicons/sourceengine.svg"
@@ -7800,7 +7332,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#205081",
     "iconVariant": "original",
     "iconUrl": "/devicons/sourcetree.svg"
@@ -7818,7 +7349,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#0F3A80",
     "iconVariant": "original",
     "iconUrl": "/devicons/spack.svg"
@@ -7835,7 +7365,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#FB5B62",
     "iconVariant": "original",
     "iconUrl": "/devicons/spicedb.svg"
@@ -7852,7 +7381,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#0C1724",
     "iconVariant": "original-wordmark",
     "iconUrl": "/devicons/splunk.svg"
@@ -7868,7 +7396,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "backend",
     "color": "#5FB832",
     "iconVariant": "original",
     "iconUrl": "/devicons/spring.svg"
@@ -7885,7 +7412,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#cc1e4c",
     "iconVariant": "original",
     "iconUrl": "/devicons/spss.svg"
@@ -7902,7 +7428,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#8c0000",
     "iconVariant": "original",
     "iconUrl": "/devicons/spyder.svg"
@@ -7917,7 +7442,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#333333",
     "iconVariant": "original",
     "iconUrl": "/devicons/sqlalchemy.svg"
@@ -7931,8 +7455,7 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "database"
     ],
     "domain": "data",
-    "kind": "developer-tool",
-    "reel": null,
+    "kind": "datastore",
     "color": "#adadad",
     "iconVariant": "original",
     "iconUrl": "/devicons/sqldeveloper.svg"
@@ -7948,7 +7471,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#0f80cc",
     "iconVariant": "original",
     "iconUrl": "/devicons/sqlite.svg"
@@ -7964,7 +7486,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#231F20",
     "iconVariant": "original",
     "iconUrl": "/devicons/ssh.svg"
@@ -7980,7 +7501,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#1389fd",
     "iconVariant": "original",
     "iconUrl": "/devicons/stackblitz.svg"
@@ -7998,7 +7518,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#F58025",
     "iconVariant": "original",
     "iconUrl": "/devicons/stackoverflow.svg"
@@ -8016,7 +7535,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#195f92",
     "iconVariant": "original-wordmark",
     "iconUrl": "/devicons/stata.svg"
@@ -8033,7 +7551,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "frontend",
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/stenciljs.svg"
@@ -8049,9 +7566,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "documentation",
       "ui"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#FF4785",
     "iconVariant": "original",
     "iconUrl": "/devicons/storybook.svg"
@@ -8067,7 +7583,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#7d353b",
     "iconVariant": "original",
     "iconUrl": "/devicons/streamlit.svg"
@@ -8087,9 +7602,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "nodejs",
       "web"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#d268a7",
     "iconVariant": "original",
     "iconUrl": "/devicons/styledcomponents.svg"
@@ -8106,7 +7620,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#333333",
     "iconVariant": "original",
     "iconUrl": "/devicons/stylus.svg"
@@ -8123,7 +7636,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#809cc8",
     "iconVariant": "original",
     "iconUrl": "/devicons/subversion.svg"
@@ -8138,7 +7650,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#112a46",
     "iconVariant": "original",
     "iconUrl": "/devicons/sulu.svg"
@@ -8155,7 +7666,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#3ecf8e",
     "iconVariant": "original",
     "iconUrl": "/devicons/supabase.svg"
@@ -8171,7 +7681,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#c900d1",
     "iconVariant": "original",
     "iconUrl": "/devicons/surrealdb.svg"
@@ -8187,9 +7696,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "compiler"
     ],
-    "domain": "application",
-    "kind": "framework",
-    "reel": "frontend",
+    "domain": "language",
+    "kind": "language",
     "color": "#ff3e00",
     "iconVariant": "original",
     "iconUrl": "/devicons/svelte.svg"
@@ -8206,9 +7714,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "library",
       "node.js"
     ],
-    "domain": "tooling",
-    "kind": "developer-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#fff",
     "iconVariant": "original",
     "iconUrl": "/devicons/svgo.svg"
@@ -8226,7 +7733,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#85ea2d",
     "iconVariant": "original",
     "iconUrl": "/devicons/swagger.svg"
@@ -8240,7 +7746,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#F05138",
     "iconVariant": "original",
     "iconUrl": "/devicons/swift.svg"
@@ -8254,9 +7759,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "javascript",
       "open-source"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#0080FF",
     "iconVariant": "original",
     "iconUrl": "/devicons/swiper.svg"
@@ -8271,7 +7775,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "backend",
     "color": "#1A171B",
     "iconVariant": "original",
     "iconUrl": "/devicons/symfony.svg"
@@ -8284,9 +7787,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "css",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#38bdf8",
     "iconVariant": "original",
     "iconUrl": "/devicons/tailwindcss.svg"
@@ -8302,7 +7804,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#f92a20",
     "iconVariant": "original",
     "iconUrl": "/devicons/talos.svg"
@@ -8320,7 +7821,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#FFC131",
     "iconVariant": "original",
     "iconUrl": "/devicons/tauri.svg"
@@ -8338,7 +7838,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#512fc9",
     "iconVariant": "original",
     "iconUrl": "/devicons/teleport.svg"
@@ -8352,9 +7851,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "machine-learning",
       "deep-learning"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#ff6f00",
     "iconVariant": "original",
     "iconUrl": "/devicons/tensorflow.svg"
@@ -8370,7 +7868,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#5c4ee5",
     "iconVariant": "original",
     "iconUrl": "/devicons/terraform.svg"
@@ -8386,7 +7883,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#fff",
     "iconVariant": "original",
     "iconUrl": "/devicons/terramate.svg"
@@ -8402,7 +7898,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/tex.svg"
@@ -8417,7 +7912,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#00BCB4",
     "iconVariant": "original",
     "iconUrl": "/devicons/thealgorithms.svg"
@@ -8440,7 +7934,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#37a5cc",
     "iconVariant": "original",
     "iconUrl": "/devicons/threedsmax.svg"
@@ -8455,7 +7948,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "frontend",
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/threejs.svg"
@@ -8472,7 +7964,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#005f0f",
     "iconVariant": "original",
     "iconUrl": "/devicons/thymeleaf.svg"
@@ -8490,7 +7981,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#bd222b",
     "iconVariant": "original",
     "iconUrl": "/devicons/titaniumsdk.svg"
@@ -8506,7 +7996,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#1bb91f",
     "iconVariant": "original",
     "iconUrl": "/devicons/tmux.svg"
@@ -8520,7 +8009,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#D1A41A",
     "iconVariant": "original",
     "iconUrl": "/devicons/tomcat.svg"
@@ -8534,7 +8022,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#4b8eb4",
     "iconVariant": "original",
     "iconUrl": "/devicons/tortoisegit.svg"
@@ -8550,7 +8037,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#d18900",
     "iconVariant": "original",
     "iconUrl": "/devicons/towergit.svg"
@@ -8565,7 +8051,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#9D0FB0",
     "iconVariant": "original",
     "iconUrl": "/devicons/traefikmesh.svg"
@@ -8580,7 +8065,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#24a1c1",
     "iconVariant": "original",
     "iconUrl": "/devicons/traefikproxy.svg"
@@ -8597,7 +8081,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#2d3136",
     "iconVariant": "original",
     "iconUrl": "/devicons/travis.svg"
@@ -8614,7 +8097,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#0052cc",
     "iconVariant": "original",
     "iconUrl": "/devicons/trello.svg"
@@ -8633,7 +8115,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#398ccb",
     "iconVariant": "original",
     "iconUrl": "/devicons/trpc.svg"
@@ -8648,7 +8129,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#5cd8e5",
     "iconVariant": "original",
     "iconUrl": "/devicons/turbo.svg"
@@ -8664,7 +8144,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#f22f46",
     "iconVariant": "original",
     "iconUrl": "/devicons/twilio.svg"
@@ -8680,7 +8159,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/twitter.svg"
@@ -8699,7 +8177,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#007acc",
     "iconVariant": "original",
     "iconUrl": "/devicons/typescript.svg"
@@ -8714,7 +8191,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#f49700",
     "iconVariant": "original",
     "iconUrl": "/devicons/typo3.svg"
@@ -8730,7 +8206,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#e95420",
     "iconVariant": "original",
     "iconUrl": "/devicons/ubuntu.svg"
@@ -8749,7 +8224,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#452e7f",
     "iconVariant": "original",
     "iconUrl": "/devicons/unifiedmodelinglanguage.svg"
@@ -8767,7 +8241,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#4d4d4d",
     "iconVariant": "original",
     "iconUrl": "/devicons/unity.svg"
@@ -8781,7 +8254,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#4051b5",
     "iconVariant": "original",
     "iconUrl": "/devicons/unix.svg"
@@ -8797,7 +8269,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#000000",
     "iconVariant": "original",
     "iconUrl": "/devicons/unrealengine.svg"
@@ -8813,7 +8284,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#bad05e",
     "iconVariant": "original",
     "iconUrl": "/devicons/uwsgi.svg"
@@ -8831,9 +8301,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "web",
       "cpp"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#00C4CC",
     "iconVariant": "original",
     "iconUrl": "/devicons/v8.svg"
@@ -8847,9 +8316,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "java",
       "web"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#00b4f0",
     "iconVariant": "original",
     "iconUrl": "/devicons/vaadin.svg"
@@ -8863,7 +8331,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#127eff",
     "iconVariant": "original",
     "iconUrl": "/devicons/vagrant.svg"
@@ -8878,7 +8345,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#a56de2",
     "iconVariant": "original",
     "iconUrl": "/devicons/vala.svg"
@@ -8896,7 +8362,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#ffd814",
     "iconVariant": "original",
     "iconUrl": "/devicons/vault.svg"
@@ -8912,7 +8377,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#04c971",
     "iconVariant": "original",
     "iconUrl": "/devicons/veevalidate.svg"
@@ -8929,7 +8393,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "platform",
     "kind": "cloud",
-    "reel": null,
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/vercel.svg"
@@ -8945,9 +8408,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "java",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#782a91",
     "iconVariant": "original",
     "iconUrl": "/devicons/vertx.svg"
@@ -8963,7 +8425,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#179a33",
     "iconVariant": "original",
     "iconUrl": "/devicons/vim.svg"
@@ -8980,7 +8441,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#004e8c",
     "iconVariant": "original",
     "iconUrl": "/devicons/visualbasic.svg"
@@ -8996,7 +8456,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#52218a",
     "iconVariant": "original",
     "iconUrl": "/devicons/visualstudio.svg"
@@ -9012,7 +8471,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "build-tool",
-    "reel": null,
     "color": "#006BFF",
     "iconVariant": "original",
     "iconUrl": "/devicons/vite.svg"
@@ -9032,7 +8490,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#ffdd35",
     "iconVariant": "original",
     "iconUrl": "/devicons/vitejs.svg"
@@ -9048,7 +8505,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#f16827",
     "iconVariant": "original",
     "iconUrl": "/devicons/vitess.svg"
@@ -9063,9 +8519,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "testing",
       "vite"
     ],
-    "domain": "tooling",
-    "kind": "developer-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#fcc72b",
     "iconVariant": "original",
     "iconUrl": "/devicons/vitest.svg"
@@ -9082,7 +8537,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#3C99D4",
     "iconVariant": "original",
     "iconUrl": "/devicons/vscode.svg"
@@ -9098,7 +8552,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#3C99D4",
     "iconVariant": "original",
     "iconUrl": "/devicons/vscodium.svg"
@@ -9116,7 +8569,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#0091da",
     "iconVariant": "original",
     "iconUrl": "/devicons/vsphere.svg"
@@ -9130,7 +8582,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "application",
     "kind": "framework",
-    "reel": "frontend",
     "color": "#41B883",
     "iconVariant": "original",
     "iconUrl": "/devicons/vuejs.svg"
@@ -9142,9 +8593,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#5ecf7b",
     "iconVariant": "original",
     "iconUrl": "/devicons/vuestorefront.svg"
@@ -9159,9 +8609,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "vuejs-library",
       "material-design"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#1697F6",
     "iconVariant": "original",
     "iconUrl": "/devicons/vuetify.svg"
@@ -9177,9 +8626,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "graphics",
       "game"
     ],
-    "domain": "design",
-    "kind": "design-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "library",
     "color": "#ac162c",
     "iconVariant": "original",
     "iconUrl": "/devicons/vulkan.svg"
@@ -9199,7 +8647,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#9F4CF2",
     "iconVariant": "original",
     "iconUrl": "/devicons/vyper.svg"
@@ -9214,9 +8661,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "web"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#dd2e44",
     "iconVariant": "original",
     "iconUrl": "/devicons/waku.svg"
@@ -9236,7 +8682,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#654ff0",
     "iconVariant": "original",
     "iconUrl": "/devicons/wasm.svg"
@@ -9253,7 +8698,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#f16822",
     "iconVariant": "original",
     "iconUrl": "/devicons/web3js.svg"
@@ -9268,7 +8712,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#4353ff",
     "iconVariant": "original",
     "iconUrl": "/devicons/webflow.svg"
@@ -9282,9 +8725,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "framework",
       "web"
     ],
-    "domain": "design",
-    "kind": "design-tool",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#005a9c",
     "iconVariant": "original",
     "iconUrl": "/devicons/webgpu.svg"
@@ -9298,7 +8740,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#2eccaa",
     "iconVariant": "original",
     "iconUrl": "/devicons/weblate.svg"
@@ -9315,7 +8756,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "build-tool",
-    "reel": null,
     "color": "#1C78C0",
     "iconVariant": "original",
     "iconUrl": "/devicons/webpack.svg"
@@ -9330,7 +8770,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#07c3f2",
     "iconVariant": "original",
     "iconUrl": "/devicons/webstorm.svg"
@@ -9344,7 +8783,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#0078d4",
     "iconVariant": "original",
     "iconUrl": "/devicons/windows11.svg"
@@ -9358,7 +8796,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#00adef",
     "iconVariant": "original",
     "iconUrl": "/devicons/windows8.svg"
@@ -9376,7 +8813,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#dd1100",
     "iconVariant": "original",
     "iconUrl": "/devicons/wolfram.svg"
@@ -9390,7 +8826,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#7f54b3",
     "iconVariant": "original",
     "iconUrl": "/devicons/woocommerce.svg"
@@ -9404,7 +8839,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#494949",
     "iconVariant": "original",
     "iconUrl": "/devicons/wordpress.svg"
@@ -9426,7 +8860,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#3498DB",
     "iconVariant": "original",
     "iconUrl": "/devicons/xamarin.svg"
@@ -9446,7 +8879,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "tooling",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#069CEC",
     "iconVariant": "original",
     "iconUrl": "/devicons/xcode.svg"
@@ -9464,7 +8896,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "design",
     "kind": "design-tool",
-    "reel": null,
     "color": "#470137",
     "iconVariant": "original",
     "iconUrl": "/devicons/xd.svg"
@@ -9481,7 +8912,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#005fad",
     "iconVariant": "original",
     "iconUrl": "/devicons/xml.svg"
@@ -9498,7 +8928,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "developer-tool",
-    "reel": null,
     "color": "#cb171e",
     "iconVariant": "original",
     "iconUrl": "/devicons/yaml.svg"
@@ -9515,7 +8944,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#2c8ebb",
     "iconVariant": "original",
     "iconUrl": "/devicons/yarn.svg"
@@ -9530,9 +8958,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "php",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#40b3d8",
     "iconVariant": "original",
     "iconUrl": "/devicons/yii.svg"
@@ -9550,7 +8977,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "data",
     "kind": "datastore",
-    "reel": "database",
     "color": "#ff5f3b",
     "iconVariant": "original",
     "iconUrl": "/devicons/yugabytedb.svg"
@@ -9564,7 +8990,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "other",
     "kind": "other",
-    "reel": null,
     "color": "#ffffff",
     "iconVariant": "original",
     "iconUrl": "/devicons/yunohost.svg"
@@ -9577,9 +9002,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
       "php",
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#68b604",
     "iconVariant": "original",
     "iconUrl": "/devicons/zend.svg"
@@ -9595,7 +9019,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#f7a41d",
     "iconVariant": "original",
     "iconUrl": "/devicons/zig.svg"
@@ -9613,7 +9036,6 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     ],
     "domain": "language",
     "kind": "language",
-    "reel": null,
     "color": "#000",
     "iconVariant": "original",
     "iconUrl": "/devicons/zsh.svg"
@@ -9625,9 +9047,8 @@ export const DEVICON_CATALOG: DeviconTech[] = [
     "tags": [
       "framework"
     ],
-    "domain": "other",
-    "kind": "other",
-    "reel": null,
+    "domain": "application",
+    "kind": "framework",
     "color": "#443e38",
     "iconVariant": "original",
     "iconUrl": "/devicons/zustand.svg"
@@ -9635,4 +9056,3 @@ export const DEVICON_CATALOG: DeviconTech[] = [
 ];
 
 export const DEVICONS_BY_DOMAIN = Object.groupBy(DEVICON_CATALOG, ({ domain }) => domain) as Partial<Record<TechDomain, DeviconTech[]>>;
-export const DEVICONS_BY_REEL = Object.groupBy(DEVICON_CATALOG.filter(({ reel }) => reel), ({ reel }) => reel as Exclude<DeviconReel, null>) as Partial<Record<Exclude<DeviconReel, null>, DeviconTech[]>>;
