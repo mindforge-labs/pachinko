@@ -324,21 +324,53 @@ body.carousel-open .utility-bar {
   text-shadow: 0 0 .6rem rgba(217, 149, 46, .35);
 }
 .stack-carousel-head > span { grid-column: 2; }
-.stack-carousel-actions { grid-column: 3; display: flex; justify-content: flex-end; gap: .35rem; }
+.stack-carousel-actions { grid-column: 3; display: flex; justify-content: flex-end; align-items: center; gap: .4rem; }
 .stack-carousel-action {
   display: grid;
   place-items: center;
-  width: 1.8rem;
-  height: 1.8rem;
-  border: 1px solid rgba(238, 213, 146, .35);
-  border-radius: .38rem;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid rgba(238, 213, 146, .28);
+  border-radius: 999px;
   padding: 0;
-  color: #f5dfa1;
-  background: rgba(255,255,255,.06);
-  font: 700 1rem/1 sans-serif;
+  color: #f0d78a;
+  background:
+    linear-gradient(160deg, rgba(255,255,255,.12), transparent 55%),
+    rgba(18, 12, 26, .92);
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.1),
+    0 .15rem .35rem rgba(0,0,0,.35);
   cursor: pointer;
+  touch-action: manipulation;
+  transition: color .15s ease, border-color .15s ease, background .15s ease, transform .12s ease, box-shadow .15s ease;
 }
-.stack-carousel-action:hover { background: rgba(240, 199, 82, .16); border-color: rgba(240, 199, 82, .65); }
+.stack-carousel-action-icon {
+  width: 1rem;
+  height: 1rem;
+  display: block;
+}
+.stack-carousel-action:hover {
+  color: #fff4c2;
+  border-color: rgba(240, 199, 82, .7);
+  background:
+    linear-gradient(160deg, rgba(255,244,180,.18), transparent 55%),
+    rgba(42, 24, 18, .95);
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.14),
+    0 0 .55rem rgba(217, 149, 46, .35);
+}
+.stack-carousel-action:active {
+  transform: translateY(1px) scale(.96);
+  box-shadow: inset 0 1px .25rem rgba(0,0,0,.35);
+}
+.stack-carousel-action:focus-visible {
+  outline: .14rem solid #fff6ae;
+  outline-offset: .18rem;
+}
+.stack-carousel-reset:hover .stack-carousel-action-icon {
+  transform: rotate(-28deg);
+  transition: transform .2s var(--ease-machine);
+}
 .stack-carousel.is-minimized { inset: auto 1rem 1rem auto; padding: 0; }
 .stack-carousel.is-minimized .stack-carousel-backdrop,
 .stack-carousel.is-minimized .stack-carousel-viewport,

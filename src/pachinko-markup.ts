@@ -127,8 +127,17 @@ export const pachinkoMarkup = String.raw`
       <header class="stack-carousel-head">
         <span id="stack-carousel-heading">YOUR STACK</span>
         <div class="stack-carousel-actions">
-          <button id="stack-carousel-minimize" class="stack-carousel-action" type="button" aria-label="Minimize stack popup" aria-expanded="true">—</button>
-          <button id="stack-carousel-reset" class="stack-carousel-action" type="button" aria-label="Reset pachinko">↻</button>
+          <button id="stack-carousel-minimize" class="stack-carousel-action" type="button" aria-label="Minimize stack popup" aria-expanded="true">
+            <svg class="stack-carousel-action-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path d="M3.5 8h9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <button id="stack-carousel-reset" class="stack-carousel-action stack-carousel-reset" type="button" aria-label="Reset pachinko">
+            <svg class="stack-carousel-action-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path d="M13.2 8A5.2 5.2 0 1 1 10.4 3.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+              <path d="M10.1 1.8h3.2V5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
         </div>
       </header>
       <div class="stack-carousel-viewport">
