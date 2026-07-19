@@ -1,5 +1,6 @@
 import { animateView, spring } from 'motion';
 import { AudioEngine } from './audio-engine';
+import { renderPreviewMarkdown } from './markdown';
 import { SpinController } from './spin-controller';
 import {
   LAYER_LABELS,
@@ -43,12 +44,12 @@ export function createApp(root: Document = document, options: any = {}) {
   const generatePromptButton = root.querySelector<HTMLButtonElement>('#generate-prompt');
   const askGeminiButton = root.querySelector<HTMLButtonElement>('#ask-gemini');
   const promptStatus = root.querySelector<HTMLElement>('#prompt-builder-status');
-  const promptOutput = root.querySelector<HTMLElement>('#prompt-output');
-  const promptTextarea = root.querySelector<HTMLTextAreaElement>('#gemini-system-prompt');
-  const copyPromptButton = root.querySelector<HTMLButtonElement>('#copy-prompt');
-  const guideOutput = root.querySelector<HTMLElement>('#gemini-guide-output');
-  const guideTextarea = root.querySelector<HTMLTextAreaElement>('#gemini-guide');
-  const copyGuideButton = root.querySelector<HTMLButtonElement>('#copy-guide');
+  const resultStage = root.querySelector<HTMLElement>('#result-stage');
+  const resultTabGuide = root.querySelector<HTMLButtonElement>('#result-tab-guide');
+  const resultTabPrompt = root.querySelector<HTMLButtonElement>('#result-tab-prompt');
+  const promptView = root.querySelector<HTMLElement>('#gemini-system-prompt');
+  const guideView = root.querySelector<HTMLElement>('#gemini-guide');
+  const copyActiveResultButton = root.querySelector<HTMLButtonElement>('#copy-active-result');
   const storage = options.storage ?? globalThis.localStorage;
   const audio = options.audio ?? new AudioEngine({ windowRef: globalThis.window, storage });
   const listeners = [];
@@ -58,6 +59,9 @@ export function createApp(root: Document = document, options: any = {}) {
   let lastBackendRuntime: string | null = null;
   let promptRequestVersion = 0;
   let restorePopupAfterReroll = false;
+  let activeResultTab: 'guide' | 'prompt' = 'prompt';
+  let promptRaw = '';
+  let guideRaw = '';
 
   if (!machine || !startButton || stopButtons.length !== 3 || reels.length !== 3) {
     throw new Error('Pachislot markup is incomplete');
@@ -154,8 +158,9 @@ export function createApp(root: Document = document, options: any = {}) {
     if (authCheckbox) authCheckbox.disabled = rerolling;
     if (generatePromptButton) generatePromptButton.disabled = rerolling;
     if (askGeminiButton) askGeminiButton.disabled = rerolling;
-    if (copyPromptButton) copyPromptButton.disabled = rerolling;
-    if (copyGuideButton) copyGuideButton.disabled = rerolling;
+    if (copyActiveResultButton) copyActiveResultButton.disabled = rerolling;
+    if (resultTabGuide) resultTabGuide.disabled = rerolling;
+    if (resultTabPrompt) resultTabPrompt.disabled = rerolling;
   };
 
   const flash = (element, className, duration = 420) => {
@@ -173,13 +178,62 @@ export function createApp(root: Document = document, options: any = {}) {
     }
   };
 
+  const setMarkdownView = (element: HTMLElement | null, source: string) => {
+    if (!element) return;
+    element.innerHTML = source.trim() ? renderPreviewMarkdown(source) : '';
+  };
+
+  const setResultTab = (tab: 'guide' | 'prompt') => {
+    const hasGuide = Boolean(guideRaw.trim());
+    const nextTab = tab === 'guide' && hasGuide ? 'guide' : 'prompt';
+    activeResultTab = nextTab;
+
+    if (resultTabGuide) {
+      resultTabGuide.hidden = !hasGuide;
+      resultTabGuide.setAttribute('aria-selected', nextTab === 'guide' ? 'true' : 'false');
+      resultTabGuide.tabIndex = nextTab === 'guide' ? 0 : -1;
+    }
+    if (resultTabPrompt) {
+      resultTabPrompt.setAttribute('aria-selected', nextTab === 'prompt' ? 'true' : 'false');
+      resultTabPrompt.tabIndex = nextTab === 'prompt' ? 0 : -1;
+    }
+    if (guideView) guideView.hidden = nextTab !== 'guide';
+    if (promptView) promptView.hidden = nextTab !== 'prompt';
+    if (copyActiveResultButton) {
+      copyActiveResultButton.textContent = nextTab === 'guide' ? 'COPY GUIDE' : 'COPY PROMPT';
+    }
+  };
+
+  const showResultStage = (tab: 'guide' | 'prompt') => {
+    if (resultStage) resultStage.hidden = false;
+    carousel?.classList.add('has-prompt');
+    setResultTab(tab);
+  };
+
   const resetPromptBuilder = ({ resetAuth = false } = {}) => {
     promptRequestVersion += 1;
     carousel?.classList.remove('has-prompt');
-    if (promptOutput) promptOutput.hidden = true;
-    if (promptTextarea) promptTextarea.value = '';
-    if (guideOutput) guideOutput.hidden = true;
-    if (guideTextarea) guideTextarea.value = '';
+    promptRaw = '';
+    guideRaw = '';
+    if (resultStage) resultStage.hidden = true;
+    if (promptView) {
+      promptView.innerHTML = '';
+      promptView.hidden = true;
+    }
+    if (guideView) {
+      guideView.innerHTML = '';
+      guideView.hidden = true;
+    }
+    if (resultTabGuide) {
+      resultTabGuide.hidden = true;
+      resultTabGuide.setAttribute('aria-selected', 'false');
+      resultTabGuide.tabIndex = -1;
+    }
+    if (resultTabPrompt) {
+      resultTabPrompt.setAttribute('aria-selected', 'false');
+      resultTabPrompt.tabIndex = -1;
+    }
+    activeResultTab = 'prompt';
     if (promptStatus) promptStatus.textContent = '';
     if (generatePromptButton) {
       generatePromptButton.disabled = false;
@@ -189,8 +243,7 @@ export function createApp(root: Document = document, options: any = {}) {
       askGeminiButton.disabled = false;
       askGeminiButton.textContent = 'ASK GEMINI';
     }
-    if (copyPromptButton) copyPromptButton.textContent = 'COPY PROMPT';
-    if (copyGuideButton) copyGuideButton.textContent = 'COPY GUIDE';
+    if (copyActiveResultButton) copyActiveResultButton.textContent = 'COPY';
     if (resetAuth && authCheckbox) authCheckbox.checked = false;
   };
 
@@ -537,14 +590,28 @@ export function createApp(root: Document = document, options: any = {}) {
     return false;
   };
 
+  const clearCarouselChromeInlineStyles = () => {
+    for (const element of [carouselViewport, carouselSummary, carouselDots, promptBuilder, carouselPanel, carouselBackdrop]) {
+      if (!(element instanceof HTMLElement)) continue;
+      element.style.opacity = '';
+      element.style.transform = '';
+      element.style.width = '';
+      element.style.height = '';
+      element.style.maxHeight = '';
+    }
+  };
+
   const applyCarouselMinimizedState = (minimized: boolean) => {
     if (!carousel) return;
     carousel.classList.toggle('is-minimized', minimized);
     body.classList.toggle('carousel-open', !minimized);
     carouselMinimize?.setAttribute('aria-expanded', String(!minimized));
     carouselMinimize?.setAttribute('aria-label', minimized ? 'Restore stack popup' : 'Minimize stack popup');
-    if (minimized) stopCarousel();
-    else {
+    if (minimized) {
+      stopCarousel();
+      clearCarouselChromeInlineStyles();
+    } else {
+      clearCarouselChromeInlineStyles();
       renderCarouselSlide();
       startCarouselLoop();
     }
@@ -582,6 +649,11 @@ export function createApp(root: Document = document, options: any = {}) {
         .exit({ opacity: 0, transform: 'scale(0.97)' }, { duration: 0.18 })
         .enter({ opacity: [0, 1], transform: ['scale(0.97)', 'none'] }, { duration: 0.28 });
     }
+
+    // Layout/fade springs can leave inline size/opacity that fights CSS after settle.
+    globalThis.setTimeout(() => {
+      clearCarouselChromeInlineStyles();
+    }, 700);
   };
 
   const toggleCarouselMinimized = () => {
@@ -632,15 +704,14 @@ export function createApp(root: Document = document, options: any = {}) {
       if (requestVersion !== promptRequestVersion) return;
       if (typeof payload?.prompt !== 'string') throw new Error('The server returned an invalid prompt.');
 
-      if (promptTextarea) promptTextarea.value = payload.prompt;
-      if (promptOutput) promptOutput.hidden = false;
-      if (guideOutput) guideOutput.hidden = true;
-      if (guideTextarea) guideTextarea.value = '';
-      carousel?.classList.add('has-prompt');
+      promptRaw = payload.prompt;
+      guideRaw = '';
+      setMarkdownView(promptView, promptRaw);
+      setMarkdownView(guideView, '');
+      showResultStage('prompt');
       generatePromptButton.textContent = 'REGENERATE PROMPT';
       if (promptStatus) promptStatus.textContent = 'Prompt ready. Copy it into Gemini as a system prompt.';
-      promptTextarea?.focus();
-      promptTextarea?.setSelectionRange(0, 0);
+      promptView?.focus();
     } catch (error) {
       if (requestVersion !== promptRequestVersion) return;
       if (promptStatus) {
@@ -679,16 +750,15 @@ export function createApp(root: Document = document, options: any = {}) {
         throw new Error('Gemini returned an invalid guide.');
       }
 
-      if (promptTextarea) promptTextarea.value = payload.prompt;
-      if (promptOutput) promptOutput.hidden = false;
-      if (guideTextarea) guideTextarea.value = payload.guide;
-      if (guideOutput) guideOutput.hidden = false;
-      carousel?.classList.add('has-prompt');
+      promptRaw = payload.prompt;
+      guideRaw = payload.guide;
+      setMarkdownView(promptView, promptRaw);
+      setMarkdownView(guideView, guideRaw);
+      showResultStage('guide');
       if (generatePromptButton) generatePromptButton.textContent = 'REGENERATE PROMPT';
       askGeminiButton.textContent = 'ASK GEMINI AGAIN';
       if (promptStatus) promptStatus.textContent = `Guide ready from ${payload.model || 'Gemini'}. You can copy the prompt or the result.`;
-      guideTextarea?.focus();
-      guideTextarea?.setSelectionRange(0, 0);
+      guideView?.focus();
     } catch (error) {
       if (requestVersion !== promptRequestVersion) return;
       askGeminiButton.textContent = 'TRY GEMINI AGAIN';
@@ -703,29 +773,33 @@ export function createApp(root: Document = document, options: any = {}) {
     }
   };
 
-  const copyText = async (
-    textarea: HTMLTextAreaElement | null,
-    button: HTMLButtonElement | null,
-    successMessage: string,
-  ) => {
-    const value = textarea?.value;
-    if (!value || !button) return;
+  const activeResultText = () => (activeResultTab === 'guide' ? guideRaw : promptRaw);
+
+  const copyActiveResult = async () => {
+    const value = activeResultText();
+    const button = copyActiveResultButton;
+    if (!value.trim() || !button) return;
+
+    const successMessage = activeResultTab === 'guide'
+      ? 'Implementation guide copied.'
+      : 'Copied. Paste it into Gemini as the system prompt.';
+    const idleLabel = activeResultTab === 'guide' ? 'COPY GUIDE' : 'COPY PROMPT';
 
     try {
       if (globalThis.navigator?.clipboard?.writeText) {
         await globalThis.navigator.clipboard.writeText(value);
-      } else if (textarea) {
-        textarea.focus();
-        textarea.select();
-        if (!root.execCommand?.('copy')) throw new Error('Clipboard API is unavailable.');
+      } else {
+        throw new Error('Clipboard API is unavailable.');
       }
       button.textContent = 'COPIED ✓';
       if (promptStatus) promptStatus.textContent = successMessage;
+      globalThis.setTimeout(() => {
+        if (copyActiveResultButton) copyActiveResultButton.textContent = idleLabel;
+      }, 1600);
     } catch {
-      textarea?.focus();
-      textarea?.select();
-      button.textContent = 'PRESS CTRL/CMD + C';
-      if (promptStatus) promptStatus.textContent = 'Automatic copy is blocked; the text has been selected for you.';
+      (activeResultTab === 'guide' ? guideView : promptView)?.focus();
+      button.textContent = 'COPY FAILED';
+      if (promptStatus) promptStatus.textContent = 'Automatic copy is blocked by the browser.';
     }
   };
 
@@ -741,16 +815,9 @@ export function createApp(root: Document = document, options: any = {}) {
   if (carouselReset) on(carouselReset, 'click', resetPachinko);
   if (generatePromptButton) on(generatePromptButton, 'click', (() => { void generateGeminiPrompt(); }) as EventListener);
   if (askGeminiButton) on(askGeminiButton, 'click', (() => { void askGemini(); }) as EventListener);
-  if (copyPromptButton) {
-    on(copyPromptButton, 'click', (() => {
-      void copyText(promptTextarea, copyPromptButton, 'Copied. Paste it into Gemini as the system prompt.');
-    }) as EventListener);
-  }
-  if (copyGuideButton) {
-    on(copyGuideButton, 'click', (() => {
-      void copyText(guideTextarea, copyGuideButton, 'Implementation guide copied.');
-    }) as EventListener);
-  }
+  if (resultTabGuide) on(resultTabGuide, 'click', (() => { setResultTab('guide'); }) as EventListener);
+  if (resultTabPrompt) on(resultTabPrompt, 'click', (() => { setResultTab('prompt'); }) as EventListener);
+  if (copyActiveResultButton) on(copyActiveResultButton, 'click', (() => { void copyActiveResult(); }) as EventListener);
   if (authCheckbox) {
     on(authCheckbox, 'change', () => {
       resetPromptBuilder();
