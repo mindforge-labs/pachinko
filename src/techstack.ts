@@ -1,4 +1,11 @@
-import { DEVICON_CATALOG, type DeviconTech } from './generated/devicon-catalog';
+import matrixJson from './techstack-matrix.json';
+import { DEVICON_CATALOG } from './generated/devicon-catalog';
+import {
+  validateTechStackMatrix,
+  type MatrixTechnology,
+  type TechRole,
+  type TechSource,
+} from './techstack-matrix';
 
 export type ReelLayer = 'fe' | 'be' | 'db';
 
@@ -6,103 +13,162 @@ export type Tech = {
   id: string;
   name: string;
   short: string;
-  devicon: string;
-  docsUrl: string | null;
+  devicon: string | null;
+  iconUrl: string;
+  docsUrl: string;
   githubUrl: string | null;
   tags: string[];
   color: string | null;
+  roles: TechRole[];
+  source: TechSource;
 };
 
-/** Per-reel tech catalogs: FE | BE | DB */
-export const REEL_LAYERS: ReelLayer[] = ['fe', 'be', 'db'];
+export type BackendPair = { frameworkId: string; runtimeId: string };
 
-export const LAYER_LABELS = {
-  fe: 'Frontend',
-  be: 'Backend',
-  db: 'Database',
-};
-
-const CURATED_TECH_STACK = {
-  fe: [
-    { id: 'react', name: 'React', short: 'REACT', devicon: 'react', docsUrl: 'https://react.dev/reference/react', githubUrl: 'https://github.com/facebook/react' },
-    { id: 'vue', name: 'Vue', short: 'VUE', devicon: 'vuejs', docsUrl: 'https://vuejs.org/guide/', githubUrl: 'https://github.com/vuejs/core' },
-    { id: 'svelte', name: 'Svelte', short: 'SVLT', devicon: 'svelte', docsUrl: 'https://svelte.dev/docs/svelte/overview', githubUrl: 'https://github.com/sveltejs/svelte' },
-    { id: 'next', name: 'Next.js', short: 'NEXT', devicon: 'nextjs', docsUrl: 'https://nextjs.org/docs', githubUrl: 'https://github.com/vercel/next.js' },
-    { id: 'angular', name: 'Angular', short: 'NGLR', devicon: 'angularjs', docsUrl: 'https://angular.dev/overview', githubUrl: 'https://github.com/angular/angular' },
-    { id: 'solid', name: 'Solid', short: 'SLID', devicon: 'solidjs', docsUrl: 'https://docs.solidjs.com/', githubUrl: 'https://github.com/solidjs/solid' },
-  ],
-  be: [
-    { id: 'node', name: 'Node.js', short: 'NODE', devicon: 'nodejs', docsUrl: 'https://nodejs.org/docs/latest/api/', githubUrl: 'https://github.com/nodejs/node' },
-    { id: 'go', name: 'Go', short: 'GO', devicon: 'go', docsUrl: 'https://go.dev/doc/', githubUrl: 'https://github.com/golang/go' },
-    { id: 'rust', name: 'Rust', short: 'RUST', devicon: 'rust', docsUrl: 'https://doc.rust-lang.org/', githubUrl: 'https://github.com/rust-lang/rust' },
-    { id: 'django', name: 'Django', short: 'DJNG', devicon: 'django', docsUrl: 'https://docs.djangoproject.com/', githubUrl: 'https://github.com/django/django' },
-    { id: 'rails', name: 'Rails', short: 'RAIL', devicon: 'rails', docsUrl: 'https://guides.rubyonrails.org/', githubUrl: 'https://github.com/rails/rails' },
-    { id: 'fastapi', name: 'FastAPI', short: 'FAST', devicon: 'fastapi', docsUrl: 'https://fastapi.tiangolo.com/', githubUrl: 'https://github.com/fastapi/fastapi' },
-  ],
-  db: [
-    { id: 'postgres', name: 'Postgres', short: 'PG', devicon: 'postgresql', docsUrl: 'https://www.postgresql.org/docs/current/', githubUrl: 'https://github.com/postgres/postgres' },
-    { id: 'mongo', name: 'MongoDB', short: 'MONGO', devicon: 'mongodb', docsUrl: 'https://www.mongodb.com/docs/', githubUrl: 'https://github.com/mongodb/mongo' },
-    { id: 'redis', name: 'Redis', short: 'REDIS', devicon: 'redis', docsUrl: 'https://redis.io/docs/latest/', githubUrl: 'https://github.com/redis/redis' },
-    { id: 'mysql', name: 'MySQL', short: 'MYSQL', devicon: 'mysql', docsUrl: 'https://dev.mysql.com/doc/', githubUrl: 'https://github.com/mysql/mysql-server' },
-    { id: 'sqlite', name: 'SQLite', short: 'SQLT', devicon: 'sqlite', docsUrl: 'https://www.sqlite.org/docs.html', githubUrl: 'https://github.com/sqlite/sqlite' },
-    { id: 'dynamo', name: 'DynamoDB', short: 'DYNO', devicon: 'dynamodb', docsUrl: 'https://docs.aws.amazon.com/dynamodb/', githubUrl: null },
-  ],
-};
-
-const REEL_FOR_LAYER = { fe: 'frontend', be: 'backend', db: 'database' } as const;
-const curatedByDevicon = new Map(
-  Object.values(CURATED_TECH_STACK).flat().map((tech) => [tech.devicon, tech]),
-);
-
-const titleize = (id: string) => id
-  .replace(/js$/, '.js')
-  .replace(/(^|[-_])([a-z])/g, (_, separator, letter) => `${separator ? ' ' : ''}${letter.toUpperCase()}`);
-
-const toTech = (icon: DeviconTech): Tech => {
-  const curated = curatedByDevicon.get(icon.id);
-  return {
-    id: icon.id,
-    name: curated?.name ?? titleize(icon.id),
-    short: curated?.short ?? icon.id.replace(/[^a-z0-9]/gi, '').toUpperCase().slice(0, 6),
-    devicon: icon.id,
-    docsUrl: curated?.docsUrl ?? null,
-    githubUrl: curated?.githubUrl ?? null,
-    tags: icon.tags,
-    color: icon.color,
+export type DescribedStackItem = {
+  layer: ReelLayer;
+  layerLabel: string;
+  id: string;
+  name: string;
+  short: string;
+  docsUrl: string;
+  iconUrl: string;
+  runtime?: {
+    id: string;
+    name: string;
+    short: string;
+    docsUrl: string;
+    iconUrl: string;
   };
 };
 
+/** Physical reels remain FE | BE framework | DB. */
+export const REEL_LAYERS: ReelLayer[] = ['fe', 'be', 'db'];
+export const LAYER_LABELS = { fe: 'Frontend', be: 'Backend', db: 'Database' } as const;
+const ROLE_FOR_LAYER: Record<ReelLayer, TechRole> = {
+  fe: 'frontend',
+  be: 'backend-framework',
+  db: 'database',
+};
+
+export const MATRIX_VALIDATION = validateTechStackMatrix(matrixJson);
+if (!MATRIX_VALIDATION.matrix) {
+  throw new Error(`Invalid committed tech-stack matrix: ${MATRIX_VALIDATION.errors.map(({ message }) => message).join(' ')}`);
+}
+export const TECH_STACK_MATRIX = MATRIX_VALIDATION.matrix;
+export const REROLL_LIMITS = { ...TECH_STACK_MATRIX.rerollLimits };
+
+const devicons = new Map(DEVICON_CATALOG.map((item) => [item.id, item]));
+
+const resolveTechnology = (entry: MatrixTechnology): Tech => {
+  const upstream = entry.source.type === 'devicon' ? devicons.get(entry.source.sourceId) : null;
+  return {
+    id: entry.id,
+    name: entry.name,
+    short: entry.short,
+    devicon: upstream?.id ?? null,
+    iconUrl: upstream?.iconUrl ?? entry.iconUrl!,
+    docsUrl: entry.docsUrl,
+    githubUrl: null,
+    tags: upstream?.tags ?? [],
+    color: upstream?.color ?? null,
+    roles: [...entry.roles],
+    source: entry.source,
+  };
+};
+
+export const TECHNOLOGIES = TECH_STACK_MATRIX.technologies
+  .filter(({ enabled }) => enabled)
+  .map(resolveTechnology);
+
+const technologyMap = new Map(TECHNOLOGIES.map((tech) => [tech.id, tech]));
+
 export const TECH_STACK: Record<ReelLayer, Tech[]> = Object.fromEntries(
-  REEL_LAYERS.map((layer) => [
-    layer,
-    DEVICON_CATALOG.filter(({ reel }) => reel === REEL_FOR_LAYER[layer]).map(toTech),
-  ]),
+  REEL_LAYERS.map((layer) => [layer, TECHNOLOGIES.filter(({ roles }) => roles.includes(ROLE_FOR_LAYER[layer]))]),
 ) as Record<ReelLayer, Tech[]>;
+
+export const BACKEND_RUNTIMES = TECHNOLOGIES.filter(({ roles }) => roles.includes('backend-runtime'));
+export const BACKEND_COMPATIBILITY = new Map(
+  TECH_STACK_MATRIX.compatibility.map(({ frameworkId, runtimeIds }) => [frameworkId, [...runtimeIds]]),
+);
 
 export function layerForReel(index: number): ReelLayer {
   return REEL_LAYERS[index] ?? 'fe';
 }
 
-export function techById(layer: ReelLayer, id: string) {
-  return TECH_STACK[layer]?.find((item) => item.id === id) ?? null;
+export function technologyById(id: string) {
+  return technologyMap.get(id) ?? null;
 }
+
+export function techById(layer: ReelLayer, id: string) {
+  const tech = technologyById(id);
+  return tech?.roles.includes(ROLE_FOR_LAYER[layer]) ? tech : null;
+}
+
+const randomIndex = (length: number, random: () => number) => Math.min(length - 1, Math.max(0, Math.floor(random() * length)));
 
 export function pickTech(index: number, random = Math.random) {
-  const layer = layerForReel(index);
-  const pool = TECH_STACK[layer];
-  return pool[Math.floor(random() * pool.length)].id;
+  const pool = TECH_STACK[layerForReel(index)];
+  return pool[randomIndex(pool.length, random)].id;
 }
 
-export function describeStack(symbols: string[] = []) {
+export function pickDifferentTech(index: number, currentId: string, random = Math.random) {
+  const pool = TECH_STACK[layerForReel(index)];
+  const candidates = pool.filter(({ id }) => id !== currentId);
+  if (!candidates.length) throw new Error(`Reel ${index} has no alternative technology.`);
+  return candidates[randomIndex(candidates.length, random)].id;
+}
+
+export function compatibleRuntimeIds(frameworkId: string) {
+  return [...(BACKEND_COMPATIBILITY.get(frameworkId) ?? [])];
+}
+
+export function pickBackendRuntime(frameworkId: string, random = Math.random) {
+  const runtimeIds = compatibleRuntimeIds(frameworkId);
+  if (!runtimeIds.length) throw new Error(`Backend framework ${frameworkId} has no compatible runtime.`);
+  return runtimeIds[randomIndex(runtimeIds.length, random)];
+}
+
+export function pickBackendPair(previousFrameworkId: string | null = null, random = Math.random): BackendPair {
+  const frameworks = TECH_STACK.be;
+  const candidates = frameworks.length > 1
+    ? frameworks.filter(({ id }) => id !== previousFrameworkId)
+    : frameworks;
+  const frameworkId = candidates[randomIndex(candidates.length, random)].id;
+  return { frameworkId, runtimeId: pickBackendRuntime(frameworkId, random) };
+}
+
+export function docsUrlFor(tech: Pick<Tech, 'name' | 'docsUrl'> | null | undefined, fallbackName = 'technology') {
+  if (tech?.docsUrl) return tech.docsUrl;
+  return `https://www.google.com/search?q=${encodeURIComponent(`${tech?.name ?? fallbackName} documentation`)}`;
+}
+
+export function describeStack(symbols: string[] = [], backendRuntime?: string | null): DescribedStackItem[] {
   return symbols.map((id, index) => {
     const layer = layerForReel(index);
     const tech = techById(layer, id);
-    return {
+    const name = tech?.name ?? id;
+    const item: DescribedStackItem = {
       layer,
       layerLabel: LAYER_LABELS[layer],
       id,
-      name: tech?.name ?? id,
+      name,
       short: tech?.short ?? String(id).toUpperCase(),
+      docsUrl: docsUrlFor(tech, name),
+      iconUrl: tech?.iconUrl ?? `/devicons/${id}.svg`,
     };
+    if (layer === 'be' && backendRuntime) {
+      const runtime = technologyById(backendRuntime);
+      if (runtime?.roles.includes('backend-runtime') && compatibleRuntimeIds(id).includes(runtime.id)) {
+        item.runtime = {
+          id: runtime.id,
+          name: runtime.name,
+          short: runtime.short,
+          docsUrl: runtime.docsUrl,
+          iconUrl: runtime.iconUrl,
+        };
+      }
+    }
+    return item;
   });
 }
