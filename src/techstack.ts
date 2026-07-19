@@ -56,6 +56,7 @@ if (!MATRIX_VALIDATION.matrix) {
   throw new Error(`Invalid committed tech-stack matrix: ${MATRIX_VALIDATION.errors.map(({ message }) => message).join(' ')}`);
 }
 export const TECH_STACK_MATRIX = MATRIX_VALIDATION.matrix;
+export const REROLL_LIMITS = { ...TECH_STACK_MATRIX.rerollLimits };
 
 const devicons = new Map(DEVICON_CATALOG.map((item) => [item.id, item]));
 
@@ -109,6 +110,13 @@ const randomIndex = (length: number, random: () => number) => Math.min(length - 
 export function pickTech(index: number, random = Math.random) {
   const pool = TECH_STACK[layerForReel(index)];
   return pool[randomIndex(pool.length, random)].id;
+}
+
+export function pickDifferentTech(index: number, currentId: string, random = Math.random) {
+  const pool = TECH_STACK[layerForReel(index)];
+  const candidates = pool.filter(({ id }) => id !== currentId);
+  if (!candidates.length) throw new Error(`Reel ${index} has no alternative technology.`);
+  return candidates[randomIndex(candidates.length, random)].id;
 }
 
 export function compatibleRuntimeIds(frameworkId: string) {

@@ -1,7 +1,9 @@
 import { DEVICON_CATALOG, DEVICON_VERSION, type DeviconTech } from './generated/devicon-catalog';
 
-export const TECHSTACK_SCHEMA_VERSION = 1 as const;
+export const TECHSTACK_SCHEMA_VERSION = 2 as const;
 export const INSTALLED_DEVICON_VERSION = DEVICON_VERSION;
+
+export const MIGRATED_REROLL_LIMITS = { fe: 1, be: 1, db: 1 } as const;
 
 export const TECH_ROLES = [
   'frontend',
@@ -31,9 +33,16 @@ export type FrameworkCompatibility = {
   runtimeIds: string[];
 };
 
+export type RerollLimits = {
+  fe: number;
+  be: number;
+  db: number;
+};
+
 export type TechStackMatrix = {
   schemaVersion: number;
   source: { name: 'devicon'; version: string };
+  rerollLimits: RerollLimits;
   technologies: MatrixTechnology[];
   compatibility: FrameworkCompatibility[];
 };
@@ -82,9 +91,19 @@ export function validateTechStackMatrix(
   } else if (input.source.version !== installedDeviconVersion) {
     warning('source-version-mismatch', `Matrix uses Devicon ${input.source.version}, but ${installedDeviconVersion} is installed.`);
   }
+  if (!isRecord(input.rerollLimits)) {
+    error('invalid-reroll-limits', 'rerollLimits must configure fe, be, and db.');
+  } else {
+    for (const layer of ['fe', 'be', 'db'] as const) {
+      const limit = input.rerollLimits[layer];
+      if (!Number.isInteger(limit) || (limit as number) < 0 || (limit as number) > 99) {
+        error('invalid-reroll-limit', `${layer} reroll limit must be an integer from 0 through 99.`);
+      }
+    }
+  }
   if (!Array.isArray(input.technologies)) error('invalid-technologies', 'technologies must be an array.');
   if (!Array.isArray(input.compatibility)) error('invalid-compatibility', 'compatibility must be an array.');
-  if (issues.some(({ code }) => ['unsupported-schema', 'invalid-source-metadata', 'invalid-technologies', 'invalid-compatibility'].includes(code))) {
+  if (issues.some(({ code }) => ['unsupported-schema', 'invalid-source-metadata', 'invalid-reroll-limits', 'invalid-technologies', 'invalid-compatibility'].includes(code))) {
     return splitIssues(null, issues);
   }
 
@@ -176,6 +195,26 @@ export function validateTechStackMatrix(
     if (count === 0) error('empty-role-pool', `The enabled ${role} pool is empty.`);
   }
 
+  if (isRecord(input.rerollLimits)) {
+    const poolRoleByLayer = {
+      fe: 'frontend',
+      be: 'backend-framework',
+      db: 'database',
+    } as const;
+    for (const layer of ['fe', 'be', 'db'] as const) {
+      const limit = input.rerollLimits[layer];
+      if (!Number.isInteger(limit) || (limit as number) <= 0 || (limit as number) > 99) continue;
+      const role = poolRoleByLayer[layer];
+      const count = technologies.filter((raw) => isRecord(raw)
+        && raw.enabled === true
+        && Array.isArray(raw.roles)
+        && raw.roles.includes(role)).length;
+      if (count < 2) {
+        error('reroll-pool-too-small', `${layer} needs at least two enabled choices when rerolls are enabled.`);
+      }
+    }
+  }
+
   return splitIssues(issues.some(({ level }) => level === 'error') ? null : input as unknown as TechStackMatrix, issues);
 }
 
@@ -193,11 +232,20 @@ export function parseTechStackMatrixJson(
   installedDeviconVersion = INSTALLED_DEVICON_VERSION,
 ): MatrixValidation {
   try {
-    return validateTechStackMatrix(JSON.parse(json), catalog, installedDeviconVersion);
+    return validateTechStackMatrix(migrateTechStackMatrix(JSON.parse(json)), catalog, installedDeviconVersion);
   } catch (cause) {
     const message = cause instanceof Error ? cause.message : 'Unknown JSON error';
     return splitIssues(null, [{ level: 'error', code: 'malformed-json', message: `Malformed JSON: ${message}` }]);
   }
+}
+
+export function migrateTechStackMatrix(input: unknown): unknown {
+  if (!isRecord(input) || input.schemaVersion !== 1) return input;
+  return {
+    ...input,
+    schemaVersion: TECHSTACK_SCHEMA_VERSION,
+    rerollLimits: { ...MIGRATED_REROLL_LIMITS },
+  };
 }
 
 const compare = (left: string, right: string) => left.localeCompare(right, 'en');
@@ -207,6 +255,11 @@ export function sortTechStackMatrix(matrix: TechStackMatrix): TechStackMatrix {
   return {
     schemaVersion: matrix.schemaVersion,
     source: { name: 'devicon', version: matrix.source.version },
+    rerollLimits: {
+      fe: matrix.rerollLimits.fe,
+      be: matrix.rerollLimits.be,
+      db: matrix.rerollLimits.db,
+    },
     technologies: matrix.technologies
       .map((tech) => ({
         id: tech.id,

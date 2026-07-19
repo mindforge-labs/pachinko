@@ -14,6 +14,7 @@ import {
 } from '../../src/techstack-matrix';
 
 const DRAFT_KEY = `pachinko-techstack-matrix-draft:v${TECHSTACK_SCHEMA_VERSION}`;
+const LEGACY_DRAFT_KEY = 'pachinko-techstack-matrix-draft:v1';
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 const titleize = (id: string) => id.replace(/js$/, '.js').replace(/(^|[-_])([a-z])/g, (_, separator, letter) => `${separator ? ' ' : ''}${letter.toUpperCase()}`);
 const compatibilityCodes = new Set(['invalid-compatibility-edge', 'invalid-framework-edge', 'framework-without-runtime', 'invalid-runtime-edge', 'duplicate-runtime-edge', 'duplicate-compatibility']);
@@ -37,12 +38,16 @@ export default function TechStackManager({ committedMatrix, catalog, installedDe
 
   useEffect(() => {
     try {
-      const draft = localStorage.getItem(DRAFT_KEY);
+      const currentDraft = localStorage.getItem(DRAFT_KEY);
+      const draft = currentDraft ?? localStorage.getItem(LEGACY_DRAFT_KEY);
       if (!draft) return;
-      const parsed = JSON.parse(draft) as Partial<TechStackMatrix>;
-      if (parsed.schemaVersion === TECHSTACK_SCHEMA_VERSION && Array.isArray(parsed.technologies) && Array.isArray(parsed.compatibility)) {
-        setMatrix(parsed as TechStackMatrix);
-        setNotice('Restored the versioned browser draft.');
+      const parsed = parseTechStackMatrixJson(draft, catalog, installedDeviconVersion);
+      if (parsed.matrix) {
+        setMatrix(parsed.matrix);
+        if (!currentDraft) localStorage.removeItem(LEGACY_DRAFT_KEY);
+        setNotice(currentDraft ? 'Restored the versioned browser draft.' : 'Migrated and restored the schema v1 browser draft.');
+      } else {
+        setNotice(`The saved browser draft is invalid: ${parsed.errors.map(({ message }) => message).join(' ')}`);
       }
     } catch {
       setNotice('The saved browser draft could not be restored.');
@@ -231,6 +236,27 @@ export default function TechStackManager({ committedMatrix, catalog, installedDe
         <strong className={validation.errors.length ? 'is-error' : 'is-valid'}>{validation.errors.length ? `${validation.errors.length} export-blocking error(s)` : 'Structurally valid'}</strong>
         <span>{validation.warnings.length} warning(s)</span>
         {[...validation.errors, ...validation.warnings].map((issue, index) => <p key={`${issue.code}-${issue.technologyId}-${index}`} className={`matrix-issue matrix-issue--${issue.level}`}>{issue.level.toUpperCase()} · {issue.message}</p>)}
+      </section>
+
+      <section className="matrix-manager__panel matrix-reroll-limits" aria-labelledby="matrix-reroll-heading">
+        <div>
+          <h2 id="matrix-reroll-heading">Per-stack reroll limits</h2>
+          <p>Choose 0–99 rerolls for each reel. A positive limit requires at least two enabled choices.</p>
+        </div>
+        {(['fe', 'be', 'db'] as const).map((layer) => (
+          <label key={layer}>{layer.toUpperCase()}
+            <input
+              type="number"
+              min={0}
+              max={99}
+              step={1}
+              value={matrix.rerollLimits[layer]}
+              onChange={(event) => mutate((draft) => {
+                draft.rerollLimits[layer] = Number.isNaN(event.target.valueAsNumber) ? 0 : event.target.valueAsNumber;
+              })}
+            />
+          </label>
+        ))}
       </section>
 
       <section className="matrix-manager__catalog" aria-label="Technology catalog">

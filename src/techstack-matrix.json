@@ -1,8 +1,13 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "source": {
     "name": "devicon",
     "version": "2.17.0"
+  },
+  "rerollLimits": {
+    "fe": 3,
+    "be": 3,
+    "db": 3
   },
   "technologies": [
     { "id": "angular", "name": "Angular", "short": "NGLR", "docsUrl": "https://angular.dev/overview", "enabled": true, "source": { "type": "devicon", "sourceId": "angular" }, "roles": ["frontend"] },

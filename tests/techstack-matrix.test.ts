@@ -22,7 +22,7 @@ describe('tech-stack matrix', () => {
 
   test('rejects unsupported schemas, malformed JSON, invalid and duplicate ids', () => {
     const matrix = fresh();
-    matrix.schemaVersion = 2;
+    matrix.schemaVersion = 3;
     expect(codes(matrix)).toContain('unsupported-schema');
 
     const invalidIds = fresh();
@@ -109,5 +109,40 @@ describe('tech-stack matrix', () => {
     expect(parsed.errors).toEqual([]);
     expect(parsed.matrix).toEqual(sortTechStackMatrix(matrix));
     expect(exported).toBe(exportTechStackMatrix(parsed.matrix!));
+  });
+
+  test('migrates schema v1 imports with one reroll per reel', () => {
+    const legacy = fresh() as TechStackMatrix & { rerollLimits?: TechStackMatrix['rerollLimits'] };
+    legacy.schemaVersion = 1;
+    delete legacy.rerollLimits;
+    const parsed = parseTechStackMatrixJson(JSON.stringify(legacy));
+    expect(parsed.errors).toEqual([]);
+    expect(parsed.matrix?.schemaVersion).toBe(2);
+    expect(parsed.matrix?.rerollLimits).toEqual({ fe: 1, be: 1, db: 1 });
+  });
+
+  test('round-trips committed reroll limits in deterministic order and permits zero', () => {
+    const matrix = fresh();
+    expect(matrix.rerollLimits).toEqual({ fe: 3, be: 3, db: 3 });
+    matrix.rerollLimits = { fe: 0, be: 2, db: 1 };
+    const exported = exportTechStackMatrix(matrix);
+    expect(exported.indexOf('"rerollLimits"')).toBeLessThan(exported.indexOf('"technologies"'));
+    expect(parseTechStackMatrixJson(exported).matrix?.rerollLimits).toEqual({ fe: 0, be: 2, db: 1 });
+  });
+
+  test('rejects invalid reroll ranges and undersized enabled pools', () => {
+    const invalid = fresh();
+    invalid.rerollLimits.fe = -1;
+    invalid.rerollLimits.be = 100;
+    invalid.rerollLimits.db = 1.5;
+    expect(codes(invalid)).toEqual(expect.arrayContaining(['invalid-reroll-limit']));
+
+    const undersized = fresh();
+    undersized.technologies.forEach((tech) => {
+      if (tech.roles.includes('frontend')) tech.enabled = tech.id === 'react';
+    });
+    expect(codes(undersized)).toContain('reroll-pool-too-small');
+    undersized.rerollLimits.fe = 0;
+    expect(codes(undersized)).not.toContain('reroll-pool-too-small');
   });
 });

@@ -143,8 +143,8 @@ export const pachinkoMarkup = String.raw`
       <div class="stack-carousel-viewport">
         <div id="stack-carousel-track" class="stack-carousel-track" aria-live="polite"></div>
       </div>
-      <div id="stack-carousel-summary" class="stack-carousel-summary" aria-hidden="true"></div>
-      <div id="stack-carousel-dots" class="stack-carousel-dots" aria-hidden="true"></div>
+      <div id="stack-carousel-summary" class="stack-carousel-summary" aria-label="Selected stack actions"></div>
+      <div id="stack-carousel-dots" class="stack-carousel-dots" aria-label="Choose stack item"></div>
       <section class="prompt-builder" aria-labelledby="prompt-builder-heading">
         <div class="prompt-builder-copy">
           <strong id="prompt-builder-heading">GEMINI IMPLEMENTATION PROMPT</strong>

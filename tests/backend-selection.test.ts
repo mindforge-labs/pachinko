@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { compatibleRuntimeIds, pickBackendPair, TECH_STACK } from '../src/techstack';
+import { compatibleRuntimeIds, pickBackendPair, pickDifferentTech, TECH_STACK } from '../src/techstack';
 
 const sequence = (...values: number[]) => {
   let index = 0;
@@ -23,5 +23,17 @@ describe('backend framework/runtime selection', () => {
     const lastFramework = TECH_STACK.be.at(-1)!;
     expect(last.frameworkId).toBe(lastFramework.id);
     expect(last.runtimeId).toBe(compatibleRuntimeIds(lastFramework.id).at(-1));
+  });
+});
+
+describe('single-reel replacement selection', () => {
+  test('frontend and database choices never repeat at random boundaries', () => {
+    for (const index of [0, 2]) {
+      const pool = index === 0 ? TECH_STACK.fe : TECH_STACK.db;
+      for (const random of [() => 0, () => 0.999999]) {
+        expect(pickDifferentTech(index, pool[0].id, random)).not.toBe(pool[0].id);
+        expect(pickDifferentTech(index, pool.at(-1)!.id, random)).not.toBe(pool.at(-1)!.id);
+      }
+    }
   });
 });

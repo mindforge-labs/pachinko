@@ -181,8 +181,9 @@ Workflow maintenance:
 2. Search toàn bộ catalog Devicon, lọc theo source/role/unassigned/compatibility error, rồi gán một hoặc nhiều role.
 3. Với mỗi `backend-framework`, chọn ít nhất một entry đang có role `backend-runtime`.
 4. Có thể thêm custom entry bằng stable lowercase id, display name, short label, HTTPS documentation URL, HTTPS source homepage và icon URL.
-5. Import JSON để review/chỉnh tiếp, hoặc **Reset committed** để bỏ draft. Draft schema v1 được lưu riêng trong `localStorage` của browser.
-6. Sửa hết error rồi chọn **Validate and export**. Warning không block export; output được sort theo id, role và compatibility để diff ổn định. Copy/download JSON và thay nội dung `src/techstack-matrix.json` qua quy trình review bình thường.
+5. Chọn giới hạn reroll độc lập cho FE/BE/DB từ 0–99. Limit dương yêu cầu reel tương ứng có ít nhất hai lựa chọn enabled; BE đếm backend framework.
+6. Import JSON để review/chỉnh tiếp, hoặc **Reset committed** để bỏ draft. Draft schema v2 được lưu riêng trong `localStorage`; draft/import schema v1 tự migrate với limit `1/1/1`.
+7. Sửa hết error rồi chọn **Validate and export**. Warning không block export; output được sort theo id, role và compatibility để diff ổn định. Copy/download JSON và thay nội dung `src/techstack-matrix.json` qua quy trình review bình thường.
 
 Custom `docsUrl` và source `homepage` bắt buộc là HTTPS. `iconUrl` có thể là HTTPS hoặc root-relative như `/devicons/custom.svg`; protocol-relative URL (`//…`) không hợp lệ. Browser manager không ghi trực tiếp vào repository hay production. Devicon display/source metadata chỉ đọc trong editor; role và compatibility thuộc product matrix.
 
