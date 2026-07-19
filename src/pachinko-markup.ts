@@ -195,8 +195,38 @@ export const pachinkoMarkup = String.raw`
 
   <main class="showcase" aria-labelledby="showcase-title">
     <h1 id="showcase-title" class="visually-hidden">Nocturne Nova tech stack spinner</h1>
-    <div class="ambient-sign sign-left" aria-hidden="true"><span>FE</span><small>FRONT</small></div>
-    <div class="ambient-sign sign-right" aria-hidden="true"><span>BE</span><small>BACK · DB</small></div>
+    <div class="machine-connector connector-left" aria-hidden="true"><i></i><b></b></div>
+    <div class="machine-connector connector-right" aria-hidden="true"><i></i><b></b></div>
+
+    <aside class="stack-module stack-module--frontend" aria-label="Frontend module">
+      <div class="stack-module__corner stack-module__corner--one" aria-hidden="true"></div>
+      <header class="stack-module__header">
+        <span class="stack-module__signal" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="stack-module__eyebrow">FRONTEND MODULE</span>
+        <strong>FE · INTERFACE LAYER</strong>
+      </header>
+      <div class="stack-module__slots">
+        <div class="module-tech-card"><img src="/devicons/nextjs.svg" alt=""><span>Next.js</span><b>01</b></div>
+        <div class="module-tech-card"><img src="/devicons/react.svg" alt=""><span>React</span><b>02</b></div>
+        <div class="module-tech-card"><img src="/devicons/tailwindcss.svg" alt=""><span>Tailwind CSS</span><b>03</b></div>
+      </div>
+      <footer class="stack-module__footer"><span>READY</span><i aria-hidden="true"></i><span>SYNC</span></footer>
+    </aside>
+
+    <aside class="stack-module stack-module--backend" aria-label="Backend module">
+      <div class="stack-module__corner stack-module__corner--one" aria-hidden="true"></div>
+      <header class="stack-module__header">
+        <span class="stack-module__signal" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="stack-module__eyebrow">BACKEND MODULE</span>
+        <strong>BE · DATA &amp; SERVICES</strong>
+      </header>
+      <div class="stack-module__slots">
+        <div class="module-tech-card"><img src="/devicons/bun.svg" alt=""><span>Bun</span><b>01</b></div>
+        <div class="module-tech-card"><img src="/devicons/redis.svg" alt=""><span>Redis</span><b>02</b></div>
+        <div class="module-tech-card"><img src="/devicons/postgresql.svg" alt=""><span>PostgreSQL</span><b>03</b></div>
+      </div>
+      <footer class="stack-module__footer"><span>READY</span><i aria-hidden="true"></i><span>SYNC</span></footer>
+    </aside>
 
     <article class="machine" id="pachislot-machine" data-state="idle" aria-label="Nocturne Nova tech stack spinner cabinet">
       <div class="machine-shadow" aria-hidden="true"></div>
