@@ -54,9 +54,9 @@ export class SpinController {
 
   constructor({
     reelCount = 3,
-    autoStopDelays = [1800, 2500, 3200],
+    autoStopDelays = [2200, 3000, 3800],
     settleDelay = 650,
-    rerollDelay = 900,
+    rerollDelay = 1600,
     rerollLimits = REROLL_LIMITS,
     reducedMotion = false,
     schedule = globalThis.setTimeout?.bind(globalThis),

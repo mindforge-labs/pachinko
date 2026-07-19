@@ -3,6 +3,7 @@ import { AudioEngine } from './audio-engine';
 import { SpinController } from './spin-controller';
 import {
   LAYER_LABELS,
+  TECH_STACK,
   describeStack,
   layerForReel,
   pickTech,
@@ -62,6 +63,50 @@ export function createApp(root: Document = document, options: any = {}) {
     throw new Error('Pachislot markup is incomplete');
   }
 
+  const populateReelStrips = () => {
+    reels.forEach((reel, index) => {
+      const layer = layerForReel(index);
+      const pool = TECH_STACK[layer];
+      const strip = reel.querySelector<HTMLElement>('.reel-strip');
+      if (!strip || !pool.length) return;
+
+      // Two identical sets let either end of the strip wrap without a visible seam.
+      const sequence = [...pool, ...pool];
+      const fragment = root.createDocumentFragment();
+      sequence.forEach((tech) => {
+        const tile = root.createElement('div');
+        tile.className = 'tech-tile';
+        tile.dataset.layer = layer;
+        tile.dataset.tech = tech.id;
+
+        const image = root.createElement('img');
+        image.className = 'tech-icon';
+        image.src = tech.iconUrl;
+        image.alt = '';
+        image.loading = 'eager';
+        image.decoding = 'async';
+        tile.append(image);
+        fragment.append(tile);
+      });
+
+      strip.replaceChildren(fragment);
+      strip.dataset.poolSize = String(pool.length);
+
+      const tileShift = 100 / sequence.length;
+      const rollsDown = index === 1;
+      // Three symbols align with the cabinet's top, center, and bottom paylines.
+      strip.style.setProperty('--strip-height', `${sequence.length * 31}%`);
+      strip.style.setProperty('--tile-size', `${tileShift}%`);
+      strip.style.setProperty('--reel-duration', `${(pool.length * (rollsDown ? 0.19 : 0.21)).toFixed(2)}s`);
+      strip.style.setProperty('--loop-start', rollsDown ? '-50%' : '0%');
+      strip.style.setProperty('--loop-end', rollsDown ? '0%' : '-50%');
+      strip.style.setProperty('--brake-start', `${(rollsDown ? 3 : -3) * tileShift}%`);
+      strip.style.setProperty('--brake-near', `${(rollsDown ? 0.3 : -0.3) * tileShift}%`);
+    });
+  };
+
+  populateReelStrips();
+
   const on = (target: EventTarget, type: string, listener: EventListener, config?: AddEventListenerOptions) => {
     target.addEventListener(type, listener, config);
     listeners.push(() => target.removeEventListener(type, listener, config));
@@ -113,12 +158,12 @@ export function createApp(root: Document = document, options: any = {}) {
     if (copyGuideButton) copyGuideButton.disabled = rerolling;
   };
 
-  const flash = (element, className) => {
+  const flash = (element, className, duration = 420) => {
     if (!element) return;
     element.classList.remove(className);
     void element.offsetWidth;
     element.classList.add(className);
-    globalThis.setTimeout(() => element.classList.remove(className), 420);
+    globalThis.setTimeout(() => element.classList.remove(className), duration);
   };
 
   const stopCarousel = () => {
@@ -334,7 +379,7 @@ export function createApp(root: Document = document, options: any = {}) {
         const tech = techById(layer, event.symbol);
         reel.dataset.state = 'stopped';
         setReelSymbol(event.index, event.symbol);
-        flash(reel, 'is-stopping');
+        flash(reel, 'is-stopping', 680);
         flash(stopButtons[event.index], 'is-hit');
         setDisplay(`${layer.toUpperCase()} · ${tech?.short ?? event.symbol}`);
         const runtime = event.index === 1 && event.backendRuntime ? technologyById(event.backendRuntime) : null;
@@ -384,7 +429,7 @@ export function createApp(root: Document = document, options: any = {}) {
         const reel = reels[event.index];
         reel.dataset.state = 'stopped';
         setReelSymbol(event.index, event.symbol);
-        flash(reel, 'is-stopping');
+        flash(reel, 'is-stopping', 680);
         flash(stopButtons[event.index], 'is-hit');
         audio.play('stop');
         break;
