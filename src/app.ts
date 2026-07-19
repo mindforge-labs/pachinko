@@ -1,5 +1,6 @@
 import { animateView, spring } from 'motion';
 import { AudioEngine } from './audio-engine';
+import { renderPreviewMarkdown } from './markdown';
 import { SpinController } from './spin-controller';
 import {
   LAYER_LABELS,
@@ -46,7 +47,7 @@ export function createApp(root: Document = document, options: any = {}) {
   const resultStage = root.querySelector<HTMLElement>('#result-stage');
   const resultTabGuide = root.querySelector<HTMLButtonElement>('#result-tab-guide');
   const resultTabPrompt = root.querySelector<HTMLButtonElement>('#result-tab-prompt');
-  const promptTextarea = root.querySelector<HTMLTextAreaElement>('#gemini-system-prompt');
+  const promptView = root.querySelector<HTMLElement>('#gemini-system-prompt');
   const guideView = root.querySelector<HTMLElement>('#gemini-guide');
   const copyActiveResultButton = root.querySelector<HTMLButtonElement>('#copy-active-result');
   const storage = options.storage ?? globalThis.localStorage;
@@ -59,6 +60,8 @@ export function createApp(root: Document = document, options: any = {}) {
   let promptRequestVersion = 0;
   let restorePopupAfterReroll = false;
   let activeResultTab: 'guide' | 'prompt' = 'prompt';
+  let promptRaw = '';
+  let guideRaw = '';
 
   if (!machine || !startButton || stopButtons.length !== 3 || reels.length !== 3) {
     throw new Error('Pachislot markup is incomplete');
@@ -175,8 +178,13 @@ export function createApp(root: Document = document, options: any = {}) {
     }
   };
 
+  const setMarkdownView = (element: HTMLElement | null, source: string) => {
+    if (!element) return;
+    element.innerHTML = source.trim() ? renderPreviewMarkdown(source) : '';
+  };
+
   const setResultTab = (tab: 'guide' | 'prompt') => {
-    const hasGuide = Boolean(guideView?.textContent?.trim());
+    const hasGuide = Boolean(guideRaw.trim());
     const nextTab = tab === 'guide' && hasGuide ? 'guide' : 'prompt';
     activeResultTab = nextTab;
 
@@ -190,7 +198,7 @@ export function createApp(root: Document = document, options: any = {}) {
       resultTabPrompt.tabIndex = nextTab === 'prompt' ? 0 : -1;
     }
     if (guideView) guideView.hidden = nextTab !== 'guide';
-    if (promptTextarea) promptTextarea.hidden = nextTab !== 'prompt';
+    if (promptView) promptView.hidden = nextTab !== 'prompt';
     if (copyActiveResultButton) {
       copyActiveResultButton.textContent = nextTab === 'guide' ? 'COPY GUIDE' : 'COPY PROMPT';
     }
@@ -205,13 +213,15 @@ export function createApp(root: Document = document, options: any = {}) {
   const resetPromptBuilder = ({ resetAuth = false } = {}) => {
     promptRequestVersion += 1;
     carousel?.classList.remove('has-prompt');
+    promptRaw = '';
+    guideRaw = '';
     if (resultStage) resultStage.hidden = true;
-    if (promptTextarea) {
-      promptTextarea.value = '';
-      promptTextarea.hidden = true;
+    if (promptView) {
+      promptView.innerHTML = '';
+      promptView.hidden = true;
     }
     if (guideView) {
-      guideView.textContent = '';
+      guideView.innerHTML = '';
       guideView.hidden = true;
     }
     if (resultTabGuide) {
@@ -694,13 +704,14 @@ export function createApp(root: Document = document, options: any = {}) {
       if (requestVersion !== promptRequestVersion) return;
       if (typeof payload?.prompt !== 'string') throw new Error('The server returned an invalid prompt.');
 
-      if (promptTextarea) promptTextarea.value = payload.prompt;
-      if (guideView) guideView.textContent = '';
+      promptRaw = payload.prompt;
+      guideRaw = '';
+      setMarkdownView(promptView, promptRaw);
+      setMarkdownView(guideView, '');
       showResultStage('prompt');
       generatePromptButton.textContent = 'REGENERATE PROMPT';
       if (promptStatus) promptStatus.textContent = 'Prompt ready. Copy it into Gemini as a system prompt.';
-      promptTextarea?.focus();
-      promptTextarea?.setSelectionRange(0, 0);
+      promptView?.focus();
     } catch (error) {
       if (requestVersion !== promptRequestVersion) return;
       if (promptStatus) {
@@ -739,8 +750,10 @@ export function createApp(root: Document = document, options: any = {}) {
         throw new Error('Gemini returned an invalid guide.');
       }
 
-      if (promptTextarea) promptTextarea.value = payload.prompt;
-      if (guideView) guideView.textContent = payload.guide;
+      promptRaw = payload.prompt;
+      guideRaw = payload.guide;
+      setMarkdownView(promptView, promptRaw);
+      setMarkdownView(guideView, guideRaw);
       showResultStage('guide');
       if (generatePromptButton) generatePromptButton.textContent = 'REGENERATE PROMPT';
       askGeminiButton.textContent = 'ASK GEMINI AGAIN';
@@ -760,10 +773,7 @@ export function createApp(root: Document = document, options: any = {}) {
     }
   };
 
-  const activeResultText = () => {
-    if (activeResultTab === 'guide') return guideView?.textContent ?? '';
-    return promptTextarea?.value ?? '';
-  };
+  const activeResultText = () => (activeResultTab === 'guide' ? guideRaw : promptRaw);
 
   const copyActiveResult = async () => {
     const value = activeResultText();
@@ -778,10 +788,6 @@ export function createApp(root: Document = document, options: any = {}) {
     try {
       if (globalThis.navigator?.clipboard?.writeText) {
         await globalThis.navigator.clipboard.writeText(value);
-      } else if (activeResultTab === 'prompt' && promptTextarea) {
-        promptTextarea.focus();
-        promptTextarea.select();
-        if (!root.execCommand?.('copy')) throw new Error('Clipboard API is unavailable.');
       } else {
         throw new Error('Clipboard API is unavailable.');
       }
@@ -791,14 +797,9 @@ export function createApp(root: Document = document, options: any = {}) {
         if (copyActiveResultButton) copyActiveResultButton.textContent = idleLabel;
       }, 1600);
     } catch {
-      if (activeResultTab === 'prompt' && promptTextarea) {
-        promptTextarea.focus();
-        promptTextarea.select();
-      } else {
-        guideView?.focus();
-      }
-      button.textContent = 'PRESS CTRL/CMD + C';
-      if (promptStatus) promptStatus.textContent = 'Automatic copy is blocked; select the text and copy manually.';
+      (activeResultTab === 'guide' ? guideView : promptView)?.focus();
+      button.textContent = 'COPY FAILED';
+      if (promptStatus) promptStatus.textContent = 'Automatic copy is blocked by the browser.';
     }
   };
 

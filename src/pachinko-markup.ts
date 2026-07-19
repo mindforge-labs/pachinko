@@ -176,8 +176,8 @@ export const pachinkoMarkup = String.raw`
             <button id="copy-active-result" class="prompt-copy-action" type="button">COPY</button>
           </div>
           <div class="result-panels">
-            <pre id="gemini-guide" class="result-body" role="tabpanel" aria-labelledby="result-tab-guide" hidden tabindex="0"></pre>
-            <textarea id="gemini-system-prompt" class="result-body" role="tabpanel" aria-labelledby="result-tab-prompt" readonly spellcheck="false" hidden tabindex="0"></textarea>
+            <article id="gemini-guide" class="result-body markdown-body" role="tabpanel" aria-labelledby="result-tab-guide" hidden tabindex="0"></article>
+            <article id="gemini-system-prompt" class="result-body markdown-body" role="tabpanel" aria-labelledby="result-tab-prompt" hidden tabindex="0"></article>
           </div>
         </div>
       </section>
