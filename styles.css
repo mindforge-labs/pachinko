@@ -63,7 +63,6 @@ body::after {
 body[data-backdrop="isolated"] { background: radial-gradient(circle at 50% 42%, #22112b 0, #0b0710 43%, #030205 100%); }
 body[data-backdrop="isolated"]::before,
 body[data-backdrop="isolated"]::after,
-body[data-backdrop="isolated"] .stack-module,
 body[data-backdrop="isolated"] .machine-connector { opacity: 0; }
 button { font: inherit; }
 button:focus-visible { outline: .18rem solid #fff6ae; outline-offset: .22rem; }
