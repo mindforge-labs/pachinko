@@ -10,36 +10,501 @@
     "db": 3
   },
   "technologies": [
-    { "id": "angular", "name": "Angular", "short": "NGLR", "docsUrl": "https://angular.dev/overview", "enabled": true, "source": { "type": "devicon", "sourceId": "angular" }, "roles": ["frontend"] },
-    { "id": "bun", "name": "Bun", "short": "BUN", "docsUrl": "https://bun.sh/docs", "enabled": true, "source": { "type": "devicon", "sourceId": "bun" }, "roles": ["backend-runtime"] },
-    { "id": "django", "name": "Django", "short": "DJNG", "docsUrl": "https://docs.djangoproject.com/", "enabled": true, "source": { "type": "devicon", "sourceId": "django" }, "roles": ["backend-framework"] },
-    { "id": "dynamodb", "name": "DynamoDB", "short": "DYNO", "docsUrl": "https://docs.aws.amazon.com/dynamodb/", "enabled": true, "source": { "type": "devicon", "sourceId": "dynamodb" }, "roles": ["database"] },
-    { "id": "express", "name": "Express", "short": "EXPR", "docsUrl": "https://expressjs.com/", "enabled": true, "source": { "type": "devicon", "sourceId": "express" }, "roles": ["backend-framework"] },
-    { "id": "fastapi", "name": "FastAPI", "short": "FAST", "docsUrl": "https://fastapi.tiangolo.com/", "enabled": true, "source": { "type": "devicon", "sourceId": "fastapi" }, "roles": ["backend-framework"] },
-    { "id": "java", "name": "Java", "short": "JAVA", "docsUrl": "https://docs.oracle.com/en/java/", "enabled": true, "source": { "type": "devicon", "sourceId": "java" }, "roles": ["backend-runtime"] },
-    { "id": "kotlin", "name": "Kotlin", "short": "KOTL", "docsUrl": "https://kotlinlang.org/docs/home.html", "enabled": true, "source": { "type": "devicon", "sourceId": "kotlin" }, "roles": ["backend-runtime"] },
-    { "id": "mongodb", "name": "MongoDB", "short": "MONGO", "docsUrl": "https://www.mongodb.com/docs/", "enabled": true, "source": { "type": "devicon", "sourceId": "mongodb" }, "roles": ["database"] },
-    { "id": "mysql", "name": "MySQL", "short": "MYSQL", "docsUrl": "https://dev.mysql.com/doc/", "enabled": true, "source": { "type": "devicon", "sourceId": "mysql" }, "roles": ["database"] },
-    { "id": "nextjs", "name": "Next.js", "short": "NEXT", "docsUrl": "https://nextjs.org/docs", "enabled": true, "source": { "type": "devicon", "sourceId": "nextjs" }, "roles": ["frontend", "backend-framework"] },
-    { "id": "nodejs", "name": "Node.js", "short": "NODE", "docsUrl": "https://nodejs.org/docs/latest/api/", "enabled": true, "source": { "type": "devicon", "sourceId": "nodejs" }, "roles": ["backend-runtime"] },
-    { "id": "postgresql", "name": "Postgres", "short": "PG", "docsUrl": "https://www.postgresql.org/docs/current/", "enabled": true, "source": { "type": "devicon", "sourceId": "postgresql" }, "roles": ["database"] },
-    { "id": "python", "name": "Python", "short": "PY", "docsUrl": "https://docs.python.org/3/", "enabled": true, "source": { "type": "devicon", "sourceId": "python" }, "roles": ["backend-runtime"] },
-    { "id": "rails", "name": "Rails", "short": "RAIL", "docsUrl": "https://guides.rubyonrails.org/", "enabled": true, "source": { "type": "devicon", "sourceId": "rails" }, "roles": ["backend-framework"] },
-    { "id": "react", "name": "React", "short": "REACT", "docsUrl": "https://react.dev/reference/react", "enabled": true, "source": { "type": "devicon", "sourceId": "react" }, "roles": ["frontend"] },
-    { "id": "redis", "name": "Redis", "short": "REDIS", "docsUrl": "https://redis.io/docs/latest/", "enabled": true, "source": { "type": "devicon", "sourceId": "redis" }, "roles": ["database"] },
-    { "id": "ruby", "name": "Ruby", "short": "RUBY", "docsUrl": "https://docs.ruby-lang.org/en/", "enabled": true, "source": { "type": "devicon", "sourceId": "ruby" }, "roles": ["backend-runtime"] },
-    { "id": "solidjs", "name": "Solid", "short": "SLID", "docsUrl": "https://docs.solidjs.com/", "enabled": true, "source": { "type": "devicon", "sourceId": "solidjs" }, "roles": ["frontend"] },
-    { "id": "spring", "name": "Spring Boot", "short": "SPRG", "docsUrl": "https://docs.spring.io/spring-boot/", "enabled": true, "source": { "type": "devicon", "sourceId": "spring" }, "roles": ["backend-framework"] },
-    { "id": "sqlite", "name": "SQLite", "short": "SQLT", "docsUrl": "https://www.sqlite.org/docs.html", "enabled": true, "source": { "type": "devicon", "sourceId": "sqlite" }, "roles": ["database"] },
-    { "id": "svelte", "name": "Svelte", "short": "SVLT", "docsUrl": "https://svelte.dev/docs/svelte/overview", "enabled": true, "source": { "type": "devicon", "sourceId": "svelte" }, "roles": ["frontend"] },
-    { "id": "vuejs", "name": "Vue", "short": "VUE", "docsUrl": "https://vuejs.org/guide/", "enabled": true, "source": { "type": "devicon", "sourceId": "vuejs" }, "roles": ["frontend"] }
+    {
+      "id": "angular",
+      "name": "Angular",
+      "short": "NGLR",
+      "docsUrl": "https://angular.dev/overview",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "angular"
+      },
+      "roles": [
+        "frontend"
+      ]
+    },
+    {
+      "id": "astro",
+      "name": "Astro",
+      "short": "ASTRO",
+      "docsUrl": "https://devicon.dev/icons/astro",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "astro"
+      },
+      "roles": [
+        "frontend"
+      ]
+    },
+    {
+      "id": "bun",
+      "name": "Bun",
+      "short": "BUN",
+      "docsUrl": "https://bun.sh/docs",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "bun"
+      },
+      "roles": [
+        "backend-runtime"
+      ]
+    },
+    {
+      "id": "cassandra",
+      "name": "Cassandra",
+      "short": "CASSANDR",
+      "docsUrl": "https://devicon.dev/icons/cassandra",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "cassandra"
+      },
+      "roles": [
+        "database"
+      ]
+    },
+    {
+      "id": "clickhouse",
+      "name": "Clickhouse",
+      "short": "CLICKHOU",
+      "docsUrl": "https://devicon.dev/icons/clickhouse",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "clickhouse"
+      },
+      "roles": [
+        "database"
+      ]
+    },
+    {
+      "id": "couchbase",
+      "name": "Couchbase",
+      "short": "COUCHBAS",
+      "docsUrl": "https://devicon.dev/icons/couchbase",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "couchbase"
+      },
+      "roles": [
+        "database"
+      ]
+    },
+    {
+      "id": "couchdb",
+      "name": "Couchdb",
+      "short": "COUCHDB",
+      "docsUrl": "https://devicon.dev/icons/couchdb",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "couchdb"
+      },
+      "roles": [
+        "database"
+      ]
+    },
+    {
+      "id": "denojs",
+      "name": "Deno.js",
+      "short": "DENOJS",
+      "docsUrl": "https://devicon.dev/icons/denojs",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "denojs"
+      },
+      "roles": [
+        "backend-runtime"
+      ]
+    },
+    {
+      "id": "django",
+      "name": "Django",
+      "short": "DJNG",
+      "docsUrl": "https://docs.djangoproject.com/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "django"
+      },
+      "roles": [
+        "backend-framework"
+      ]
+    },
+    {
+      "id": "duckdb",
+      "name": "Duckdb",
+      "short": "DUCKDB",
+      "docsUrl": "https://devicon.dev/icons/duckdb",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "duckdb"
+      },
+      "roles": [
+        "database"
+      ]
+    },
+    {
+      "id": "dynamodb",
+      "name": "DynamoDB",
+      "short": "DYNO",
+      "docsUrl": "https://docs.aws.amazon.com/dynamodb/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "dynamodb"
+      },
+      "roles": [
+        "database"
+      ]
+    },
+    {
+      "id": "express",
+      "name": "Express",
+      "short": "EXPR",
+      "docsUrl": "https://expressjs.com/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "express"
+      },
+      "roles": [
+        "backend-framework"
+      ]
+    },
+    {
+      "id": "fastapi",
+      "name": "FastAPI",
+      "short": "FAST",
+      "docsUrl": "https://fastapi.tiangolo.com/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "fastapi"
+      },
+      "roles": [
+        "backend-framework"
+      ]
+    },
+    {
+      "id": "flask",
+      "name": "Flask",
+      "short": "FLASK",
+      "docsUrl": "https://devicon.dev/icons/flask",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "flask"
+      },
+      "roles": [
+        "backend-framework"
+      ]
+    },
+    {
+      "id": "java",
+      "name": "Java",
+      "short": "JAVA",
+      "docsUrl": "https://docs.oracle.com/en/java/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "java"
+      },
+      "roles": [
+        "backend-runtime"
+      ]
+    },
+    {
+      "id": "kotlin",
+      "name": "Kotlin",
+      "short": "KOTL",
+      "docsUrl": "https://kotlinlang.org/docs/home.html",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "kotlin"
+      },
+      "roles": [
+        "backend-runtime"
+      ]
+    },
+    {
+      "id": "mongodb",
+      "name": "MongoDB",
+      "short": "MONGO",
+      "docsUrl": "https://www.mongodb.com/docs/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "mongodb"
+      },
+      "roles": [
+        "database"
+      ]
+    },
+    {
+      "id": "mysql",
+      "name": "MySQL",
+      "short": "MYSQL",
+      "docsUrl": "https://dev.mysql.com/doc/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "mysql"
+      },
+      "roles": [
+        "database"
+      ]
+    },
+    {
+      "id": "neo4j",
+      "name": "Neo4j",
+      "short": "NEO4J",
+      "docsUrl": "https://devicon.dev/icons/neo4j",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "neo4j"
+      },
+      "roles": [
+        "database"
+      ]
+    },
+    {
+      "id": "nextjs",
+      "name": "Next.js",
+      "short": "NEXT",
+      "docsUrl": "https://nextjs.org/docs",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "nextjs"
+      },
+      "roles": [
+        "frontend",
+        "backend-framework"
+      ]
+    },
+    {
+      "id": "nodejs",
+      "name": "Node.js",
+      "short": "NODE",
+      "docsUrl": "https://nodejs.org/docs/latest/api/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "nodejs"
+      },
+      "roles": [
+        "backend-runtime"
+      ]
+    },
+    {
+      "id": "postgresql",
+      "name": "Postgres",
+      "short": "PG",
+      "docsUrl": "https://www.postgresql.org/docs/current/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "postgresql"
+      },
+      "roles": [
+        "database"
+      ]
+    },
+    {
+      "id": "python",
+      "name": "Python",
+      "short": "PY",
+      "docsUrl": "https://docs.python.org/3/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "python"
+      },
+      "roles": [
+        "backend-runtime"
+      ]
+    },
+    {
+      "id": "rails",
+      "name": "Rails",
+      "short": "RAIL",
+      "docsUrl": "https://guides.rubyonrails.org/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "rails"
+      },
+      "roles": [
+        "backend-framework"
+      ]
+    },
+    {
+      "id": "react",
+      "name": "React",
+      "short": "REACT",
+      "docsUrl": "https://react.dev/reference/react",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "react"
+      },
+      "roles": [
+        "frontend"
+      ]
+    },
+    {
+      "id": "redis",
+      "name": "Redis",
+      "short": "REDIS",
+      "docsUrl": "https://redis.io/docs/latest/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "redis"
+      },
+      "roles": [
+        "database"
+      ]
+    },
+    {
+      "id": "ruby",
+      "name": "Ruby",
+      "short": "RUBY",
+      "docsUrl": "https://docs.ruby-lang.org/en/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "ruby"
+      },
+      "roles": [
+        "backend-runtime"
+      ]
+    },
+    {
+      "id": "solidjs",
+      "name": "Solid",
+      "short": "SLID",
+      "docsUrl": "https://docs.solidjs.com/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "solidjs"
+      },
+      "roles": [
+        "frontend"
+      ]
+    },
+    {
+      "id": "spring",
+      "name": "Spring Boot",
+      "short": "SPRG",
+      "docsUrl": "https://docs.spring.io/spring-boot/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "spring"
+      },
+      "roles": [
+        "backend-framework"
+      ]
+    },
+    {
+      "id": "sqlite",
+      "name": "SQLite",
+      "short": "SQLT",
+      "docsUrl": "https://www.sqlite.org/docs.html",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "sqlite"
+      },
+      "roles": [
+        "database"
+      ]
+    },
+    {
+      "id": "svelte",
+      "name": "Svelte",
+      "short": "SVLT",
+      "docsUrl": "https://svelte.dev/docs/svelte/overview",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "svelte"
+      },
+      "roles": [
+        "frontend"
+      ]
+    },
+    {
+      "id": "vuejs",
+      "name": "Vue",
+      "short": "VUE",
+      "docsUrl": "https://vuejs.org/guide/",
+      "enabled": true,
+      "source": {
+        "type": "devicon",
+        "sourceId": "vuejs"
+      },
+      "roles": [
+        "frontend"
+      ]
+    }
   ],
   "compatibility": [
-    { "frameworkId": "django", "runtimeIds": ["python"] },
-    { "frameworkId": "express", "runtimeIds": ["bun", "nodejs"] },
-    { "frameworkId": "fastapi", "runtimeIds": ["python"] },
-    { "frameworkId": "nextjs", "runtimeIds": ["bun", "nodejs"] },
-    { "frameworkId": "rails", "runtimeIds": ["ruby"] },
-    { "frameworkId": "spring", "runtimeIds": ["java", "kotlin"] }
+    {
+      "frameworkId": "django",
+      "runtimeIds": [
+        "python"
+      ]
+    },
+    {
+      "frameworkId": "express",
+      "runtimeIds": [
+        "bun",
+        "nodejs"
+      ]
+    },
+    {
+      "frameworkId": "fastapi",
+      "runtimeIds": [
+        "python"
+      ]
+    },
+    {
+      "frameworkId": "flask",
+      "runtimeIds": [
+        "python"
+      ]
+    },
+    {
+      "frameworkId": "nextjs",
+      "runtimeIds": [
+        "bun",
+        "nodejs"
+      ]
+    },
+    {
+      "frameworkId": "rails",
+      "runtimeIds": [
+        "ruby"
+      ]
+    },
+    {
+      "frameworkId": "spring",
+      "runtimeIds": [
+        "java",
+        "kotlin"
+      ]
+    }
   ]
 }
