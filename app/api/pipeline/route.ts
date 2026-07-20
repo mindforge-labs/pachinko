@@ -29,10 +29,7 @@ type PipelineBody = {
 function modelClient() {
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) return null;
-  return new GeminiProjectGenerationModel({
-    apiKey,
-    model: process.env.GEMINI_MODEL,
-  });
+  return new GeminiProjectGenerationModel({ apiKey });
 }
 
 function jsonResponse(payload: unknown, status = 200) {
@@ -78,7 +75,7 @@ export async function POST(request: Request) {
 
   const workspaceBase = resolvePipelineWorkspaceBase();
   await mkdir(workspaceBase, { recursive: true });
-  const modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-3.5-flash';
+  const models = model.resolvedModels();
   const action = typeof body.action === 'string' ? body.action : 'start';
 
   try {
@@ -119,7 +116,8 @@ export async function POST(request: Request) {
         runId,
         workspaceRoot,
         report,
-        model: modelName,
+        models,
+        model: models.powerful,
       }, status);
     }
 
@@ -161,7 +159,8 @@ export async function POST(request: Request) {
       workspaceRoot: orchestrator.getWorkspaceRoot() ?? null,
       architecturePlan: orchestrator.getArchitecturePlan() ?? null,
       report,
-      model: modelName,
+      models,
+      model: models.powerful,
     }, httpStatus);
   } catch (error) {
     if (isPipelineError(error)) {

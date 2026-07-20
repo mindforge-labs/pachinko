@@ -22,6 +22,7 @@ import path from 'node:path';
 import {
   GeminiProjectGenerationModel,
   PipelineOrchestrator,
+  resolveGeminiModels,
   resolvePipelineWorkspaceBase,
   type FinalProjectReport,
   type FinalProjectStatus,
@@ -46,6 +47,11 @@ type DryRunRecord = {
     authentication: boolean;
   };
   model: string;
+  models: {
+    default: string;
+    powerful: string;
+    economical: string;
+  };
   workspaceBase: string;
   httpEquivalentStatus: number | null;
   reportStatus: FinalProjectStatus | 'not_run';
@@ -135,7 +141,7 @@ function toMarkdown(record: DryRunRecord): string {
     `- runtime: \`${record.stack.backendRuntime}\``,
     `- authentication: \`${record.stack.authentication}\``,
     `- executeVerification: \`${record.executeVerification}\``,
-    `- model: \`${record.model}\``,
+    `- models: default=\`${record.models.default}\`, powerful=\`${record.models.powerful}\`, economical=\`${record.models.economical}\``,
     '',
     '## Report',
     '',
@@ -192,7 +198,9 @@ function toMarkdown(record: DryRunRecord): string {
 async function main(): Promise<number> {
   const cli = parseArgs(process.argv.slice(2));
   const apiKey = process.env.GEMINI_API_KEY?.trim();
-  const model = process.env.GEMINI_MODEL?.trim() || 'gemini-3.5-flash';
+  const gemini = apiKey ? new GeminiProjectGenerationModel({ apiKey }) : null;
+  const models = gemini?.resolvedModels() ?? resolveGeminiModels();
+  const model = models.powerful;
   const workspaceBase = resolvePipelineWorkspaceBase();
   const started = Date.now();
 
@@ -202,7 +210,7 @@ async function main(): Promise<number> {
     note: 'Recorded separately in checklist; this script does not invoke the unit suite.',
   };
 
-  if (!apiKey) {
+  if (!apiKey || !gemini) {
     const record: DryRunRecord = {
       recordedAt: new Date().toISOString(),
       mode: 'pipeline-dry-run',
@@ -213,6 +221,7 @@ async function main(): Promise<number> {
         authentication: cli.authentication,
       },
       model,
+      models,
       workspaceBase,
       httpEquivalentStatus: null,
       reportStatus: 'not_run',
@@ -243,7 +252,7 @@ async function main(): Promise<number> {
   await mkdir(workspaceBase, { recursive: true });
 
   const orchestrator = new PipelineOrchestrator({
-    model: new GeminiProjectGenerationModel({ apiKey, model }),
+    model: gemini,
     workspaceBaseDir: workspaceBase,
     mode: 'pipeline',
     autoApprovePlan: true,
@@ -307,6 +316,7 @@ async function main(): Promise<number> {
       authentication: cli.authentication,
     },
     model,
+    models,
     workspaceBase,
     httpEquivalentStatus: report ? reportHttpStatus(report.status) : null,
     reportStatus: report?.status ?? 'not_run',

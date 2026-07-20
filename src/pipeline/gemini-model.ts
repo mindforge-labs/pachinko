@@ -1,3 +1,10 @@
+import {
+  resolveGeminiModel,
+  resolveGeminiModels,
+  sanitizeGeminiModelId,
+  type GeminiModelTask,
+  type GeminiModelTier,
+} from '../gemini-models';
 import { PipelineError } from './errors';
 import type {
   ArchitecturePlanningInput,
@@ -15,7 +22,11 @@ import type { ArchitecturePlan, GenerationBatchResult, RepairResult } from './ty
 
 export type GeminiModelOptions = {
   apiKey: string;
+  /** Force one model for every task (dry-run / tests). */
   model?: string;
+  /** Per-tier overrides when `model` is not set. */
+  models?: Partial<Record<GeminiModelTier, string>>;
+  env?: NodeJS.ProcessEnv;
   fetchImpl?: typeof fetch;
   timeoutMs?: number;
   maxInvalidResponseRetries?: number;
@@ -34,9 +45,6 @@ type GeminiResponse = {
     candidatesTokenCount?: number;
   };
 };
-
-const DEFAULT_MODEL = 'gemini-3.5-flash';
-const MODEL_PATTERN = /^[a-zA-Z0-9._-]+$/;
 
 function readText(payload: GeminiResponse): string {
   return payload.candidates?.[0]?.content?.parts
@@ -63,18 +71,24 @@ function parseJsonObject(text: string): unknown {
 
 export class GeminiProjectGenerationModel implements ProjectGenerationModel {
   private readonly apiKey: string;
-  private readonly model: string;
+  private readonly forcedModel?: string;
+  private readonly models?: Partial<Record<GeminiModelTier, string>>;
+  private readonly env: NodeJS.ProcessEnv;
   private readonly fetchImpl: typeof fetch;
   private readonly timeoutMs: number;
   private readonly maxInvalidResponseRetries: number;
   private readonly maxRequestRetries: number;
   private readonly requestRetryDelayMs: number;
   lastUsage?: { promptTokens?: number; completionTokens?: number };
+  lastModel?: string;
 
   constructor(options: GeminiModelOptions) {
     this.apiKey = options.apiKey;
-    const configured = options.model?.trim() || DEFAULT_MODEL;
-    this.model = MODEL_PATTERN.test(configured) ? configured : DEFAULT_MODEL;
+    this.forcedModel = options.model?.trim()
+      ? sanitizeGeminiModelId(options.model, resolveGeminiModel('default', options.env ?? process.env, options.models))
+      : undefined;
+    this.models = options.models;
+    this.env = options.env ?? process.env;
     this.fetchImpl = options.fetchImpl ?? fetch;
     this.timeoutMs = options.timeoutMs ?? 240_000;
     this.maxInvalidResponseRetries = options.maxInvalidResponseRetries ?? 2;
@@ -82,12 +96,29 @@ export class GeminiProjectGenerationModel implements ProjectGenerationModel {
     this.requestRetryDelayMs = options.requestRetryDelayMs ?? 8_000;
   }
 
+  modelFor(task: GeminiModelTask): string {
+    if (this.forcedModel) return this.forcedModel;
+    return resolveGeminiModel(task, this.env, this.models);
+  }
+
+  resolvedModels(): Record<GeminiModelTier, string> {
+    if (this.forcedModel) {
+      return {
+        default: this.forcedModel,
+        powerful: this.forcedModel,
+        economical: this.forcedModel,
+      };
+    }
+    return resolveGeminiModels(this.env, this.models);
+  }
+
   async planArchitecture(input: ArchitecturePlanningInput): Promise<ArchitecturePlan> {
-    return this.generateValidatedJson(input.system, input.user, validateArchitecturePlan);
+    return this.generateValidatedJson('architecture', input.system, input.user, validateArchitecturePlan);
   }
 
   async generateBatch(input: BatchGenerationInput): Promise<GenerationBatchResult> {
     return this.generateValidatedJson(
+      'codebase',
       input.system,
       input.user,
       (raw) => validateGenerationBatchResult(raw, {
@@ -100,6 +131,7 @@ export class GeminiProjectGenerationModel implements ProjectGenerationModel {
 
   async repairFailure(input: RepairInput): Promise<RepairResult> {
     return this.generateValidatedJson(
+      'codebase',
       input.system,
       input.user,
       (raw) => validateRepairResult(raw, {
@@ -111,6 +143,7 @@ export class GeminiProjectGenerationModel implements ProjectGenerationModel {
   }
 
   private async generateValidatedJson<T>(
+    task: GeminiModelTask,
     system: string,
     user: string,
     validate: (raw: unknown) => SchemaValidationResult<T>,
@@ -119,7 +152,7 @@ export class GeminiProjectGenerationModel implements ProjectGenerationModel {
     let lastError: unknown;
     for (let attempt = 0; attempt <= this.maxInvalidResponseRetries; attempt += 1) {
       try {
-        const text = await this.callGemini(system, user, attempt > 0);
+        const text = await this.callGemini(task, system, user, attempt > 0);
         const raw = parseJsonObject(text);
         const validated = validate(raw);
         if (!validated.ok) {
@@ -138,11 +171,16 @@ export class GeminiProjectGenerationModel implements ProjectGenerationModel {
       : new PipelineError('MODEL_RESPONSE_INVALID', 'Model response invalid after retries');
   }
 
-  private async callGemini(system: string, user: string, isRetry: boolean): Promise<string> {
+  private async callGemini(
+    task: GeminiModelTask,
+    system: string,
+    user: string,
+    isRetry: boolean,
+  ): Promise<string> {
     let lastError: unknown;
     for (let attempt = 0; attempt <= this.maxRequestRetries; attempt += 1) {
       try {
-        return await this.callGeminiOnce(system, user, isRetry);
+        return await this.callGeminiOnce(task, system, user, isRetry);
       } catch (error) {
         lastError = error;
         if (!isTransientModelFailure(error) || attempt >= this.maxRequestRetries) {
@@ -157,8 +195,15 @@ export class GeminiProjectGenerationModel implements ProjectGenerationModel {
       : new PipelineError('MODEL_REQUEST_FAILED', 'Gemini request failed after retries');
   }
 
-  private async callGeminiOnce(system: string, user: string, isRetry: boolean): Promise<string> {
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:generateContent`;
+  private async callGeminiOnce(
+    task: GeminiModelTask,
+    system: string,
+    user: string,
+    isRetry: boolean,
+  ): Promise<string> {
+    const model = this.modelFor(task);
+    this.lastModel = model;
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
     const retrySuffix = isRetry
       ? `\n\nPrevious response failed schema validation. Return ONLY one JSON object with ALL required top-level keys.
 Required architecture keys when planning: summary, assumptions, dependencies, repositoryTree, files, batches, verificationPlan.
@@ -189,7 +234,7 @@ Do not omit arrays — use [] if empty. No markdown fences.`
       throw new PipelineError(
         'MODEL_REQUEST_FAILED',
         timedOut ? 'Gemini request timed out' : 'Could not reach Gemini API',
-        { cause: error },
+        { cause: error, model },
       );
     }
 
@@ -197,14 +242,14 @@ Do not omit arrays — use [] if empty. No markdown fences.`
     try {
       payload = await response.json();
     } catch {
-      throw new PipelineError('MODEL_REQUEST_FAILED', 'Gemini returned non-JSON HTTP body');
+      throw new PipelineError('MODEL_REQUEST_FAILED', 'Gemini returned non-JSON HTTP body', { model });
     }
 
     if (!response.ok) {
       throw new PipelineError(
         'MODEL_REQUEST_FAILED',
         payload.error?.message || `Gemini failed with status ${response.status}`,
-        { status: response.status },
+        { status: response.status, model },
       );
     }
 
@@ -215,7 +260,7 @@ Do not omit arrays — use [] if empty. No markdown fences.`
 
     const text = readText(payload);
     if (!text) {
-      throw new PipelineError('MODEL_RESPONSE_INVALID', 'Gemini returned no text');
+      throw new PipelineError('MODEL_RESPONSE_INVALID', 'Gemini returned no text', { model });
     }
     return text;
   }

@@ -7,7 +7,11 @@ services:
     restart: unless-stopped
     environment:
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
-      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.5-flash}
+      GEMINI_MODEL: ${GEMINI_MODEL:-}
+      GEMINI_MODEL_FORCE: ${GEMINI_MODEL_FORCE:-}
+      GEMINI_MODEL_DEFAULT: ${GEMINI_MODEL_DEFAULT:-gemini-3.5-flash}
+      GEMINI_MODEL_POWERFUL: ${GEMINI_MODEL_POWERFUL:-gemini-3.1-pro-preview}
+      GEMINI_MODEL_ECONOMICAL: ${GEMINI_MODEL_ECONOMICAL:-gemini-3.1-flash-lite}
     ports:
       - "${APP_PORT:-3000}:3000"
     healthcheck:

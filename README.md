@@ -44,8 +44,24 @@ Trong development, maintainer có thể mở `http://localhost:3000/techstack-ma
 
 ```env
 GEMINI_API_KEY=your_server_side_api_key
-GEMINI_MODEL=gemini-3.5-flash
+
+# Optional: force one model for every task
+# GEMINI_MODEL_FORCE=gemini-3.5-flash
+
+# Optional: override individual tiers (defaults shown)
+# GEMINI_MODEL_DEFAULT=gemini-3.5-flash
+# GEMINI_MODEL=gemini-3.5-flash   # legacy alias for DEFAULT only
+# GEMINI_MODEL_POWERFUL=gemini-3.1-pro-preview
+# GEMINI_MODEL_ECONOMICAL=gemini-3.1-flash-lite
 ```
+
+Routing mặc định:
+
+| Task | Tier | Model |
+|------|------|--------|
+| Sinh tech stack, giải thích lựa chọn, tạo prompt | `default` | `gemini-3.5-flash` |
+| Architecture / codebase phức tạp | `powerful` | `gemini-3.1-pro-preview` |
+| Phân loại requirement, chuẩn hóa JSON, kiểm tra input | `economical` | `gemini-3.1-flash-lite` |
 
 Sau khi sửa `.env.local`, restart `bun run dev`. Không đặt tên biến là `NEXT_PUBLIC_GEMINI_API_KEY` và không commit `.env.local`.
 

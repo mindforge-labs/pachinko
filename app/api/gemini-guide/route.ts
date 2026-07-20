@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { resolveGeminiModel } from '../../../src/gemini-models';
 import { buildGeminiSystemPrompt } from '../../../src/gemini-prompt';
 import { parsePromptRequest } from '../../../src/prompt-request';
 
@@ -8,9 +9,8 @@ export const maxDuration = 300;
 /**
  * Legacy one-shot guide generation (GenerationMode: legacy-one-shot).
  * Prefer POST /api/pipeline with mode=pipeline for batched, verified generation.
+ * Uses the default Gemini tier (tech-stack / explain / prompt tasks).
  */
-const DEFAULT_MODEL = 'gemini-3.5-flash';
-const MODEL_PATTERN = /^[a-zA-Z0-9._-]+$/;
 const REQUEST_TIMEOUT_MS = 240_000;
 
 type GeminiPart = { text?: unknown };
@@ -48,8 +48,7 @@ export async function POST(request: Request) {
 
   const { stack, authentication } = parsed.value;
   const prompt = buildGeminiSystemPrompt(stack, { authentication });
-  const configuredModel = process.env.GEMINI_MODEL?.trim() || DEFAULT_MODEL;
-  const model = MODEL_PATTERN.test(configuredModel) ? configuredModel : DEFAULT_MODEL;
+  const model = resolveGeminiModel('tech-stack');
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
 
   let geminiResponse: Response;
