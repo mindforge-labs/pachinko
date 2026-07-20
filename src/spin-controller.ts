@@ -10,6 +10,8 @@ import type { RerollLimits } from './techstack-matrix';
 
 const DEFAULT_SYMBOLS = ['react', 'express', 'postgresql', 'vuejs', 'spring', 'mongodb'];
 const LAYERS: ReelLayer[] = ['fe', 'be', 'db'];
+const DEFAULT_AUTO_STOP_DELAYS = [2800, 4300, 5900];
+const DEFAULT_SETTLE_DELAY = 1600;
 
 type Phase = 'idle' | 'spinning' | 'settling' | 'rerolling';
 type Reel = { index: number; state: 'stopped' | 'spinning'; symbol: string | null };
@@ -54,8 +56,8 @@ export class SpinController {
 
   constructor({
     reelCount = 3,
-    autoStopDelays = [2200, 3000, 3800],
-    settleDelay = 650,
+    autoStopDelays = DEFAULT_AUTO_STOP_DELAYS,
+    settleDelay = DEFAULT_SETTLE_DELAY,
     rerollDelay = 1600,
     rerollLimits = REROLL_LIMITS,
     reducedMotion = false,
@@ -280,4 +282,4 @@ export class SpinController {
   }
 }
 
-export { DEFAULT_SYMBOLS };
+export { DEFAULT_AUTO_STOP_DELAYS, DEFAULT_SETTLE_DELAY, DEFAULT_SYMBOLS };

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { SpinController } from '../src/spin-controller';
+import { DEFAULT_AUTO_STOP_DELAYS, DEFAULT_SETTLE_DELAY, SpinController } from '../src/spin-controller';
 
 const clock = () => {
   let nextId = 1;
@@ -53,6 +53,16 @@ const setup = (overrides: ConstructorParameters<typeof SpinController>[0] = {}) 
 };
 
 describe('SpinController rerolls', () => {
+  test('uses a readable three-stage automatic stop cadence by default', () => {
+    const controller = new SpinController();
+    expect(controller.autoStopDelays).toEqual(DEFAULT_AUTO_STOP_DELAYS);
+    expect(controller.autoStopDelays[1] - controller.autoStopDelays[0]).toBeGreaterThanOrEqual(1200);
+    expect(controller.autoStopDelays[2] - controller.autoStopDelays[1]).toBeGreaterThanOrEqual(1200);
+    expect(controller.settleDelay).toBe(DEFAULT_SETTLE_DELAY);
+    expect(controller.settleDelay).toBeGreaterThanOrEqual(1100);
+    controller.destroy();
+  });
+
   test('rejects invalid, busy, incomplete, and exhausted rerolls', () => {
     const { controller, time } = setup();
     expect(controller.reroll(-1)).toBe(false);
