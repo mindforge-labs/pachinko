@@ -5,6 +5,10 @@ import { parsePromptRequest } from '../../../src/prompt-request';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 300;
 
+/**
+ * Legacy one-shot guide generation (GenerationMode: legacy-one-shot).
+ * Prefer POST /api/pipeline with mode=pipeline for batched, verified generation.
+ */
 const DEFAULT_MODEL = 'gemini-3.5-flash';
 const MODEL_PATTERN = /^[a-zA-Z0-9._-]+$/;
 const REQUEST_TIMEOUT_MS = 240_000;

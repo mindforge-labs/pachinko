@@ -1,5 +1,11 @@
 import { animateView, spring } from 'motion';
 import { AudioEngine } from './audio-engine';
+import {
+  formatArchitecturePlanAsMarkdown,
+  formatPipelineReportAsMarkdown,
+  formatPipelineRunbook,
+  isPipelineReportPayload,
+} from './format-pipeline-report';
 import { renderPreviewMarkdown } from './markdown';
 import { SpinController } from './spin-controller';
 import {
@@ -13,6 +19,7 @@ import {
 } from './techstack';
 
 const BACKDROP_KEY = 'nocturne-pachislot-backdrop';
+const GENERATION_MODE_KEY = 'nocturne-pachislot-generation-mode';
 const CAROUSEL_INTERVAL_MS = 1600;
 const INITIAL_SYMBOLS = ['react', 'express', 'postgresql'];
 const REEL_STOP_EFFECT_MS = 1150;
@@ -42,8 +49,13 @@ export function createApp(root: Document = document, options: any = {}) {
   const promptBuilder = root.querySelector<HTMLElement>('.prompt-builder');
   const carouselReset = root.querySelector('#stack-carousel-reset');
   const authCheckbox = root.querySelector<HTMLInputElement>('#include-auth');
+  const pipelineCheckbox = root.querySelector<HTMLInputElement>('#use-pipeline');
+  const requirePlanApprovalCheckbox = root.querySelector<HTMLInputElement>('#require-plan-approval');
   const generatePromptButton = root.querySelector<HTMLButtonElement>('#generate-prompt');
   const askGeminiButton = root.querySelector<HTMLButtonElement>('#ask-gemini');
+  const approvePlanButton = root.querySelector<HTMLButtonElement>('#approve-plan');
+  const rejectPlanButton = root.querySelector<HTMLButtonElement>('#reject-plan');
+  const planApprovalBar = root.querySelector<HTMLElement>('#plan-approval-bar');
   const promptStatus = root.querySelector<HTMLElement>('#prompt-builder-status');
   const resultStage = root.querySelector<HTMLElement>('#result-stage');
   const resultTabGuide = root.querySelector<HTMLButtonElement>('#result-tab-guide');
@@ -63,6 +75,9 @@ export function createApp(root: Document = document, options: any = {}) {
   let activeResultTab: 'guide' | 'prompt' = 'prompt';
   let promptRaw = '';
   let guideRaw = '';
+  let lastGenerationMode: 'pipeline' | 'legacy-one-shot' = 'pipeline';
+  let pendingPipelineRunId: string | null = null;
+  let awaitingPlanApproval = false;
 
   if (!machine || !startButton || stopButtons.length !== 3 || reels.length !== 3) {
     throw new Error('Pachislot markup is incomplete');
@@ -166,8 +181,14 @@ export function createApp(root: Document = document, options: any = {}) {
     if (carouselMinimize instanceof HTMLButtonElement) carouselMinimize.disabled = rerolling;
     if (carouselReset instanceof HTMLButtonElement) carouselReset.disabled = rerolling;
     if (authCheckbox) authCheckbox.disabled = rerolling;
+    if (pipelineCheckbox) pipelineCheckbox.disabled = rerolling;
+    if (requirePlanApprovalCheckbox) {
+      requirePlanApprovalCheckbox.disabled = rerolling || pipelineCheckbox?.checked === false;
+    }
     if (generatePromptButton) generatePromptButton.disabled = rerolling;
-    if (askGeminiButton) askGeminiButton.disabled = rerolling;
+    if (askGeminiButton) askGeminiButton.disabled = rerolling || awaitingPlanApproval;
+    if (approvePlanButton) approvePlanButton.disabled = rerolling || !awaitingPlanApproval;
+    if (rejectPlanButton) rejectPlanButton.disabled = rerolling || !awaitingPlanApproval;
     if (copyActiveResultButton) copyActiveResultButton.disabled = rerolling;
     if (resultTabGuide) resultTabGuide.disabled = rerolling;
     if (resultTabPrompt) resultTabPrompt.disabled = rerolling;
@@ -197,20 +218,33 @@ export function createApp(root: Document = document, options: any = {}) {
     const hasGuide = Boolean(guideRaw.trim());
     const nextTab = tab === 'guide' && hasGuide ? 'guide' : 'prompt';
     activeResultTab = nextTab;
+    const pipelineLabels = awaitingPlanApproval
+      ? { guide: 'PLAN', prompt: 'RUNBOOK', copyGuide: 'COPY PLAN', copyPrompt: 'COPY RUNBOOK' }
+      : { guide: 'REPORT', prompt: 'RUNBOOK', copyGuide: 'COPY REPORT', copyPrompt: 'COPY RUNBOOK' };
 
     if (resultTabGuide) {
       resultTabGuide.hidden = !hasGuide;
+      resultTabGuide.textContent = lastGenerationMode === 'pipeline' ? pipelineLabels.guide : 'GUIDE';
       resultTabGuide.setAttribute('aria-selected', nextTab === 'guide' ? 'true' : 'false');
       resultTabGuide.tabIndex = nextTab === 'guide' ? 0 : -1;
     }
     if (resultTabPrompt) {
+      resultTabPrompt.textContent = lastGenerationMode === 'pipeline' ? pipelineLabels.prompt : 'PROMPT';
       resultTabPrompt.setAttribute('aria-selected', nextTab === 'prompt' ? 'true' : 'false');
       resultTabPrompt.tabIndex = nextTab === 'prompt' ? 0 : -1;
     }
     if (guideView) guideView.hidden = nextTab !== 'guide';
     if (promptView) promptView.hidden = nextTab !== 'prompt';
     if (copyActiveResultButton) {
-      copyActiveResultButton.textContent = nextTab === 'guide' ? 'COPY GUIDE' : 'COPY PROMPT';
+      if (nextTab === 'guide') {
+        copyActiveResultButton.textContent = lastGenerationMode === 'pipeline'
+          ? pipelineLabels.copyGuide
+          : 'COPY GUIDE';
+      } else {
+        copyActiveResultButton.textContent = lastGenerationMode === 'pipeline'
+          ? pipelineLabels.copyPrompt
+          : 'COPY PROMPT';
+      }
     }
   };
 
@@ -220,11 +254,19 @@ export function createApp(root: Document = document, options: any = {}) {
     setResultTab(tab);
   };
 
+  const setPlanApprovalVisible = (visible: boolean) => {
+    awaitingPlanApproval = visible;
+    if (planApprovalBar) planApprovalBar.hidden = !visible;
+    if (!visible) pendingPipelineRunId = null;
+    setControls(controller.snapshot());
+  };
+
   const resetPromptBuilder = ({ resetAuth = false } = {}) => {
     promptRequestVersion += 1;
     carousel?.classList.remove('has-prompt');
     promptRaw = '';
     guideRaw = '';
+    setPlanApprovalVisible(false);
     if (resultStage) resultStage.hidden = true;
     if (promptView) {
       promptView.innerHTML = '';
@@ -255,6 +297,7 @@ export function createApp(root: Document = document, options: any = {}) {
     }
     if (copyActiveResultButton) copyActiveResultButton.textContent = 'COPY';
     if (resetAuth && authCheckbox) authCheckbox.checked = false;
+    lastGenerationMode = pipelineCheckbox?.checked === false ? 'legacy-one-shot' : 'pipeline';
   };
 
   const hideCarousel = () => {
@@ -767,24 +810,117 @@ export function createApp(root: Document = document, options: any = {}) {
     }
   };
 
+  const presentPipelinePayload = (payload: {
+    report: Parameters<typeof formatPipelineReportAsMarkdown>[0];
+    architecturePlan?: Parameters<typeof formatArchitecturePlanAsMarkdown>[0] | null;
+    runId?: string;
+    model?: string;
+  }) => {
+    const statusLabel = payload.report.status;
+    if (statusLabel === 'awaiting_plan_approval' && payload.architecturePlan && payload.runId) {
+      pendingPipelineRunId = payload.runId;
+      guideRaw = formatArchitecturePlanAsMarkdown(payload.architecturePlan);
+      promptRaw = formatPipelineRunbook(payload.report);
+      setMarkdownView(promptView, promptRaw);
+      setMarkdownView(guideView, guideRaw);
+      setPlanApprovalVisible(true);
+      showResultStage('guide');
+      askGeminiButton.textContent = 'WAITING FOR APPROVAL';
+      if (promptStatus) {
+        promptStatus.textContent = `Architecture plan ready (run ${payload.runId}). Approve to generate files, or reject to cancel.`;
+      }
+      guideView?.focus();
+      return;
+    }
+
+    setPlanApprovalVisible(false);
+    guideRaw = formatPipelineReportAsMarkdown(payload.report);
+    promptRaw = formatPipelineRunbook(payload.report);
+    setMarkdownView(promptView, promptRaw);
+    setMarkdownView(guideView, guideRaw);
+    showResultStage('guide');
+    if (generatePromptButton) generatePromptButton.textContent = 'REGENERATE PROMPT';
+    askGeminiButton.textContent = 'RUN PIPELINE AGAIN';
+
+    const firstIssue = payload.report.unresolvedIssues[0]
+      || payload.report.compatibilityWarnings[0]?.message;
+    if (promptStatus) {
+      if (statusLabel === 'stack_incompatible') {
+        promptStatus.textContent = firstIssue
+          ? `Stack incompatible: ${firstIssue}`
+          : 'Stack incompatible. Review the report for conflicts and resolution options.';
+      } else if (statusLabel === 'failed') {
+        promptStatus.textContent = firstIssue
+          ? `Pipeline failed: ${firstIssue}`
+          : `Pipeline finished with status ${statusLabel}. Review the report for unresolved issues.`;
+      } else {
+        const warningNote = payload.report.compatibilityWarnings.length
+          ? ` · ${payload.report.compatibilityWarnings.length} compatibility warning(s)`
+          : '';
+        promptStatus.textContent = `Pipeline report ready (${statusLabel})${warningNote}. Verification was skipped in the UI; copy the report or runbook.`;
+      }
+    }
+    guideView?.focus();
+  };
+
   const askGemini = async () => {
-    if (!lastStack.length || !askGeminiButton) return;
+    if (!lastStack.length || !askGeminiButton || awaitingPlanApproval) return;
+
+    const usePipeline = pipelineCheckbox?.checked !== false;
+    lastGenerationMode = usePipeline ? 'pipeline' : 'legacy-one-shot';
+    const requirePlanApproval = usePipeline && requirePlanApprovalCheckbox?.checked !== false;
 
     const requestVersion = ++promptRequestVersion;
     askGeminiButton.disabled = true;
-    askGeminiButton.textContent = 'GEMINI IS WRITING…';
+    askGeminiButton.textContent = usePipeline ? 'PIPELINE RUNNING…' : 'GEMINI IS WRITING…';
     if (generatePromptButton) generatePromptButton.disabled = true;
-    if (promptStatus) promptStatus.textContent = 'Gemini is generating the implementation guide. This can take a few minutes…';
+    if (promptStatus) {
+      promptStatus.textContent = usePipeline
+        ? (requirePlanApproval
+          ? 'Verified pipeline is drafting an architecture plan for your approval…'
+          : 'Verified pipeline is planning and generating in batches. This can take several minutes…')
+        : 'Gemini is generating the legacy one-shot guide. This can take a few minutes…';
+    }
+
+    const stackBody = {
+      symbols: lastStack.map(({ id }) => id),
+      backendRuntime: lastBackendRuntime,
+      authentication: Boolean(authCheckbox?.checked),
+    };
 
     try {
+      if (usePipeline) {
+        const response = await globalThis.fetch('/api/pipeline', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...stackBody,
+            mode: 'pipeline',
+            action: 'start',
+            requirePlanApproval,
+            executeVerification: false,
+          }),
+        });
+        const payload = await response.json();
+
+        if (requestVersion !== promptRequestVersion) return;
+
+        if (!isPipelineReportPayload(payload)) {
+          throw new Error(payload?.error || 'Pipeline returned an invalid report.');
+        }
+
+        if (!response.ok && payload.report?.status !== 'awaiting_plan_approval' && !payload.report) {
+          throw new Error(payload?.error || 'Pipeline request failed.');
+        }
+
+        presentPipelinePayload(payload);
+        return;
+      }
+
       const response = await globalThis.fetch('/api/gemini-guide', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          symbols: lastStack.map(({ id }) => id),
-          backendRuntime: lastBackendRuntime,
-          authentication: Boolean(authCheckbox?.checked),
-        }),
+        body: JSON.stringify(stackBody),
       });
       const payload = await response.json();
 
@@ -801,17 +937,63 @@ export function createApp(root: Document = document, options: any = {}) {
       showResultStage('guide');
       if (generatePromptButton) generatePromptButton.textContent = 'REGENERATE PROMPT';
       askGeminiButton.textContent = 'ASK GEMINI AGAIN';
-      if (promptStatus) promptStatus.textContent = `Guide ready from ${payload.model || 'Gemini'}. You can copy the prompt or the result.`;
+      if (promptStatus) promptStatus.textContent = `Legacy guide ready from ${payload.model || 'Gemini'}. You can copy the prompt or the result.`;
       guideView?.focus();
     } catch (error) {
       if (requestVersion !== promptRequestVersion) return;
-      askGeminiButton.textContent = 'TRY GEMINI AGAIN';
+      askGeminiButton.textContent = usePipeline ? 'TRY PIPELINE AGAIN' : 'TRY GEMINI AGAIN';
       if (promptStatus) {
         promptStatus.textContent = error instanceof Error ? error.message : 'Gemini could not generate the guide.';
       }
     } finally {
-      if (requestVersion === promptRequestVersion) {
+      if (requestVersion === promptRequestVersion && !awaitingPlanApproval) {
         askGeminiButton.disabled = false;
+        if (generatePromptButton) generatePromptButton.disabled = false;
+      }
+    }
+  };
+
+  const decidePlan = async (decision: 'approve' | 'reject') => {
+    if (!pendingPipelineRunId || !awaitingPlanApproval) return;
+    const requestVersion = ++promptRequestVersion;
+    if (approvePlanButton) approvePlanButton.disabled = true;
+    if (rejectPlanButton) rejectPlanButton.disabled = true;
+    if (askGeminiButton) askGeminiButton.disabled = true;
+    if (promptStatus) {
+      promptStatus.textContent = decision === 'approve'
+        ? 'Plan approved. Generating implementation batches…'
+        : 'Rejecting architecture plan…';
+    }
+
+    try {
+      const response = await globalThis.fetch('/api/pipeline', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mode: 'pipeline',
+          action: decision,
+          runId: pendingPipelineRunId,
+          executeVerification: false,
+        }),
+      });
+      const payload = await response.json();
+      if (requestVersion !== promptRequestVersion) return;
+      if (!isPipelineReportPayload(payload)) {
+        throw new Error(payload?.error || `Could not ${decision} the architecture plan.`);
+      }
+      presentPipelinePayload(payload);
+      if (decision === 'reject' && promptStatus && payload.report.status === 'failed') {
+        promptStatus.textContent = 'Architecture plan rejected. Pipeline run cancelled.';
+      }
+    } catch (error) {
+      if (requestVersion !== promptRequestVersion) return;
+      if (promptStatus) {
+        promptStatus.textContent = error instanceof Error ? error.message : `Could not ${decision} the plan.`;
+      }
+      setPlanApprovalVisible(Boolean(pendingPipelineRunId));
+    } finally {
+      if (requestVersion === promptRequestVersion && !awaitingPlanApproval) {
+        if (askGeminiButton) askGeminiButton.disabled = false;
         if (generatePromptButton) generatePromptButton.disabled = false;
       }
     }
@@ -825,9 +1007,13 @@ export function createApp(root: Document = document, options: any = {}) {
     if (!value.trim() || !button) return;
 
     const successMessage = activeResultTab === 'guide'
-      ? 'Implementation guide copied.'
-      : 'Copied. Paste it into Gemini as the system prompt.';
-    const idleLabel = activeResultTab === 'guide' ? 'COPY GUIDE' : 'COPY PROMPT';
+      ? (lastGenerationMode === 'pipeline' ? 'Pipeline report copied.' : 'Implementation guide copied.')
+      : (lastGenerationMode === 'pipeline'
+        ? 'Pipeline runbook copied.'
+        : 'Copied. Paste it into Gemini as the system prompt.');
+    const idleLabel = activeResultTab === 'guide'
+      ? (lastGenerationMode === 'pipeline' ? 'COPY REPORT' : 'COPY GUIDE')
+      : (lastGenerationMode === 'pipeline' ? 'COPY RUNBOOK' : 'COPY PROMPT');
 
     try {
       if (globalThis.navigator?.clipboard?.writeText) {
@@ -859,6 +1045,8 @@ export function createApp(root: Document = document, options: any = {}) {
   if (carouselReset) on(carouselReset, 'click', resetPachinko);
   if (generatePromptButton) on(generatePromptButton, 'click', (() => { void generateGeminiPrompt(); }) as EventListener);
   if (askGeminiButton) on(askGeminiButton, 'click', (() => { void askGemini(); }) as EventListener);
+  if (approvePlanButton) on(approvePlanButton, 'click', (() => { void decidePlan('approve'); }) as EventListener);
+  if (rejectPlanButton) on(rejectPlanButton, 'click', (() => { void decidePlan('reject'); }) as EventListener);
   if (resultTabGuide) on(resultTabGuide, 'click', (() => { setResultTab('guide'); }) as EventListener);
   if (resultTabPrompt) on(resultTabPrompt, 'click', (() => { setResultTab('prompt'); }) as EventListener);
   if (copyActiveResultButton) on(copyActiveResultButton, 'click', (() => { void copyActiveResult(); }) as EventListener);
@@ -868,6 +1056,50 @@ export function createApp(root: Document = document, options: any = {}) {
       if (promptStatus) promptStatus.textContent = authCheckbox.checked
         ? 'Authentication will be included.'
         : 'Authentication will remain an extension point.';
+    });
+  }
+  if (pipelineCheckbox) {
+    const readGenerationMode = (): 'pipeline' | 'legacy-one-shot' => {
+      try {
+        return storage?.getItem(GENERATION_MODE_KEY) === 'legacy-one-shot'
+          ? 'legacy-one-shot'
+          : 'pipeline';
+      } catch {
+        return 'pipeline';
+      }
+    };
+    const applyGenerationMode = (mode: 'pipeline' | 'legacy-one-shot') => {
+      pipelineCheckbox.checked = mode === 'pipeline';
+      lastGenerationMode = mode;
+      if (requirePlanApprovalCheckbox) {
+        requirePlanApprovalCheckbox.disabled = mode !== 'pipeline';
+      }
+      try {
+        storage?.setItem(GENERATION_MODE_KEY, mode);
+      } catch {
+        // Preference still applies for this session when persistence fails.
+      }
+    };
+    applyGenerationMode(readGenerationMode());
+    on(pipelineCheckbox, 'change', () => {
+      const mode = pipelineCheckbox.checked ? 'pipeline' : 'legacy-one-shot';
+      applyGenerationMode(mode);
+      resetPromptBuilder();
+      if (promptStatus) {
+        promptStatus.textContent = mode === 'pipeline'
+          ? 'Ask Gemini will run the verified batch pipeline.'
+          : 'Ask Gemini will use the legacy one-shot markdown guide.';
+      }
+    });
+  }
+  if (requirePlanApprovalCheckbox) {
+    on(requirePlanApprovalCheckbox, 'change', () => {
+      resetPromptBuilder();
+      if (promptStatus) {
+        promptStatus.textContent = requirePlanApprovalCheckbox.checked
+          ? 'Pipeline will pause for architecture plan approval before generating files.'
+          : 'Pipeline will auto-approve the architecture plan and generate immediately.';
+      }
     });
   }
   if (carouselDots) {
@@ -1007,4 +1239,4 @@ export function createApp(root: Document = document, options: any = {}) {
   };
 }
 
-export { BACKDROP_KEY, CAROUSEL_INTERVAL_MS };
+export { BACKDROP_KEY, CAROUSEL_INTERVAL_MS, GENERATION_MODE_KEY };

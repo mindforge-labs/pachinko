@@ -744,6 +744,34 @@ body.carousel-open .utility-bar {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.prompt-builder-options {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .35rem;
+}
+.plan-approval-bar {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: .55rem;
+  padding: .7rem .75rem;
+  border: 1px solid rgba(240, 199, 82, .35);
+  border-radius: .4rem;
+  background: linear-gradient(180deg, rgba(54, 34, 12, .72), rgba(24, 14, 20, .88));
+}
+.plan-approval-bar[hidden] { display: none !important; }
+.plan-approval-copy {
+  margin: 0;
+  color: #ead79e;
+  font-size: .66rem;
+  line-height: 1.45;
+}
+.plan-approval-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: .45rem;
+}
 .auth-option {
   display: flex;
   align-items: center;
@@ -1059,6 +1087,7 @@ body.carousel-open .utility-bar {
   .stack-slide-name { font-size: clamp(1rem, 6vw, 1.35rem); }
   .prompt-builder { grid-template-columns: 1fr auto; }
   .prompt-builder-copy { grid-column: 1 / -1; }
+  .prompt-builder-options { grid-column: 1 / -1; }
   .prompt-builder-actions { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
   .prompt-builder-status { text-align: left; }
   .result-toolbar {

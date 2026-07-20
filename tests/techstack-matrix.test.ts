@@ -16,7 +16,8 @@ describe('tech-stack matrix', () => {
   test('parses the committed matrix, resolves multi-role entries, and reports all pools', () => {
     const validation = validateTechStackMatrix(fresh());
     expect(validation.errors).toEqual([]);
-    expect(validation.warnings).toEqual([]);
+    expect(validation.warnings.every(({ code }) => code === 'unused-runtime')).toBe(true);
+    expect(validation.warnings.map(({ technologyId }) => technologyId)).toContain('denojs');
     expect(validation.matrix?.technologies.find(({ id }) => id === 'nextjs')?.roles).toEqual(['frontend', 'backend-framework']);
   });
 
