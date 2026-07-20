@@ -909,10 +909,7 @@ export function createApp(root: Document = document, options: any = {}) {
           throw new Error(payload?.error || 'Pipeline returned an invalid report.');
         }
 
-        if (!response.ok && payload.report?.status !== 'awaiting_plan_approval' && !payload.report) {
-          throw new Error(payload?.error || 'Pipeline request failed.');
-        }
-
+        // Non-OK statuses can still include a report (e.g. stack_incompatible / failed).
         presentPipelinePayload(payload);
         return;
       }

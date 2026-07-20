@@ -1,3 +1,9 @@
+import { generateGeminiContent, GeminiRequestError } from '../gemini-client';
+import {
+  GeminiApiKeyRotator,
+  resolveGeminiApiKeys,
+  sharedGeminiApiKeyRotator,
+} from '../gemini-api-keys';
 import {
   resolveGeminiModel,
   resolveGeminiModels,
@@ -21,7 +27,12 @@ import {
 import type { ArchitecturePlan, GenerationBatchResult, RepairResult } from './types';
 
 export type GeminiModelOptions = {
-  apiKey: string;
+  /** Single key (backward compatible). Prefer env multi-key or `apiKeys`. */
+  apiKey?: string;
+  /** Explicit key list — skips env lookup when provided. */
+  apiKeys?: string[];
+  /** Shared/custom rotator (preserves cooldowns across calls). */
+  keyRotator?: GeminiApiKeyRotator;
   /** Force one model for every task (dry-run / tests). */
   model?: string;
   /** Per-tier overrides when `model` is not set. */
@@ -33,25 +44,6 @@ export type GeminiModelOptions = {
   maxRequestRetries?: number;
   requestRetryDelayMs?: number;
 };
-
-type GeminiResponse = {
-  candidates?: Array<{
-    content?: { parts?: Array<{ text?: unknown }> };
-    finishReason?: string;
-  }>;
-  error?: { message?: string };
-  usageMetadata?: {
-    promptTokenCount?: number;
-    candidatesTokenCount?: number;
-  };
-};
-
-function readText(payload: GeminiResponse): string {
-  return payload.candidates?.[0]?.content?.parts
-    ?.map((part) => (typeof part.text === 'string' ? part.text : ''))
-    .join('')
-    .trim() ?? '';
-}
 
 function parseJsonObject(text: string): unknown {
   const trimmed = text.trim();
@@ -69,8 +61,27 @@ function parseJsonObject(text: string): unknown {
   }
 }
 
+function resolveRotator(options: GeminiModelOptions): GeminiApiKeyRotator {
+  if (options.keyRotator) return options.keyRotator;
+  if (options.apiKeys?.length) return new GeminiApiKeyRotator(options.apiKeys);
+
+  // Explicit single key without a custom env object → isolated (unit tests).
+  if (options.apiKey?.trim() && options.env === undefined) {
+    return new GeminiApiKeyRotator([options.apiKey.trim()]);
+  }
+
+  if (options.env) {
+    const fromEnv = resolveGeminiApiKeys(options.env);
+    if (fromEnv.length > 0) return new GeminiApiKeyRotator(fromEnv);
+    if (options.apiKey?.trim()) return new GeminiApiKeyRotator([options.apiKey.trim()]);
+    throw new Error('Gemini API is not configured. Set GEMINI_API_KEY (and optional GEMINI_API_KEY_2…).');
+  }
+
+  return sharedGeminiApiKeyRotator(process.env);
+}
+
 export class GeminiProjectGenerationModel implements ProjectGenerationModel {
-  private readonly apiKey: string;
+  private readonly rotator: GeminiApiKeyRotator;
   private readonly forcedModel?: string;
   private readonly models?: Partial<Record<GeminiModelTier, string>>;
   private readonly env: NodeJS.ProcessEnv;
@@ -81,9 +92,10 @@ export class GeminiProjectGenerationModel implements ProjectGenerationModel {
   private readonly requestRetryDelayMs: number;
   lastUsage?: { promptTokens?: number; completionTokens?: number };
   lastModel?: string;
+  lastKeyId?: string;
 
   constructor(options: GeminiModelOptions) {
-    this.apiKey = options.apiKey;
+    this.rotator = resolveRotator(options);
     this.forcedModel = options.model?.trim()
       ? sanitizeGeminiModelId(options.model, resolveGeminiModel('default', options.env ?? process.env, options.models))
       : undefined;
@@ -110,6 +122,10 @@ export class GeminiProjectGenerationModel implements ProjectGenerationModel {
       };
     }
     return resolveGeminiModels(this.env, this.models);
+  }
+
+  keyCount(): number {
+    return this.rotator.size;
   }
 
   async planArchitecture(input: ArchitecturePlanningInput): Promise<ArchitecturePlan> {
@@ -155,7 +171,7 @@ export class GeminiProjectGenerationModel implements ProjectGenerationModel {
         const text = await this.callGemini(task, system, user, attempt > 0);
         const raw = parseJsonObject(text);
         const validated = validate(raw);
-        if (!validated.ok) {
+        if (validated.ok === false) {
           throw new PipelineError(invalidCode, validated.errors.join('; '), { errors: validated.errors });
         }
         return validated.value;
@@ -177,110 +193,39 @@ export class GeminiProjectGenerationModel implements ProjectGenerationModel {
     user: string,
     isRetry: boolean,
   ): Promise<string> {
-    let lastError: unknown;
-    for (let attempt = 0; attempt <= this.maxRequestRetries; attempt += 1) {
-      try {
-        return await this.callGeminiOnce(task, system, user, isRetry);
-      } catch (error) {
-        lastError = error;
-        if (!isTransientModelFailure(error) || attempt >= this.maxRequestRetries) {
-          throw error;
-        }
-        const delay = this.requestRetryDelayMs * (attempt + 1);
-        await sleep(delay);
-      }
-    }
-    throw lastError instanceof PipelineError
-      ? lastError
-      : new PipelineError('MODEL_REQUEST_FAILED', 'Gemini request failed after retries');
-  }
-
-  private async callGeminiOnce(
-    task: GeminiModelTask,
-    system: string,
-    user: string,
-    isRetry: boolean,
-  ): Promise<string> {
     const model = this.modelFor(task);
     this.lastModel = model;
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
     const retrySuffix = isRetry
       ? `\n\nPrevious response failed schema validation. Return ONLY one JSON object with ALL required top-level keys.
 Required architecture keys when planning: summary, assumptions, dependencies, repositoryTree, files, batches, verificationPlan.
 Do not omit arrays — use [] if empty. No markdown fences.`
       : '';
 
-    let response: Response;
     try {
-      response = await this.fetchImpl(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-goog-api-key': this.apiKey,
-        },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: system }] },
-          contents: [{ role: 'user', parts: [{ text: user + retrySuffix }] }],
-          generationConfig: {
-            maxOutputTokens: 32768,
-            responseMimeType: 'application/json',
-          },
-        }),
-        cache: 'no-store',
-        signal: AbortSignal.timeout(this.timeoutMs),
+      const result = await generateGeminiContent({
+        model,
+        system,
+        user: user + retrySuffix,
+        rotator: this.rotator,
+        env: this.env,
+        fetchImpl: this.fetchImpl,
+        timeoutMs: this.timeoutMs,
+        maxAttempts: Math.max(this.maxRequestRetries + 1, this.rotator.size * 2),
+        retryDelayMs: this.requestRetryDelayMs,
+        responseMimeType: 'application/json',
       });
+      this.lastUsage = result.usage;
+      this.lastKeyId = result.keyId;
+      return result.text;
     } catch (error) {
-      const timedOut = error instanceof Error && (error.name === 'TimeoutError' || error.name === 'AbortError');
-      throw new PipelineError(
-        'MODEL_REQUEST_FAILED',
-        timedOut ? 'Gemini request timed out' : 'Could not reach Gemini API',
-        { cause: error, model },
-      );
+      if (error instanceof GeminiRequestError) {
+        throw new PipelineError(
+          error.message.includes('no text') ? 'MODEL_RESPONSE_INVALID' : 'MODEL_REQUEST_FAILED',
+          error.message,
+          { status: error.status, model: error.model, keyId: error.keyId, cause: error },
+        );
+      }
+      throw error;
     }
-
-    let payload: GeminiResponse;
-    try {
-      payload = await response.json();
-    } catch {
-      throw new PipelineError('MODEL_REQUEST_FAILED', 'Gemini returned non-JSON HTTP body', { model });
-    }
-
-    if (!response.ok) {
-      throw new PipelineError(
-        'MODEL_REQUEST_FAILED',
-        payload.error?.message || `Gemini failed with status ${response.status}`,
-        { status: response.status, model },
-      );
-    }
-
-    this.lastUsage = {
-      promptTokens: payload.usageMetadata?.promptTokenCount,
-      completionTokens: payload.usageMetadata?.candidatesTokenCount,
-    };
-
-    const text = readText(payload);
-    if (!text) {
-      throw new PipelineError('MODEL_RESPONSE_INVALID', 'Gemini returned no text', { model });
-    }
-    return text;
   }
-}
-
-function isTransientModelFailure(error: unknown): boolean {
-  if (!(error instanceof PipelineError) || error.code !== 'MODEL_REQUEST_FAILED') return false;
-  const message = error.message.toLowerCase();
-  const status = typeof error.details === 'object' && error.details && 'status' in error.details
-    ? Number((error.details as { status?: number }).status)
-    : undefined;
-  return status === 429
-    || status === 503
-    || message.includes('high demand')
-    || message.includes('try again later')
-    || message.includes('resource exhausted')
-    || message.includes('unavailable')
-    || message.includes('timed out');
-}
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }

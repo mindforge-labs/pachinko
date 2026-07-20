@@ -28,6 +28,7 @@ import {
   type FinalProjectStatus,
   type VerificationStatus,
 } from '../src/pipeline';
+import { hasGeminiApiKeys } from '../src/gemini-api-keys';
 
 type DryRunCli = {
   symbols: [string, string, string];
@@ -197,8 +198,8 @@ function toMarkdown(record: DryRunRecord): string {
 
 async function main(): Promise<number> {
   const cli = parseArgs(process.argv.slice(2));
-  const apiKey = process.env.GEMINI_API_KEY?.trim();
-  const gemini = apiKey ? new GeminiProjectGenerationModel({ apiKey }) : null;
+  const configured = hasGeminiApiKeys();
+  const gemini = configured ? new GeminiProjectGenerationModel({}) : null;
   const models = gemini?.resolvedModels() ?? resolveGeminiModels();
   const model = models.powerful;
   const workspaceBase = resolvePipelineWorkspaceBase();
@@ -210,7 +211,7 @@ async function main(): Promise<number> {
     note: 'Recorded separately in checklist; this script does not invoke the unit suite.',
   };
 
-  if (!apiKey || !gemini) {
+  if (!configured || !gemini) {
     const record: DryRunRecord = {
       recordedAt: new Date().toISOString(),
       mode: 'pipeline-dry-run',

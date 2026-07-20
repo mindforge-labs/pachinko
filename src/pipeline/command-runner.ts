@@ -161,7 +161,7 @@ export class CommandRunner {
       workspaceRoot: this.workspaceRoot,
     });
 
-    if (!allowed.ok) {
+    if (allowed.ok === false) {
       return {
         command,
         cwd,
@@ -181,7 +181,7 @@ export class CommandRunner {
     return new Promise<CommandResult>((resolve) => {
       const child = spawn(command[0], command.slice(1), {
         cwd,
-        env: { ...this.env, ...sanitizeEnv(options.env ?? {}) },
+        env: { ...this.env, ...sanitizeEnv(options.env ?? this.env) },
         shell: false,
         stdio: ['ignore', 'pipe', 'pipe'],
       });

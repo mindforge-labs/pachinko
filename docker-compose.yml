@@ -7,6 +7,9 @@ services:
     restart: unless-stopped
     environment:
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_API_KEY_2: ${GEMINI_API_KEY_2:-}
+      GEMINI_API_KEY_3: ${GEMINI_API_KEY_3:-}
+      GEMINI_API_KEYS: ${GEMINI_API_KEYS:-}
       GEMINI_MODEL: ${GEMINI_MODEL:-}
       GEMINI_MODEL_FORCE: ${GEMINI_MODEL_FORCE:-}
       GEMINI_MODEL_DEFAULT: ${GEMINI_MODEL_DEFAULT:-gemini-3.5-flash}

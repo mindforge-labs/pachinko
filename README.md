@@ -44,6 +44,8 @@ Trong development, maintainer có thể mở `http://localhost:3000/techstack-ma
 
 ```env
 GEMINI_API_KEY=your_server_side_api_key
+GEMINI_API_KEY_2=optional_second_key
+GEMINI_API_KEY_3=optional_third_key
 
 # Optional: force one model for every task
 # GEMINI_MODEL_FORCE=gemini-3.5-flash
@@ -54,6 +56,8 @@ GEMINI_API_KEY=your_server_side_api_key
 # GEMINI_MODEL_POWERFUL=gemini-3.1-pro-preview
 # GEMINI_MODEL_ECONOMICAL=gemini-3.1-flash-lite
 ```
+
+Khi bị rate limit / quota / high demand / key invalid, server tự xoay sang key tiếp theo (`GEMINI_API_KEY_2`, `_3`, …). Các key đang lỗi được cooldown ~60s (invalid key ~30 phút).
 
 Routing mặc định:
 

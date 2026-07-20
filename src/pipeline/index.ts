@@ -22,6 +22,13 @@ export {
   sanitizeGeminiModelId,
 } from '../gemini-models';
 export type { GeminiModelTask, GeminiModelTier } from '../gemini-models';
+export {
+  GeminiApiKeyRotator,
+  hasGeminiApiKeys,
+  resolveGeminiApiKeys,
+  sharedGeminiApiKeyRotator,
+} from '../gemini-api-keys';
+export { generateGeminiContent, GeminiRequestError } from '../gemini-client';
 export { buildStableSystemInstruction } from './prompts/system';
 export { buildArchitecturePlanningPrompt } from './prompts/architecture';
 export { buildBatchGenerationPrompt } from './prompts/batch';

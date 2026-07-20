@@ -244,7 +244,7 @@ export function validateGenerationBatchResult(
   if (!Array.isArray(input.commands)) errors.push('commands must be an array');
 
   const filesResult = validateGeneratedFiles(input.files, { allowlist: options.allowlist });
-  if (!filesResult.ok) errors.push(...filesResult.errors);
+  if (filesResult.ok === false) errors.push(...filesResult.errors);
 
   const commands = [];
   if (Array.isArray(input.commands)) {
@@ -261,7 +261,7 @@ export function validateGenerationBatchResult(
     }
   }
 
-  if (errors.length || !filesResult.ok) return fail(errors);
+  if (errors.length || filesResult.ok === false) return fail(errors);
   return {
     ok: true,
     value: {
@@ -284,12 +284,12 @@ export function validateRepairResult(
   if (!Array.isArray(input.notes) || !input.notes.every(isString)) errors.push('notes must be a string array');
 
   const filesResult = validateGeneratedFiles(input.files, { allowlist: options.allowlist });
-  if (!filesResult.ok) errors.push(...filesResult.errors);
+  if (filesResult.ok === false) errors.push(...filesResult.errors);
   else if (options.maxFiles != null && filesResult.value.length > options.maxFiles) {
     errors.push(`repair may change at most ${options.maxFiles} files`);
   }
 
-  if (errors.length || !filesResult.ok) return fail(errors);
+  if (errors.length || filesResult.ok === false) return fail(errors);
   return {
     ok: true,
     value: {
@@ -301,7 +301,7 @@ export function validateRepairResult(
 }
 
 export function assertValidOrThrow<T>(result: SchemaValidationResult<T>, code: 'MODEL_RESPONSE_INVALID' | 'BATCH_SCOPE_VIOLATION' = 'MODEL_RESPONSE_INVALID'): T {
-  if (!result.ok) {
+  if (result.ok === false) {
     throw new PipelineError(code, result.errors.join('; '), { errors: result.errors });
   }
   return result.value;

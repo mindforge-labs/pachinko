@@ -9,6 +9,7 @@ import {
   resolveGenerationMode,
   resolvePipelineWorkspaceBase,
 } from '../../../src/pipeline';
+import { hasGeminiApiKeys } from '../../../src/gemini-api-keys';
 import { parsePromptRequest } from '../../../src/prompt-request';
 
 export const dynamic = 'force-dynamic';
@@ -27,9 +28,8 @@ type PipelineBody = {
 };
 
 function modelClient() {
-  const apiKey = process.env.GEMINI_API_KEY?.trim();
-  if (!apiKey) return null;
-  return new GeminiProjectGenerationModel({ apiKey });
+  if (!hasGeminiApiKeys()) return null;
+  return new GeminiProjectGenerationModel({});
 }
 
 function jsonResponse(payload: unknown, status = 200) {

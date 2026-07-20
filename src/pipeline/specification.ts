@@ -47,7 +47,7 @@ export function buildProjectSpecification(input: BuildSpecificationInput): Proje
     authentication: input.authentication,
   });
 
-  if (!parsed.ok) {
+  if (parsed.ok === false) {
     throw new PipelineError('INVALID_PROJECT_SPEC', parsed.error);
   }
 

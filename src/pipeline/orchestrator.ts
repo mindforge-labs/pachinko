@@ -115,7 +115,7 @@ export class PipelineOrchestrator {
       this.throwIfCancelled();
 
       this.compatibility = validateSpecificationCompatibility(this.specification);
-      if (!this.compatibility.compatible) {
+      if (this.compatibility.compatible === false) {
         this.transition('failed');
         return this.finishReport({
           status: 'stack_incompatible',
@@ -362,7 +362,7 @@ export class PipelineOrchestrator {
 
           this.repairAttempts += repair.attempts;
 
-          if (!repair.ok) {
+          if (repair.ok === false) {
             this.unresolvedIssues.push(repair.reason);
             throw new PipelineError('REPAIR_LIMIT_REACHED', repair.reason);
           }
@@ -417,7 +417,7 @@ export class PipelineOrchestrator {
           policy: this.repairPolicy,
         });
         this.repairAttempts += repair.attempts;
-        if (!repair.ok) {
+        if (repair.ok === false) {
           this.unresolvedIssues.push(repair.reason);
           this.transition('failed');
           return;
