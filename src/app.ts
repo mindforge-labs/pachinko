@@ -15,6 +15,7 @@ import {
 const BACKDROP_KEY = 'nocturne-pachislot-backdrop';
 const CAROUSEL_INTERVAL_MS = 1600;
 const INITIAL_SYMBOLS = ['react', 'express', 'postgresql'];
+const REEL_STOP_EFFECT_MS = 1150;
 const MINIMIZE_SPRING = { type: spring, visualDuration: 0.48, bounce: 0.22 } as const;
 
 const iconUrlFor = (item) => techById(item.layer, item.id)?.iconUrl ?? item.iconUrl ?? `/devicons/${item.id}.svg`;
@@ -88,8 +89,13 @@ export function createApp(root: Document = document, options: any = {}) {
         image.src = tech.iconUrl;
         image.alt = '';
         image.loading = 'eager';
-        image.decoding = 'async';
+        image.decoding = 'sync';
         tile.append(image);
+
+        const label = root.createElement('span');
+        label.className = 'reel-symbol-name';
+        label.textContent = tech.name;
+        tile.append(label);
         fragment.append(tile);
       });
 
@@ -101,10 +107,14 @@ export function createApp(root: Document = document, options: any = {}) {
       // Three symbols align with the cabinet's top, center, and bottom paylines.
       strip.style.setProperty('--strip-height', `${sequence.length * 31}%`);
       strip.style.setProperty('--tile-size', `${tileShift}%`);
-      strip.style.setProperty('--reel-duration', `${(pool.length * (rollsDown ? 0.19 : 0.21)).toFixed(2)}s`);
+      // Keep individual symbols readable while the reel is moving. The final
+      // reel is deliberately the slowest to build anticipation for the stack.
+      const secondsPerSymbol = [0.28, 0.3, 0.34][index] ?? 0.3;
+      strip.style.setProperty('--reel-duration', `${(pool.length * secondsPerSymbol).toFixed(2)}s`);
       strip.style.setProperty('--loop-start', rollsDown ? '-50%' : '0%');
       strip.style.setProperty('--loop-end', rollsDown ? '0%' : '-50%');
       strip.style.setProperty('--brake-start', `${(rollsDown ? 3 : -3) * tileShift}%`);
+      strip.style.setProperty('--brake-mid', `${(rollsDown ? 1.35 : -1.35) * tileShift}%`);
       strip.style.setProperty('--brake-near', `${(rollsDown ? 0.3 : -0.3) * tileShift}%`);
     });
   };
@@ -385,17 +395,28 @@ export function createApp(root: Document = document, options: any = {}) {
     const tech = techById(layer, symbol);
     const result = reel?.querySelector<HTMLElement>('.reel-result');
     const image = result?.querySelector('img');
+    let name = result?.querySelector<HTMLElement>('.reel-result-name');
 
     if (image && tech) image.setAttribute('src', tech.iconUrl);
     if (result) {
       result.setAttribute('aria-label', tech?.name ?? symbol);
       result.dataset.layer = layer;
+      if (!name) {
+        name = root.createElement('span');
+        name.className = 'reel-result-name';
+        result.append(name);
+      }
+      name.textContent = tech?.name ?? symbol;
     }
     if (reel) {
       reel.dataset.symbol = symbol;
       reel.dataset.layer = layer;
     }
   };
+
+  reels.forEach((reel, index) => {
+    setReelSymbol(index, reel.dataset.symbol ?? INITIAL_SYMBOLS[index]);
+  });
 
   let tickTimer = null;
   const stopTicks = () => {
@@ -408,9 +429,14 @@ export function createApp(root: Document = document, options: any = {}) {
   const startTicks = () => {
     stopTicks();
     if (body.classList.contains('reduced-motion')) return;
+    const snapshot = controller.snapshot();
+    if (!['spinning', 'rerolling'].includes(snapshot.phase)) return;
+    const activeReels = snapshot.reels.filter(({ state }) => state === 'spinning').length;
+    if (activeReels === 0) return;
+    const cadence = activeReels >= 3 ? 105 : activeReels === 2 ? 145 : 210;
     tickTimer = globalThis.setInterval(() => {
       if (['spinning', 'rerolling'].includes(controller.snapshot().phase)) audio.play('tick');
-    }, 95);
+    }, cadence);
   };
 
   let controller;
@@ -420,7 +446,10 @@ export function createApp(root: Document = document, options: any = {}) {
         hideCarousel();
         machine.dataset.state = 'spinning';
         machine.classList.remove('is-celebrating');
-        reels.forEach((reel) => { reel.dataset.state = 'spinning'; });
+        reels.forEach((reel) => {
+          reel.dataset.state = 'spinning';
+          reel.classList.remove('is-locked', 'is-final-reel');
+        });
         setDisplay('SPINNING STACK');
         announce('Frontend, backend, and database reels are spinning. Use stop buttons one, two, and three.');
         audio.play('start');
@@ -431,24 +460,34 @@ export function createApp(root: Document = document, options: any = {}) {
         const layer = layerForReel(event.index);
         const tech = techById(layer, event.symbol);
         reel.dataset.state = 'stopped';
+        reel.classList.remove('is-final-reel');
         setReelSymbol(event.index, event.symbol);
-        flash(reel, 'is-stopping', 680);
+        reel.classList.add('is-locked');
+        flash(reel, 'is-stopping', REEL_STOP_EFFECT_MS);
         flash(stopButtons[event.index], 'is-hit');
         setDisplay(`${layer.toUpperCase()} · ${tech?.short ?? event.symbol}`);
         const runtime = event.index === 1 && event.backendRuntime ? technologyById(event.backendRuntime) : null;
         announce(`${LAYER_LABELS[layer]} locked on ${tech?.name ?? event.symbol}${runtime ? ` with ${runtime.name}` : ''}.`);
-        audio.play('stop');
+        audio.play(`lock${event.index + 1}`);
+        if (event.snapshot.reels.filter(({ state }) => state === 'spinning').length === 1) {
+          const finalReel = reels.find((candidate) => candidate.dataset.state === 'spinning');
+          finalReel?.classList.add('is-final-reel');
+          const finalIndex = finalReel ? reels.indexOf(finalReel) : 2;
+          setDisplay(`FINAL REEL · ${layerForReel(finalIndex).toUpperCase()} SPINNING`);
+        }
+        startTicks();
         break;
       }
       case 'allStopped': {
         stopTicks();
         machine.dataset.state = 'settling';
         machine.classList.add('is-celebrating');
-        const stack = describeStack(event.symbols, event.backendRuntime);
+        lastBackendRuntime = event.backendRuntime;
+        lastStack = describeStack(event.symbols, event.backendRuntime);
+        const stack = lastStack;
         const summary = stack.map((item) => item.runtime ? `${item.name} + ${item.runtime.name}` : item.name).join(' · ');
         setDisplay(summary);
         announce(`Stack complete: ${summary}.`);
-        showStackCarousel(event.symbols, event.backendRuntime);
         audio.play('complete');
         break;
       }
@@ -456,9 +495,11 @@ export function createApp(root: Document = document, options: any = {}) {
         stopTicks();
         machine.dataset.state = 'idle';
         machine.classList.remove('is-celebrating');
+        reels.forEach((reel) => reel.classList.remove('is-final-reel'));
         if (lastStack.length) {
           setDisplay(lastStack.map((item) => item.runtime ? `${item.short}+${item.runtime.short}` : item.short).join(' · '));
           announce('Stack ready. Press start to spin another tech stack.');
+          showStackCarousel(event.symbols, event.backendRuntime);
         } else {
           setDisplay('PRESS START');
           announce('Machine ready. Press start to spin a tech stack.');
@@ -472,6 +513,7 @@ export function createApp(root: Document = document, options: any = {}) {
         machine.dataset.state = 'rerolling';
         machine.classList.remove('is-celebrating');
         reel.dataset.state = 'spinning';
+        reel.classList.remove('is-locked');
         setDisplay(`REROLLING ${layer.toUpperCase()}`);
         announce(`${LAYER_LABELS[layer]} reroll started. All other controls are temporarily disabled.`);
         audio.play('start');
@@ -482,9 +524,10 @@ export function createApp(root: Document = document, options: any = {}) {
         const reel = reels[event.index];
         reel.dataset.state = 'stopped';
         setReelSymbol(event.index, event.symbol);
-        flash(reel, 'is-stopping', 680);
+        reel.classList.add('is-locked');
+        flash(reel, 'is-stopping', REEL_STOP_EFFECT_MS);
         flash(stopButtons[event.index], 'is-hit');
-        audio.play('stop');
+        audio.play(`lock${event.index + 1}`);
         break;
       }
       case 'rerollComplete': {
@@ -673,6 +716,7 @@ export function createApp(root: Document = document, options: any = {}) {
     machine.classList.remove('is-celebrating');
     reels.forEach((reel, index) => {
       reel.dataset.state = 'stopped';
+      reel.classList.remove('is-locked', 'is-final-reel');
       setReelSymbol(index, INITIAL_SYMBOLS[index]);
     });
     setDisplay('PRESS START');

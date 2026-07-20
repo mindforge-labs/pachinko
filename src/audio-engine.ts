@@ -3,7 +3,9 @@ const SOUND_RECIPES = {
   start: { frequency: 145, endFrequency: 310, duration: 0.24, type: 'sawtooth', volume: 0.12 },
   click: { frequency: 520, endFrequency: 400, duration: 0.045, type: 'square', volume: 0.045 },
   tick: { frequency: 880, endFrequency: 640, duration: 0.028, type: 'square', volume: 0.028 },
-  stop: { frequency: 105, endFrequency: 62, duration: 0.15, type: 'triangle', volume: 0.18, noise: true },
+  lock1: { frequency: 150, endFrequency: 92, duration: 0.2, type: 'triangle', volume: 0.16, noise: true },
+  lock2: { frequency: 185, endFrequency: 110, duration: 0.23, type: 'triangle', volume: 0.17, noise: true },
+  lock3: { frequency: 240, endFrequency: 132, duration: 0.3, type: 'triangle', volume: 0.19, noise: true },
   complete: { frequency: 392, endFrequency: 784, duration: 0.42, type: 'sine', volume: 0.13, chord: true },
 };
 
