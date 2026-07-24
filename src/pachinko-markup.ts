@@ -151,13 +151,25 @@ export const pachinkoMarkup = String.raw`
       <section class="prompt-builder" aria-labelledby="prompt-builder-heading">
         <div class="prompt-builder-copy">
           <strong id="prompt-builder-heading">GEMINI IMPLEMENTATION PROMPT</strong>
-          <span>Student CRUD · CLI only · Linux + Windows · Docker</span>
+          <span>Student CRUD · pipeline batches or legacy guide · Docker</span>
         </div>
-        <label class="auth-option" for="include-auth">
-          <input id="include-auth" type="checkbox">
-          <span class="auth-option-control" aria-hidden="true"></span>
-          <span>Include authentication</span>
-        </label>
+        <div class="prompt-builder-options">
+          <label class="auth-option" for="include-auth">
+            <input id="include-auth" type="checkbox">
+            <span class="auth-option-control" aria-hidden="true"></span>
+            <span>Include authentication</span>
+          </label>
+          <label class="auth-option" for="use-pipeline" title="Verified pipeline writes an isolated workspace in batches. Turn off to use the legacy one-shot markdown guide.">
+            <input id="use-pipeline" type="checkbox" checked>
+            <span class="auth-option-control" aria-hidden="true"></span>
+            <span>Verified pipeline</span>
+          </label>
+          <label class="auth-option" for="require-plan-approval" title="Pause after architecture planning so you can approve or reject before file generation.">
+            <input id="require-plan-approval" type="checkbox" checked>
+            <span class="auth-option-control" aria-hidden="true"></span>
+            <span>Approve plan first</span>
+          </label>
+        </div>
         <div class="prompt-builder-actions">
           <button id="generate-prompt" class="prompt-secondary-action" type="button">
             GENERATE PROMPT
@@ -167,6 +179,13 @@ export const pachinkoMarkup = String.raw`
           </button>
         </div>
         <p id="prompt-builder-status" class="prompt-builder-status" role="status" aria-live="polite"></p>
+        <div id="plan-approval-bar" class="plan-approval-bar" hidden>
+          <p class="plan-approval-copy">Architecture plan ready. Review the PLAN tab, then approve generation or reject the run.</p>
+          <div class="plan-approval-actions">
+            <button id="reject-plan" class="prompt-secondary-action" type="button">REJECT PLAN</button>
+            <button id="approve-plan" class="prompt-primary-action" type="button">APPROVE &amp; GENERATE</button>
+          </div>
+        </div>
         <div id="result-stage" class="result-stage" hidden>
           <div class="result-toolbar">
             <div class="result-tabs" role="tablist" aria-label="Gemini result">

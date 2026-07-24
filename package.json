@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "test": "bun test",
+    "dry-run:pipeline": "bun scripts/pipeline-dry-run.ts",
     "sync:devicons": "bun scripts/sync-devicons.ts"
   },
   "packageManager": "bun@1.3.14",
