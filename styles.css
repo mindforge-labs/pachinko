@@ -501,10 +501,6 @@ body.carousel-open .utility-bar {
   outline-offset: .18rem;
 }
 .stack-carousel-action:disabled { opacity: .42; cursor: not-allowed; }
-.stack-carousel-reset:hover .stack-carousel-action-icon {
-  transform: rotate(-28deg);
-  transition: transform .2s var(--ease-machine);
-}
 .stack-carousel.is-minimized {
   inset: auto 1rem 1rem auto;
   padding: 0;
@@ -1098,10 +1094,6 @@ body.carousel-open .utility-bar {
   .result-tab { flex: 1 1 auto; text-align: center; }
   .result-toolbar .prompt-copy-action { width: 100%; }
 }
-.payline { position: absolute; z-index: 6; left: .2%; right: .2%; height: .08rem; pointer-events: none; background: linear-gradient(90deg, transparent, #e7bb46 8% 92%, transparent); opacity: .65; }
-.payline::before, .payline::after { content: "◆"; position: absolute; top: 50%; transform: translateY(-50%); color: #f0c84f; font-size: .45rem; }
-.payline::before { left: 0; }.payline::after { right: 0; }
-.payline-top { top: 19%; opacity: .25; }.payline-main { top: 50%; height: .12rem; box-shadow: 0 0 .4rem #f2bf3d; }.payline-bottom { top: 81%; opacity: .25; }
 .reel-footer i { width: 18%; height: .08rem; background: linear-gradient(90deg, transparent, var(--gold)); }.reel-footer i:last-child { transform: scaleX(-1); }
 
 .control-deck {
