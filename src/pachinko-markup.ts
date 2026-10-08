@@ -137,8 +137,7 @@ export const pachinkoMarkup = String.raw`
           </button>
           <button id="stack-carousel-reset" class="stack-carousel-action stack-carousel-reset" type="button" aria-label="Reset pachinko">
             <svg class="stack-carousel-action-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-              <path d="M13.2 8A5.2 5.2 0 1 1 10.4 3.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-              <path d="M10.1 1.8h3.2V5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M4.5 4.5l7 7m0-7-7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
             </svg>
           </button>
         </div>
@@ -307,10 +306,6 @@ export const pachinkoMarkup = String.raw`
       <section class="reel-bay" aria-label="Tech stack reels">
         <div class="reel-header" aria-hidden="true"><span>FE</span><strong>STACK REELS</strong><span>DB</span></div>
         <div class="reel-frame">
-          <span class="payline payline-top" aria-hidden="true"></span>
-          <span class="payline payline-main" aria-hidden="true"></span>
-          <span class="payline payline-bottom" aria-hidden="true"></span>
-
           <div class="reel" data-reel="0" data-layer="fe" data-state="stopped" data-symbol="react" aria-label="Frontend reel">
             <div class="reel-strip" aria-hidden="true">
               <div class="tech-tile" data-layer="fe"><img class="tech-icon" src="/devicons/vuejs.svg" alt=""></div>
@@ -421,7 +416,7 @@ export const pachinkoMarkup = String.raw`
       </footer>
     </article>
 
-    <p class="keyboard-hint"><kbd>Enter</kbd> or <kbd>Space</kbd> start · <kbd>1</kbd> FE · <kbd>2</kbd> BE · <kbd>3</kbd> DB</p>
+    <p class="keyboard-hint"><kbd>Enter</kbd> or <kbd>Space</kbd> start</p>
     <p class="disclaimer">Interactive art only — no wagers, credits, prizes, or payouts.</p>
     <p id="machine-status" class="visually-hidden" role="status" aria-live="polite">Machine ready. Press start to spin a tech stack.</p>
   </main>
